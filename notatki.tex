@@ -1,0 +1,150 @@
+\documentclass[a4paper]{article}
+
+\usepackage{fullpage} % Package to use full page
+\usepackage{parskip} % Package to tweak paragraph skipping
+\usepackage{tikz} % Package for drawing
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[MeX]{polski}
+
+\title{Notatki z kursu Sieci Komputerowe}
+\author{Małgorzata Dymek}
+\date{2018/19, semestr letni}
+
+\begin{document}
+\maketitle
+
+\section{Wykład 1}
+\subsection{Podstawowe pojęcia}
+\textbf{Sieć komputerowa} - zbiór połączonych komputerów i urządzeń z możliwością komunikacji. Obejmują	również	wszystko co	umożliwia
+komunikację i współdzielenie zasobów, w szczególności oprogramowanie, protokoły komunikacyjne, media transmisyjne (kable).
+\\
+Dwie główne kategorie sieci:
+\begin{itemize}
+    \item \textbf{LAN} - Local Area Networks
+    \item \textbf{WAN} - Wide Area Networks
+\end{itemize}
+
+Przybliżone  kryterium	 rozróżnienia: odległości między łączonymi	komputerami. Są techlonolgie charakterystyczne dla
+sieci	lokalnych (Gigabit Ethernet),	inne dla sieci rozległych (T1,	E1	czy	Frame	Relay).
+\\
+Inny podział wg kryterium odległości:
+\begin{itemize}
+    \item \textbf{Nanoscale} – obecnie przedmiot badań, zastosowanie w nanomedycynie (IEEE).
+    \item \textbf{NFC} (Near Field Communication) – odległości	rzędu	centymetrów.
+    \item \textbf{BAN} (Body Area Network),	\textbf{WBAN} (Wireless	BAN),	inaczej to	BSN	(Body	Sensor	Network) – łączenie	czujników,	„wearable	devices”.
+    \item \textbf{PAN} (Personal Area Network) – od centymetrów	do	kilku metrów (bezprzedowowe: IrDA,	Bluetooth,	Wireless USB,	oraz	przewodowe	jak	USB,	FireWire,
+Thunderbolt).
+    \item \textbf{NAN} (Near-me	Area	Network)	– komunikacja	między	urządzeniami bezprzewodowymi, które	są	blisko	siebie. Ścieżka	komunikacyjna	między	urządzeniami	w	jednej	sieci	NAN	może jednak	być	długa	i	może	nawet	obejmować	technologie	sieci	WAN,	np.	jeśli	do	NAN	należą telefony	zarejestrowane	w	różnych	firmach	telekomunikacyjnych.
+    \item \textbf{SAN} (Storage	Area	Network).
+    \item \textbf{CAN} – Campus	Area	Network,	sieci	kampusowe.
+    \item \textbf{MAN} (Metropolitan	Area	Network)	– obejmuje	obszar	miasta,	dużego	kampusu.
+\end{itemize}
+
+\textbf{Internet jest globalną	 siecią	 komputerową} złożoną z	 wielu	 sieci	 komputerowych wykorzystujących	 \textbf{protokół IP} (zestaw protokołów TCP/IP). Od strony	 logicznej	 Internet można	identyfikować	z	\textbf{przestrzenią	adresową	protokołu	IP}	 (są	w użyciu	dwie wersje:	IPv4 i nowsza IPv6).\\
+Na	każdą	sieć	komputerową	składają	się	sprzętowe	oraz	programowe	elementy	składowe.
+
+\subsubsection{Sprzętowe	elementy	składowe	sieci	komputerowych}
+Podstawowymi	elementami	sprzętowymi	są:
+\begin{itemize}
+    \item \textbf{Nośniki	transmisji}	(media	transmisyjne)\\
+    Nośniki	 transportu	 sygnałów	 przesyłanych	 przez	 sieć. Są to na przykład kable koncentryczne, tzw.
+    skrętki, kable miedziane,  kable	 światłowodowe,	 ale	 też	 przestrzeń (przesyłanie	fal	radiowych,	mikrofal,	światła).
+    \item \textbf{Urządzenia	dostępu do	nośnika}\\
+    Są odpowiedzialne za	formatowanie danych	tak, by nadawały się do	 przesyłania poprzez nośnik	 transmisji, umieszczanie	 tych	 danych	 w nośniku	transmisji	oraz	odbieranie	odpowiednio zaadresowanych	danych	(np. karty sieciowe w sieci LAN).
+    \item \textbf{Urządzenia	wzmacniające,	filtrujące	i	kierujące	przesyłane	sygnały},	np.	przełączniki warstwy	drugiej, routery.\\
+    Sygnały	 umieszczane w	 nośniku transmisji ulegają zakłóceniom.
+    \begin{itemize}
+        \item \textbf{Tłumienie} (osłabienie siły sygnału)\\
+        Sposoby unikania tłumienia:  ograniczenie	 długości	 połączeń	 (kabli), zainstalowanie	urządzenia,	które odczytuje	przesyłane	sygnały,	wzmacnia	je	i
+        wysyła	z	powrotem	do	sieci.
+        \item \textbf{Zniekształcenie} (niepożądanazmiana kształtu przebiegu czasowego)\\
+        Przeciwdziałanie	 zniekształceniom polega	 na	 przestrzeganiu	 zaleceń dotyczących	 nośnika	 (odpowiedni typ nośnika, poprawna instalacja, odpowiednie	 długości	 przewodów) oraz korzystaniu z protokołów obsługujących korektę	błędów	transmisji.
+    \end{itemize}
+    Zadania	filtrujące	i	kierujące	sygnały	spełniają	takie	urządzenia	jak	mosty (pomosty,	bridges już	 raczej	 nie	 używane),	 koncentratory (hubs)	 przełączniki (switches), punkty	 dostępowe (access points), routery (routers),	bramy (gateways).
+\end{itemize}
+
+Karty	sieciowe	pakują	dane	w	tzw.	ramki. Ramki	są	podstawowymi	porcjami	danych	przesyłanymi	w	sieciach	komputerowych.
+
+
+\subsubsection{Programowe	elementy	składowe	sieci	komputerowych.}
+Elementami	programowymi	sieci	są:
+\begin{itemize}
+    \item \textbf{Protokoły	 komunikacyjne} (sieciowe)\\
+    Zestawy standardów i zasad obowiązujących przy	 przesyłaniu danych	przez	sieć. Określają sposoby komunikowania się urządzeń	i	programów.
+    \item \textbf{Oprogramowanie	komunikacyjne}\\
+    Implementuje protokoły sieciowe. Są to programy	 umożliwiające	 użytkownikom	 korzystanie	 z
+    sieci	 komputerowych	 np. program telnet, przeglądarki WWW, klienci pocztowi, oprogramowanie	umożliwiające mapowanie	dysków	sieciowych	itd.
+    \item \textbf{Programy	 poziomu	 sprzętowego}\\
+    Sterują pracą elementów	 sprzętowych. Sterowniki, programy	 obsługi, mikroprogramy umożliwiające	działanie	takich	urządzeń,	jak	karty	sieciowe.
+\end{itemize}
+
+\subsubsection{Ramki}
+Dane przesyłane są w \textbf{porcjach zwanych ramkami}. Urządzenie	zapewniające dostęp	do nośnika przesyła	pewne sygnały, które są \textbf{interpretowane jako bity}. Od strony	logicznej wysyłany	ciąg bitów zawiera	pewne informacje i może	być	podzielony na porcje zwane \textbf{polami}.
+
+Typowa ramka zawiera następujące pola:
+\begin{itemize}
+    \item ogranicznik początku ramki (jest	to	ustalony	wzór	bitów)
+    \item tzw.	adres fizyczny nadawcy (źródła	danych)
+    \item adres	fizyczny odbiorcy (miejsca	docelowego)
+    \item dane
+    \item ogranicznik końca	ramki (sekwencja	kontrolna	ramki).
+\end{itemize}
+Ogranicznik	 początku ramki być poprzedzony lub może zawierać tzw. \textbf{preambułę}, która w pewnych technologiach sieciowych jest stosowana do synchronizacji nadajnika i
+odbiornika. Wielkość pól określana jest w oktetach (8 bitów, uniknięcia niejednoznaczności "bajtu" mogącego mieć więcej bitów). \textbf{Kapsułkowanie} - wstawienie danych do struktury ramki. Istnieją różne formaty ramek, różne sposoby kapsułkowania i różne sposoby fizycznego adresowania komputerów.
+
+\subsection{Topologia sieci lokalnych}
+Dwa rodzaje topologii:
+\begin{itemize}
+    \item Topologie fizyczne
+    \item Topologie logiczne
+\end{itemize}
+
+Jeżeli przy fizycznej topologii gwiazdy komputer przesyła dane bezpośrednio do komputera docelowego (przełącznik), to mamy logiczną topologię gwiazdy. Jeżeli ramka jest wysyłana do wszystkich dostępnych komputerów (koncentrator), to logicznie jest to topologia magistrali.
+
+\subsubsection{Komunikacja między komputerami połączonymi switchem}
+
+Założenia:
+\begin{itemize}
+    \item Komputer źródłowy - Komputer 1: IP1, MAC1
+    \item Komputer docelowy - Komputer 2: IP2, MAC2
+\end{itemize}
+
+Na komputerze docelowym  jest serwer strony WWW2.
+
+Jeżeli na komputerze 1 ktoś spróbuje otworzyć WWW2, to:
+
+\begin{itemize}
+    \item Zadziała system DNS: komputer	1 skontaktuje się ze swoim serwerem	DNS i zapyta jaki jest adres IP	komputera związanego z nazwą domenową WW2. Serwer DNS znajdzie	odpowiedni adres w swoich zasobach i odeśle informację do	komputera 1.
+    \item Przeglądarka utworzy komunikat (wg protokołu	HTTP).	Do komunikatu zostanie dodany nagłówek	(wg	protokołu TCP),	który zawiera m.in.	port docelowy (standardowo	serwery
+    WWW	wykorzystują port o numerze	80)	oraz port źródłowy (przeglądarka wykorzystuje porty	dynamicznie	przydzielane, zwykle o „wysokich” numerach). Komunikat razem z dołączonym	nagłówkiem	TCP	nazywa	się	segmentem	TCP.
+    \item Do segmentu TCP zostanie dodany nagłówek I – w ten sposób	powstanie pakiet (datagram) IP.	Nagłówek IP	zawiera	m.in. adres	IP	źródłowy (IP1) i adres P docelowy (IP2).
+    \item Pakiet  musi być przesłany w ramce. Do pakietu musi zostać dodany nagłówek ramki, zawierający	źródłowy adres MAC (MAC1 – komputer	1 tworzący ramkę zna swój adres	MAC)	 oraz docelowy adres	MAC (powinien to być MAC2). \textbf{Komputer 1 nie zna adresu MAC komputera 2}. Zna	 tylko jego	 adres IP. W IPv4 do poznania adresu docelowego MAC wykorzystywany jest \textbf{protokół ARP} – Address	 Resolution	 Protocol.
+    \begin{itemize}
+        \item Komputer 1 wysyła specjalną ramkę	\textbf{ARP Request} (zapytanie	ARP, ramka ta NIE zawiera w	pakietu	IP), która ma adres	docelowy składający	się	z samych jedynek (48	jedynek: ffff-ff-ff-ff-ff).	Adres	ten	nazywa	się	\textbf{adresem	rozgłoszeniowym}. Ramka ARP Request jest przesyłana przez przełącznik do wszystkich przyłączonych komputerów. Ramka ta zawiera zapytanie o adres MAC	komputera,	którego adres IP jest przesyłany w ramce.
+        \item Każdy	komputer przyłączony do	przełącznika ma	obowiązek odebrać ramkę	wysłaną na	adres rozgłoszeniowy MAC. Jednak tylko komputer o zadanym IP odpowie na ARP Request.
+        \item Odpowiedź to	specjalna ramka \textbf{ARP	Reply}	(odpowiedź	ARP).	Odpowiedź	ARP	jest wysyłana na adres MAC komputera 1.
+    \end{itemize}
+    \item Po tym, jak komputer 1 pozna adres MAC komputera 2, może już zbudować ramkę przeznaczoną do komputera 2. Ramka ta zawiera wcześniej zbudowany pakiet IP (który z
+    kolei zawiera segment TCP, który z kolei zawiera komunikat HTTP). Ramka	jest wysyłana do przełącznika, a przełącznik dostarcza ją tylko	do komputera 2.
+    \begin{itemize}
+        \item Przełącznik uczy się adresów MAC przyłączonych komputerów i routerów i zapamiętuje w tablicy przypisanie adresu MAC do konkretnego swojego portu. Jeśli przełącznik dostanie ramkę ze znanym mu	 adresem MAC, to kieruje tę ramkę tylko do odpowiedniego portu, w przeciwnym wypadku wysyła kopię ramki do wszystkich swoich portów (z	wyjątkiem tego, na którym	dostał ramkę).
+    \end{itemize}
+    \item Komputer 2 (jego karta sieciowa) odbiera ramkę, sprawdza adres MAC docelowy i sumę kontrolną, po czym „wyjmuje” z ramki pakiet IP. Sprawdza adres docelowy IP i „wyjmuje”	z pakietu segment TCP. Sprawdza do którego portu należy przekazać zawartość (komunikat HTTP) i ostatecznie „wyjmuje” komunikat http z segmentu i przekazuje do portu 80, na którym nasłuchuje serwer WWW.
+    \item Serwer WWW skonstruuje odpowiedź – stronę WWW zapisaną z wykorzystaniem języka HTML). Strona ta zostanie umieszczona w komunikacie http, który następnie musi być przesłany do komputera 1. Mechanizm jest analogiczny jak poprzednio.
+\end{itemize}
+W rzeczywistości zanim może zostać przesłany segment TCP, komputery wykorzystujące ten protokół do komunikacji, muszą zbudować tzw. połączenie TCP.
+
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Nagłówek ramki & Nagłówek IP & Nagłówek TCP & Komunikat HTTP & Suma kontrolna\\
+(numery MAC) & (numery IP) & (numery portów) & & \\
+& 20 bajtów & 20 bajtów & & 4 bajty\\
+\hline
+\end{tabular}
+
+
+\end{document}
