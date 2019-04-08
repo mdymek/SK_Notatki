@@ -104,15 +104,14 @@ Dwa rodzaje topologii:
 
 Jeżeli przy fizycznej topologii gwiazdy komputer przesyła dane bezpośrednio do komputera docelowego (przełącznik), to mamy logiczną topologię gwiazdy. Jeżeli ramka jest wysyłana do wszystkich dostępnych komputerów (koncentrator), to logicznie jest to topologia magistrali.
 
-\subsubsection{Komunikacja między komputerami połączonymi switchem}
+\subsubsection{Komunikacja między komputerami}
 
 Założenia:
 \begin{itemize}
     \item Komputer źródłowy - Komputer 1: IP1, MAC1
     \item Komputer docelowy - Komputer 2: IP2, MAC2
 \end{itemize}
-
-Na komputerze docelowym  jest serwer strony WWW2.
+Połączone switchem. Na komputerze docelowym  jest serwer strony WWW2.
 
 Jeżeli na komputerze 1 ktoś spróbuje otworzyć WWW2, to:
 
@@ -145,6 +144,304 @@ Nagłówek ramki & Nagłówek IP & Nagłówek TCP & Komunikat HTTP & Suma kontro
 & 20 bajtów & 20 bajtów & & 4 bajty\\
 \hline
 \end{tabular}
+
+\textbf{W przypadku komunikacji między komputerami rozdzielonymi przynajmniej jednym routerem}
+\begin{itemize}
+    \item Wszystko do skonstruowania pakietu IP włącznie działa tak samo. Komputer tworzący ramkę musi więc wykorzystując ARP Request poznać
+    MAC adres routera, czyli swojej \textbf{bramy domyślnej} (default gateway). Stąd elementem konfiguracji komputera jest podanie mu nie tylko
+    jego adresu IP, ale również adresu IP bramy.
+    \item Ramka jest wysyłana do routera.
+    \item Router (brama) po otrzymaniu ramki „wyjmuje” z niej pakiet IP, zagląda do nagłówka i sprawdza jaki jest adres docelowy IP. Na podstawie
+    tego adresu i tablicy routowania wyznacza router następnego skoku i konstruuje i wysyła do niego nową ramkę, w której umieszcza przesyłany pakiet IP. Analogicznie aż pakiet dotrze w kolejnych ramkach do docelowej sieci i do docelowego komputera.
+\end{itemize}
+
+\subsection{Adresacja IPv4}
+
+Adres IP jest przypisywany do karty sieciowej, nie do komputera.
+
+Są \textbf{trzy typy adresów IPv4}:
+\begin{itemize}
+    \item \textbf{Adresy jednostkowe} (unicast) – pojedynczy interfejs sieciowy (komunikacja one-to-one).
+    \item \textbf{Adresy rozgłoszeniowe} (broadcast) – wszystkie węzły w tym samym segmencie sieci (one-to-everyone).
+    \item \textbf{Adresy grupowe} (multicast) – jeden lub wiele komputerów w jednej lub w różnych segmentach sieci (one-to-many).
+\end{itemize}
+
+W \textbf{adresie IP} zapisanym binarnie można wyróżnić \textbf{dwie części}:
+\begin{itemize}
+    \item \textbf{Identyfikator sieci} (Network ID) - pewna liczba bitów z lewej strony adresu
+    \item \textbf{Identyfikator hosta} (Host ID) - pozostałe bity.
+\end{itemize}
+Terminem host określa się komputer, który jest końcowym konsumentem usług sieciowych.
+
+\textbf{Granica} między identyfikatorem sieci a identyfikatorem hosta może być wyznaczona przez
+tzw. \textbf{maskę sieci}.
+
+\textbf{Identyfikator sieci}
+\begin{itemize}
+    \item \textbf{nie} może się składać z \textbf{samych jedynek}.
+    \item \textbf{nie} może się składać z \textbf{samych zer}.
+    \item \textbf{nie może się powtarzać} w złożonej sieci.
+    \item W \textbf{pierwszym oktecie} adresu \textbf{nie} może się znaleźć wartość \textbf{127} (jest ona zarezerwowana dla adresu tzw. pętli zwrotnej).
+\end{itemize}
+
+\textbf{Identyfikator hosta}
+\begin{itemize}
+    \item \textbf{nie} może się składać z \textbf{samych jedynek}.
+    \item \textbf{nie} może się składać z \textbf{samych zer}.
+    \item musi być \textbf{unikalny} w segmencie sieci lokalnej.
+\end{itemize}
+
+Adres IP, który zawiera \textbf{same zera} w części hosta jest traktowany jako \textbf{adres sieci}.
+
+\textbf{Adres ograniczonego rozgłoszenia - 255.255.255.255 = 11111111 11111111 11111111 11111111} -  adres rozgłoszenia
+w danym segmencie sieci ograniczonym routerami.\\
+\textbf{Adresy rozgłoszenia do sieci lub podsieci mają jedynki tylko w części hosta}.
+
+\textbf{Adresy nieunikalne}, powtarzalne - przykłady:
+\begin{itemize}
+    \item adresy rozpoczynające się od liczby 127, które oznaczają zawsze komputer lokalny (zwykle 127.0.0.1).
+    \item adresy tzw. transmisji grupowej.
+    \item grupy tzw. adresów prywatnych.
+\end{itemize}
+
+\subsubsection{Adresowanie oparte na klasach}
+
+Pierwszy bajt adresu determinuje do jakiej klasy należy sieć.
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Klasa & Adres sieci & Adresy & Zakres 1-go bajtu & Najstarsze bity\\
+\hline
+A & w.0.0.0 & 1.0.0.0 - 126.0.0.0 & 1 – 126 & 0\\
+\hline
+B & w.x.0.0 & 128.0.0.0 - 191.255.0.0 & 128 – 191 & 10\\
+\hline
+C & w.x.y.0 & 192.0.0.0 - 223.255.255.0 & 192 – 223 & 110\\
+\hline
+D & nie dotyczy & nie dotyczy & 224 – 239 & 1110\\
+\hline
+E & nie dotyczy & nie dotyczy & 240 – 255 & 11110\\
+\hline
+\end{tabular}
+
+
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+Klasa & Ilość sieci & Komp. w sieci & ID sieci & ID hosta & "pierwszy" & "ostatni"\\
+\hline
+A & 126 & $2^{24}-2$ & 1 bajt & 3 bajty & w.0.0.1 & w.255.255.254\\
+\hline
+B & $(191-128+1)*256$ & $2^{16}-2 = 65 534$ & 2 bajty & 2 bajty & w.x.0.1 & w.x.255.254\\
+\hline
+C & $(192-223+1)*256*256$ & $2^8 -2 = 254$ & 3 bajty & 1 bajt & w.x.z.1 & w.x.z.254\\
+\hline
+\end{tabular}
+
+\begin{itemize}
+\item \textbf{Adresy klasy D} - przeznaczone są do transmisji grupowych.
+\item \textbf{Adresy klasy E} - zarezerwowane (nie wykorzystywane normalnie do transmisji pakietów).
+\item \textbf{Adresy pętli zwrotnej} (loopback) - postaci 127.x.y.z (na ogół 127.0.0.1). Cały ruch przesyłany na ten adres nie wychodzi z komputera.
+\end{itemize}
+
+Identyfikator sieci można określić na podstawie adresu IP oraz tzw. \textbf{maski sieci}. Jest to \textbf{liczba binarna 32 bitowa}, zapisywana podobnie jak adres IP, jednak \textbf{maska zawsze z lewej strony ma jedynki, natomiast z prawej ma zera}.\\
+Przykłady masek:\\
+255.0.0.0 = 11111111.00000000.00000000.00000000 = /8,\\
+255.255.0.0 = 11111111. 11111111.00000000.00000000 = /16.\\
+\\
+Adres sieci = AdresIP \& Maska\\
+
+
+\textbf{Dzielenie sieci na podsieci}\\
+Dzielenie sieci na fragmenty nazywane \textbf{podsieciami} w celu zwiększenia efektywności działania.
+\begin{itemize}
+    \item zmniejszenie ruchu w segmentach,
+    \item zmniejszenoe tzw. dziedziny rozgłaszania (obszary przekazywania ramek rozgłoszeniowych,
+    tj. z adresem MAC ff-ff-ff-ff-ff-ff-)
+    \item zwiększenie bezpieczeństwa. Routery mogą działać jako filtry pakietów, które
+    przepuszczają między sobą tylko pakiety spełniające określone kryteria.
+\end{itemize}
+Adres podsieci można określić przez użycie niestandardowych masek sieci (\textbf{masek podsieci}).
+
+Dzielenie klasy A - maski 255.255.0.0, 255.255.255.0, dla B - 255.255.255.0.
+
+Routery przechowują w tablicach routowania informacje o znanych im trasach do pewnych sieci. Administrator w trakcie konfiguracji routera wprowadza informacje o sieciach bezpośrednio przyłączonych do routera. Potem, po włączeniu opcji dynamicznego rutowania
+routery wymieniają się informacjami o sieciach wg protokołów rutowania i na tej podstawie budują sobie pewien obraz
+sieci i potrafią wyznaczać trasy datagramów.
+
+Przykład: komputer A: 162.168.1.100, komputer B: 162.168.2.101\\
+Maska 255.255.0.0 - komputery są względem siebie lokalne.\\
+Maska 255.255.255.0 - komputery są względem siebie odległe (przedzielone routerem).
+
+\subsubsection{Adresowanie bezklasowe}
+Pytanie: czy nie można podzielić sieci na podsieci
+z \textbf{użyciem dowolnej liczby jedynek}? Na przykład, jeśli w sieci klasy B o
+adresie 149.159.0.0 /16 zastosowalibyśmy maskę podsieci nie 24 bitową (co daje 254 lub
+256 podsieci z możliwością adresowania do 254 komputerów) tylko 22 bitową.
+Otrzymalibyśmy 62 lub 64 sieci, z których każda mogłaby mieć 1022 komputery. Do określenia sieci należy podać adres
+sieci oraz maskę. Obecnie w Internecie powszechnie jest wykorzystywane adresowanie
+bezklasowe.
+Przykład adresowania bezklasowego: 145.217.123.7 /20 (maska: 255.255.240.0)
+
+\subsection{Model ISO/OSI}
+OSI (Open Systems Interconnection) utworzony przez Międzynarodową Organizację
+Normalizacyjną (ISO International Organization for Standarization w Genewie)
+stanowi \textbf{model referencyjny} (wzorcowy).
+
+\begin{itemize}
+    \item ułatwienie zrozumienia procesów zachodzących podczas komunikowania się komputerów
+    \item ułatwienie projektowania protokołów komunikacyjnych
+\end{itemize}
+
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Numer warstwy} & \textbf{Nazwa warstwy}\\
+\hline
+7 & Aplikacji\\
+\hline
+6 & Prezentacji\\
+\hline
+5 & Sesji\\
+\hline
+4 & Transportu\\
+\hline
+3 & Sieci\\
+\hline
+2 & Łącza danych\\
+\hline
+1 & Fizyczna\\
+\hline
+\end{tabular}
+
+Każdą z warstw można rozpatrywać w aspekcie dwóch zasadniczych funkcji: odbierania i
+nadawania.
+\begin{itemize}
+\item \textbf{Warstwa fizyczna} - standard połączenia fizycznego, charakterystyki wydajnościowe nośników. Same media transmisyjne pozostają poza dziedziną jej
+zainteresowania (czasem określane są terminem warstwa zerowa).
+\item \textbf{Warstwa łącza danych} – grupowanie danych wejściowych (z warstwy fizycznej) w bloki zwane \textbf{ramkami} danych („jednostki
+danych usług warstwy fizycznej”), mechanizmy kontroli poprawności
+transmisji (FCS).
+\item \textbf{Warstwa sieci} - określenie trasy przesyłania
+danych między komputerami poza lokalnym segmentem sieci LAN, protokoły trasowane takie jak IP (ze stosu protokołów TCP/IP), IPX
+(Novell IPX/SPX), DDP (AppleTalk) (adresowanie logiczne).
+\item \textbf{Warstwa transportu} - kontrola błędów i przepływu danych
+poza lokalnymi segmentami LAN, protokoły zapewniające
+komunikację procesów uruchomionych na odległych komputerach (np. oprogramowanie klient/serwer), w tym komunikację z zapewnieniem
+niezawodności dostarczania danych. Protokoły tej warstwy to np. TCP oraz UDP (z
+TCP/IP), SPX (Novell IPX/SPX), ATP, NBP, AEP (AppleTalk).
+\item \textbf{Warstwa sesji} - zarządzanie przebiegiem komunikacji podczas
+połączenia między komputerami (sesji).
+\item \textbf{Warstwa prezentacji} - kompresja, kodowanie i
+translacja między niezgodnymi schematami kodowania oraz szyfrowanie.
+\item \textbf{Warstwa aplikacji} - interfejs między aplikacjami a
+usługami sieci.
+\end{itemize}
+
+Określona sesja komunikacyjna nie musi wykorzystywać protokołów ze wszystkich warstw
+modelu. Przy nadawaniu dane kierowane są od warstwy 7 do 1, przy odbiorze od 1 do 7.
+
+Używane są też inne modele warstwowe, np. jeden z takich
+prostszych modeli – model TCP/IP – jest często wykorzystywany przy opisie zestawu (stosu)
+protokołów TCP/IP (Internet). Nie ma warstwy prezentacji ani warstwy sesji, ponieważ zestaw TCP/IP nie zawiera
+żadnych protokołów, które można byłoby przypisać do tych warstw. Nieco inny model
+„dydaktyczny” został zaproponowany przez Tannenbauma.
+
+\begin{tabular}{|c|c|c|c| }
+\hline
+Nr warstwy OSI & Nazwa warstwy OSI & Nazwa warstwy TCP/IP & Nazwa warstwy Tannenbaum\\
+\hline
+7 & Aplikacji & Aplikacji & Aplikacji\\
+6 & Prezentacji & & \\
+5 & Sesji & & \\
+4 & Transportu & Transportu & Transportu\\
+3 & Sieci & Intersieci & Sieci\\
+2 & Łącza danych & Interfejsu sieciowego & Łącza danych\\
+1 & Fizyczna & & Fizyczna\\
+\hline
+\end{tabular}
+
+
+
+\section{Laboratorium 1}
+Zasady zaliczenia: trzy kolokwia (dwa pisane (adresacja + routing i switching)  + jedno praktyczne ( naprawienie zepsutych rzeczy ) )
+\begin{itemize}
+    \item dwa kolokwia pisemne (20 + 20)
+    \begin{itemize}
+        \item adresacja
+        \item routing i switching
+    \end{itemize}
+    \item kolokwium praktyczne (30)
+    \begin{itemize}
+        \item naprawienie zepsutych rzeczy
+    \end{itemize}
+    \item obecność - 15*2 = 30
+\end{itemize}
+W sumie 100 punktów.
+
+\begin{tabular}{|c|c|}
+\hline
+0 - 50 & ndst\\
+\hline
+51 - 60 & dst\\
+\hline
+61 - 70 & dst+\\
+\hline
+71 - 80 & db\\
+\hline
+81 - 90 & db+\\
+\hline
+91 - 100 & bdb\\
+\hline
+\end{tabular}
+
+
+Bridge - fizyczne połączenie do fizycznej karty sieciowej (kabel rj5) jakby jedna szyna (wszystko do fizycznej wpada do wirtualnej)
+Host only - tylko z komputera bez wyjścia na zewnątrz
+NAP - adres z fizycznego komputera, nie z wirtualki
+
+settings - vnet3 - nr wirtualnego switcha
+brama domyślna - wyjście na świat - pc2
+
+\section{Laboratorium 2}
+Routing
+
+menedżer urządzeń -> nr COMu -> PuTTy serial COM -> konsola - wpisać no ->
+
+\section{Wykład 3}
+
+\subsection{Routing dynamiczny}
+Sposób obsługi routowania przez warstwę IP to \textbf{mechanizm routowania} -
+przeglądanie przez tablicy routowania, podejmowanie decyzji co do przesyłania datagramów IP.
+Przez pojęcie \textbf{polityka routowania} określa się działania procesu routowania podejmowane w
+celu ustanowienia i bieżącej modyfikacji tablicy routowania, jest ona realizowana z wykorzystaniem protokołów routowania.\\
+
+Pożądane cechy protokołów routowania to:
+\begin{itemize}
+    \item Wyznaczenie \textbf{najlepszej trasy} do punktu docelowego, wymaga określenia kryterium porównywania tras.
+    \item \textbf{Odporność} (robustness) - protokoły muszą zawsze działać poprawnie.
+    \item \textbf{Szybkie osiągnięcie zbieżności} (rapid convergence), czyli stanu, w którym wszystkie routery „widzą” jednakowo topologię sieci.
+Szybkość określa czas rozpowszechnienia informacji o zmianach.
+    \item \textbf{Dopasowanie do zmian} (flexibility), wyznaczanie nowych optymalnych tras.
+\end{itemize}
+
+Internet jest zorganizowany jako grupa tzw. systemów autonomicznych (Autonomous
+System – AS), z których każdy jest osobno administrowany. W każdym są wewnętrzne protokoły routowania (ang. IGP – interdomain gateway protocol lub IRP – interdomain routing protocol).\\
+
+Ze względu na sposób działania protokoły routowania wewnętrznego dzielimy na:
+\begin{itemize}
+    \item protokoły \textbf{wektora odległości} (DV, distance-vector): RIP, RIP2, IGRP, EIGRP
+    \item protokoły \textbf{stanu łącza} (link-state): OSPF, OSPF2, IS-IS, NLSP
+\end{itemize}
+Uwaga: w starszych opracowaniach firmy Cisco protokół EIGRP był określany jako protokół
+hybrydowy.
+
+\textbf{Zewnętrzne protokoły routowania} (EGP -bexterior gateway protocols) - międzydomenowe protokoły routowania używane między routerami działającymi w różnych systemach autonomicznych.
+Najważniejszym protokołem zewnętrznym jest BGP.
+Oprócz protokołów routowania rozważa się protokoły routowalne, takie jak IP, IPX, Apple
+Talk. Określają sposoby adresowania, umożliwiające dostarczanie
+pakietów w złożonej sieci komputerowej. Routery mogą wyznaczać trasy dla różnych
+protokołów routowalnych, nie tylko IP. Każdy z protokołów routowania i każdy z protokołów
+routowalnych musi być w routerze skonfigurowany.
+
 
 
 \end{document}
