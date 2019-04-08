@@ -16,8 +16,56 @@
 \begin{document}
 \maketitle
 
-\section{Wykład 1}
-\subsection{Podstawowe pojęcia}
+
+
+% \section{Laboratorium 1}
+% Zasady zaliczenia: trzy kolokwia (dwa pisane (adresacja + routing i switching)  + jedno praktyczne ( naprawienie zepsutych rzeczy ) )
+% \begin{itemize}
+%     \item dwa kolokwia pisemne (20 + 20)
+%     \begin{itemize}
+%         \item adresacja
+%         \item routing i switching
+%     \end{itemize}
+%     \item kolokwium praktyczne (30)
+%     \begin{itemize}
+%         \item naprawienie zepsutych rzeczy
+%     \end{itemize}
+%     \item obecność - 15*2 = 30
+% \end{itemize}
+% W sumie 100 punktów.
+%
+% \begin{tabular}{|c|c|}
+% \hline
+% 0 - 50 & ndst\\
+% \hline
+% 51 - 60 & dst\\
+% \hline
+% 61 - 70 & dst+\\
+% \hline
+% 71 - 80 & db\\
+% \hline
+% 81 - 90 & db+\\
+% \hline
+% 91 - 100 & bdb\\
+% \hline
+% \end{tabular}
+%
+%
+% Bridge - fizyczne połączenie do fizycznej karty sieciowej (kabel rj5) jakby jedna szyna (wszystko do fizycznej wpada do wirtualnej)
+% Host only - tylko z komputera bez wyjścia na zewnątrz
+% NAP - adres z fizycznego komputera, nie z wirtualki
+%
+% settings - vnet3 - nr wirtualnego switcha
+% brama domyślna - wyjście na świat - pc2
+%
+% \section{Laboratorium 2}
+% Routing
+%
+% menedżer urządzeń -> nr COMu -> PuTTy serial COM -> konsola - wpisać no ->
+
+
+
+\section{Podstawowe pojęcia}
 \textbf{Sieć komputerowa} - zbiór połączonych komputerów i urządzeń z możliwością komunikacji. Obejmują	również	wszystko co	umożliwia
 komunikację i współdzielenie zasobów, w szczególności oprogramowanie, protokoły komunikacyjne, media transmisyjne (kable).
 \\
@@ -46,7 +94,7 @@ Thunderbolt).
 \textbf{Internet jest globalną	 siecią	 komputerową} złożoną z	 wielu	 sieci	 komputerowych wykorzystujących	 \textbf{protokół IP} (zestaw protokołów TCP/IP). Od strony	 logicznej	 Internet można	identyfikować	z	\textbf{przestrzenią	adresową	protokołu	IP}	 (są	w użyciu	dwie wersje:	IPv4 i nowsza IPv6).\\
 Na	każdą	sieć	komputerową	składają	się	sprzętowe	oraz	programowe	elementy	składowe.
 
-\subsubsection{Sprzętowe	elementy	składowe	sieci	komputerowych}
+\subsection{Sprzętowe	elementy	składowe	sieci	komputerowych}
 Podstawowymi	elementami	sprzętowymi	są:
 \begin{itemize}
     \item \textbf{Nośniki	transmisji}	(media	transmisyjne)\\
@@ -69,7 +117,7 @@ Podstawowymi	elementami	sprzętowymi	są:
 Karty	sieciowe	pakują	dane	w	tzw.	ramki. Ramki	są	podstawowymi	porcjami	danych	przesyłanymi	w	sieciach	komputerowych.
 
 
-\subsubsection{Programowe	elementy	składowe	sieci	komputerowych.}
+\subsection{Programowe	elementy	składowe	sieci	komputerowych.}
 Elementami	programowymi	sieci	są:
 \begin{itemize}
     \item \textbf{Protokoły	 komunikacyjne} (sieciowe)\\
@@ -81,7 +129,7 @@ Elementami	programowymi	sieci	są:
     Sterują pracą elementów	 sprzętowych. Sterowniki, programy	 obsługi, mikroprogramy umożliwiające	działanie	takich	urządzeń,	jak	karty	sieciowe.
 \end{itemize}
 
-\subsubsection{Ramki}
+\subsection{Ramki}
 Dane przesyłane są w \textbf{porcjach zwanych ramkami}. Urządzenie	zapewniające dostęp	do nośnika przesyła	pewne sygnały, które są \textbf{interpretowane jako bity}. Od strony	logicznej wysyłany	ciąg bitów zawiera	pewne informacje i może	być	podzielony na porcje zwane \textbf{polami}.
 
 Typowa ramka zawiera następujące pola:
@@ -95,7 +143,7 @@ Typowa ramka zawiera następujące pola:
 Ogranicznik	 początku ramki być poprzedzony lub może zawierać tzw. \textbf{preambułę}, która w pewnych technologiach sieciowych jest stosowana do synchronizacji nadajnika i
 odbiornika. Wielkość pól określana jest w oktetach (8 bitów, uniknięcia niejednoznaczności "bajtu" mogącego mieć więcej bitów). \textbf{Kapsułkowanie} - wstawienie danych do struktury ramki. Istnieją różne formaty ramek, różne sposoby kapsułkowania i różne sposoby fizycznego adresowania komputerów.
 
-\subsection{Topologia sieci lokalnych}
+\section{Topologia sieci lokalnych}
 Dwa rodzaje topologii:
 \begin{itemize}
     \item Topologie fizyczne
@@ -104,7 +152,7 @@ Dwa rodzaje topologii:
 
 Jeżeli przy fizycznej topologii gwiazdy komputer przesyła dane bezpośrednio do komputera docelowego (przełącznik), to mamy logiczną topologię gwiazdy. Jeżeli ramka jest wysyłana do wszystkich dostępnych komputerów (koncentrator), to logicznie jest to topologia magistrali.
 
-\subsubsection{Komunikacja między komputerami}
+\subsection{Komunikacja między komputerami}
 
 Założenia:
 \begin{itemize}
@@ -204,7 +252,7 @@ w danym segmencie sieci ograniczonym routerami.\\
     \item grupy tzw. adresów prywatnych.
 \end{itemize}
 
-\subsubsection{Adresowanie oparte na klasach}
+\subsection{Adresowanie oparte na klasach}
 
 Pierwszy bajt adresu determinuje do jakiej klasy należy sieć.
 
@@ -272,7 +320,7 @@ Przykład: komputer A: 162.168.1.100, komputer B: 162.168.2.101\\
 Maska 255.255.0.0 - komputery są względem siebie lokalne.\\
 Maska 255.255.255.0 - komputery są względem siebie odległe (przedzielone routerem).
 
-\subsubsection{Adresowanie bezklasowe}
+\subsection{Adresowanie bezklasowe}
 Pytanie: czy nie można podzielić sieci na podsieci
 z \textbf{użyciem dowolnej liczby jedynek}? Na przykład, jeśli w sieci klasy B o
 adresie 149.159.0.0 /16 zastosowalibyśmy maskę podsieci nie 24 bitową (co daje 254 lub
@@ -282,7 +330,7 @@ sieci oraz maskę. Obecnie w Internecie powszechnie jest wykorzystywane adresowa
 bezklasowe.
 Przykład adresowania bezklasowego: 145.217.123.7 /20 (maska: 255.255.240.0)
 
-\subsection{Model ISO/OSI}
+\section{Model ISO/OSI}
 OSI (Open Systems Interconnection) utworzony przez Międzynarodową Organizację
 Normalizacyjną (ISO International Organization for Standarization w Genewie)
 stanowi \textbf{model referencyjny} (wzorcowy).
@@ -359,56 +407,7 @@ Nr warstwy OSI & Nazwa warstwy OSI & Nazwa warstwy TCP/IP & Nazwa warstwy Tannen
 \hline
 \end{tabular}
 
-
-
-\section{Laboratorium 1}
-Zasady zaliczenia: trzy kolokwia (dwa pisane (adresacja + routing i switching)  + jedno praktyczne ( naprawienie zepsutych rzeczy ) )
-\begin{itemize}
-    \item dwa kolokwia pisemne (20 + 20)
-    \begin{itemize}
-        \item adresacja
-        \item routing i switching
-    \end{itemize}
-    \item kolokwium praktyczne (30)
-    \begin{itemize}
-        \item naprawienie zepsutych rzeczy
-    \end{itemize}
-    \item obecność - 15*2 = 30
-\end{itemize}
-W sumie 100 punktów.
-
-\begin{tabular}{|c|c|}
-\hline
-0 - 50 & ndst\\
-\hline
-51 - 60 & dst\\
-\hline
-61 - 70 & dst+\\
-\hline
-71 - 80 & db\\
-\hline
-81 - 90 & db+\\
-\hline
-91 - 100 & bdb\\
-\hline
-\end{tabular}
-
-
-Bridge - fizyczne połączenie do fizycznej karty sieciowej (kabel rj5) jakby jedna szyna (wszystko do fizycznej wpada do wirtualnej)
-Host only - tylko z komputera bez wyjścia na zewnątrz
-NAP - adres z fizycznego komputera, nie z wirtualki
-
-settings - vnet3 - nr wirtualnego switcha
-brama domyślna - wyjście na świat - pc2
-
-\section{Laboratorium 2}
-Routing
-
-menedżer urządzeń -> nr COMu -> PuTTy serial COM -> konsola - wpisać no ->
-
-\section{Wykład 3}
-
-\subsection{Routing dynamiczny}
+\section{Routing dynamiczny}
 Sposób obsługi routowania przez warstwę IP to \textbf{mechanizm routowania} -
 przeglądanie przez tablicy routowania, podejmowanie decyzji co do przesyłania datagramów IP.
 Przez pojęcie \textbf{polityka routowania} określa się działania procesu routowania podejmowane w
@@ -442,6 +441,144 @@ pakietów w złożonej sieci komputerowej. Routery mogą wyznaczać trasy dla r�
 protokołów routowalnych, nie tylko IP. Każdy z protokołów routowania i każdy z protokołów
 routowalnych musi być w routerze skonfigurowany.
 
+\subsection{Protokoły routowania wektora odległości}
+Distance vector – wektor odległości. Protokoły wektora odległości są oparte na \textbf{algorytmie Bellmana Forda} obliczania najkrótszych ścieżek w grafie.\\
+Węzły grafu oznaczają routery, krawędzie odpowiadają połączeniom między routerami.
+Połączenia te mają różne koszty, co odpowiada różnym wagom krawędzi grafu.
+W protokołach routowania wagi nie mogą być ujemne, co oznacza, że można też
+wykorzystać np. algorytm Dijkstry (jest wykorzystywany w protokołach stanu łącza).\\
 
+Nie zawsze router jest w stanie wykryć uszkodzenie łącza. Uszkodzeniu
+może ulec też np. sąsiedni router albo ramka zawierająca pakiet z wektorem odległości i wektor
+odległości nie dotrze do docelowego routera. Dlatego w protokołach typu wektor odległości
+trasa jest zaznaczana jako niedostępna, gdy router nie dostanie o niej informacji od sąsiada
+przez kilka kolejnych rozgłoszeń (np. w RIP 180 sekund, czyli sześć
+rozgłoszeń). Trasa niedostępna nie jest jeszcze usuwana z tablicy routowania przez
+kilka rozgłoszeń, np. w RIP przez 90 sekund. Powoduje to większe opóźnienie w czasie uzyskania zbieżności.\\
+
+\subsection{Niekorzystne zjawiska związane z routowaniem wg protokołów wektora odległości}
+\begin{itemize}
+    \item Pętle routowania.
+    \item Efekt odbijania.
+    \item Zliczanie do nieskończoności.
+\end{itemize}
+
+Taktyki rozwiązania:
+\begin{itemize}
+    \item \textbf{Dzielony horyzont (split horizon)}
+    \begin{itemize}
+        \item \textbf{Do łącza nie zostanie przekazana informacja o trasach wiodących przez to łącze}.
+        \item Dzielony horyzont nie zawsze, ale zazwyczaj likwiduje \textbf{pętle routowania}.
+    \end{itemize}
+
+    \item \textbf{Natychmiastowe/wymuszane aktualizacje (triggered updates)}
+    \begin{itemize}
+        \item W przypadku zmiany metryki trasy \textbf{musi nastąpić rozgłoszenie bez względu na okres
+    rozgłoszeń} charakterystyczny dla danego protokołu.
+        \item Powoduje to \textbf{szybszą zbieżność} i częściowo zapobiega \textbf{pętlom routowania}.
+    \end{itemize}
+
+    \item \textbf{Zegary hold-down (hold-down timers)}
+    \begin{itemize}
+        \item Router po otrzymaniu od sąsiada informacji o dezaktualizacji trasy włącza \textbf{specjalny zegar} (hold-down timer).
+        \item Jeśli przed upływem czasu progowego nastąpi:
+        \begin{itemize}
+            \item \textbf{aktualizacja od tego samego sąsiada} na trasę aktywną, to \textbf{trasa} jest zaznaczana jako \textbf{aktywna}.
+            \item router dostanie \textbf{od innego routera informację} o trasie do rozważanego miejsca docelowego z \textbf{metryką mniejszą bądź równą} tej zdezaktualizowanej, wówczas następuje \textbf{wpis zgłoszonej trasy}.
+            \item router dostanie \textbf{od innego routera informację} o trasie do rozważanego miejsca docelowego z \textbf{metryką większą} od tej zdezaktualizowanej, taka trasa \textbf{nie jest brana pod uwagę}.
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Protokół RIP}
+\begin{itemize}
+    \item Protokół typu wektor odległości.
+
+    \item Metryką w RIP jest liczba skoków (hops) do celu. Można skonfigurować inne wartości dla połączeń, więc np. preferencję tras szybszych.
+
+    \item Metryka 16 oznacza umownie nieskończoność (miejsce niedostępne), zatem RIP nie jest dobrym protokołem w przypadku dużych sieci.
+
+    \item Można ustawić trasę domyślną (adres 0.0.0.0).
+
+    \item W wersji RIP na routerach Cisco można przechowywać więcej niż jedną trasę o
+    takiej samej metryce. Można włączyć równoważenie obciążeń (load balancing) na dwa
+    sposoby:
+    \begin{itemize}
+        \item \textbf{Process switching} (packet-by-packet load balancing), kosztowny i dlatego nie polecany, każdy pakiet jest kierowany osobno, dla każdego jest przeglądana tablica routowania.
+        \item \textbf{Fast switching} (destination-by-destination), tylko dla pierwszego pakietu z pewnego miejsca źródłowego do pewnego miejsca docelowego przeszukiwana jest tablica routowania. Wyznaczona trasa jest zapisywana w pamięci podręcznej (cache) i kolejne pakiety wędrują tą samą ścieżką.
+    \end{itemize}
+
+    \item Wykorzystywane są następujące \textbf{mechanizmy} typowe dla protokołów wektor odległości:
+    \begin{itemize}
+        \item Split horizon (+ with poison reverse)
+        \item Holddown counters (timers)
+        \item Triggered updates
+    \end{itemize}
+
+    \item \textbf{Cztery zegary, liczniki} (timers, counters):
+    \begin{itemize}
+        \item \textbf{Update timer} (standardowo 30 sekund) – po przesłaniu wektora odległości
+        (routing update) zegar jest zerowany. Po osiągnięciu 30 s. wysyłany jest następny wektor.
+        \item \textbf{Invalid timer} (standardowo 180 sekund) – za każdym razem jak router dostaje uaktualnienie pewnej trasy zegar ten dla trasy jest zerowany. Po osiągnięciu wartości progowej trasa jest zaznaczana jako niepoprawna, ale pakiety jeszcze są kierowane tą trasą.
+        \item \textbf{Hold-down timer} (standardowo 180s.) – po przekroczeniu wartości progowej
+        przez invalid timer trasa jest ustawiana w stan hold-down. Trasa jest ustawiana w stan holddown również gdy router dostanie informację o tym, że sieć jest nieosiągalna (i nie ma innej, osiągalnej trasy).
+        \item \textbf{Flush-timer} (standardowo 240s.) – zegar dla trasy jest zerowany po otrzymaniu informacji o trasie. Po osiągnięciu czasu progowego trasa jest usuwana nawet, jeśli trasa jest jeszcze w stanie hold-down.
+    \end{itemize}
+
+    \item Przewidziano możliwość \textbf{odpytywania routera o cały wektor odległości} lub o \textbf{trasy} do pewnych miejsc docelowych – takie możliwości są wykorzystywane prze starcie oraz na ogół w celach diagnostycznych.\\
+
+    \item \textbf{Zalety RIP}
+    \begin{itemize}
+        \item prostota - procesor nie jest nadmiernie obciążony aktualizacją tablicy routowania i innymi działaniami,
+        \item łatwość konfiguracji.
+    \end{itemize}
+
+    \item \textbf{Wady RIP}
+    \begin{itemize}
+        \item wolne rozprzestrzenianie się informacji o zmianach w topologii sieci (wolna zbieżność),
+        \item stosunkowo częste (co 30s.) przesyłanie dużych porcji informacji w komunikatach RIP, co obciąża sieć.
+        \item Wadą RIPv1 jest to, że nie daje możliwości przesyłania masek. RIP w wersji 1 jest protokołem routowania klasowego. Przyjmowana jest maska taka, jaka jest ustawiona na interfejsie, do którego dotarł wektor odległości z tą informacją. Na granicach klas jednak routery RIP wykonują automatyczną sumaryzację, co przy niepoprawnych konfiguracjach może prowadzić do błędów w routowaniu.
+    \end{itemize}
+
+    \item RIPv2 przekazuje maski podsieci, można stosować sieci bezklasowe i podsieci o zmiennym rozmiarze. Umożliwia prostą autentykację (przez hasła). Przekazuje adresy następnego skoku w komunikatach. Część wad RIP pozostała: 16 jako metryka oznaczająca nieskończoność, brak alternatywnych tras.
+\end{itemize}
+
+\subsection{Wiele protokołów routowania. Odległości administracyjne.}
+W środowisku współdziałania wielu protokołów routowania dla tras, w zależności od tego
+jakie jest ich źródło, ustawiana jest tzw. \textbf{odległość administracyjna}. Odległość jest używana tylko \textbf{wewnętrznie przez router}, wybierane są trasy o \textbf{najmniejszej odległości}.\\
+
+Standardowe odległości dla tras:\\
+\begin{tabular}{|c|c|}
+    \hline
+    Źródło trasy & Odległość administracyjna\\
+    \hline
+    Connected interface & 0\\
+    \hline
+    Static route & 1\\
+    \hline
+    Summary EIGRP & 5\\
+    \hline
+    External BGP & 20\\
+    \hline
+    Internal EIGRP & 90\\
+    \hline
+    IGRP & 100\\
+    \hline
+    OSPF & 110\\
+    \hline
+    IS-IS & 115\\
+    \hline
+    RIP & 120\\
+    \hline
+    EGP & 140\\
+    \hline
+    Internal BGP & 200\\
+    \hline
+    Unknown & 255\\
+    \hline
+\end{tabular}
+
+Na routerach można również włączyć redystrybucję tras między protokołami routowania
+według różnych zasad, z odpowiednim przeliczaniem metryk.
 
 \end{document}
