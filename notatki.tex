@@ -62,6 +62,28 @@
 % Routing
 %
 % menedżer urządzeń -> nr COMu -> PuTTy serial COM -> konsola - wpisać no ->
+%
+%
+% \begin{itemize}
+%     \item Z listwy SERIAL (numer monitora nad) kablem prostym do konsoli routera.
+%     \item Z listwy LAN (numer monitora nad) kablem prostym do f0/1
+%     \item Z f0/0 kablem prostym do switcha.
+%     \item Odpowiednio seriale zgodnie z rysunkiem tymi płaskimi niebieskimi kablami.
+%     \item Menedżer urządzeń - sprawdzamy numer COM.
+%     \item PuTTy - wpisujemy odpowiedni numer COM.
+%
+%     \item Cisco
+%     enable\\
+%     configure terminal\\
+%
+%     interface x/x\\
+%     ip address \textit{IP_addr maska}\\
+%     interafce loopback nr \\
+%     clock rate – tylko na serialach, nie trzeba ustawiać na Cisco\\
+%     encapsulation ppp – ustawienie enkapsulacji (tylko na serialach)\\
+%     encapsulation hdlc - ustawienie enkapsulacji (tylko na serialach)\\
+%     no shutdown\\
+% \end{itemize}
 
 
 
@@ -143,7 +165,7 @@ Typowa ramka zawiera następujące pola:
 Ogranicznik	 początku ramki być poprzedzony lub może zawierać tzw. \textbf{preambułę}, która w pewnych technologiach sieciowych jest stosowana do synchronizacji nadajnika i
 odbiornika. Wielkość pól określana jest w oktetach (8 bitów, uniknięcia niejednoznaczności "bajtu" mogącego mieć więcej bitów). \textbf{Kapsułkowanie} - wstawienie danych do struktury ramki. Istnieją różne formaty ramek, różne sposoby kapsułkowania i różne sposoby fizycznego adresowania komputerów.
 
-\section{Topologia sieci lokalnych}
+\subsection{Topologia sieci lokalnych}
 Dwa rodzaje topologii:
 \begin{itemize}
     \item Topologie fizyczne
@@ -152,7 +174,7 @@ Dwa rodzaje topologii:
 
 Jeżeli przy fizycznej topologii gwiazdy komputer przesyła dane bezpośrednio do komputera docelowego (przełącznik), to mamy logiczną topologię gwiazdy. Jeżeli ramka jest wysyłana do wszystkich dostępnych komputerów (koncentrator), to logicznie jest to topologia magistrali.
 
-\subsection{Komunikacja między komputerami}
+\subsubsection{Komunikacja między komputerami}
 
 Założenia:
 \begin{itemize}
@@ -203,8 +225,211 @@ Nagłówek ramki & Nagłówek IP & Nagłówek TCP & Komunikat HTTP & Suma kontro
     tego adresu i tablicy routowania wyznacza router następnego skoku i konstruuje i wysyła do niego nową ramkę, w której umieszcza przesyłany pakiet IP. Analogicznie aż pakiet dotrze w kolejnych ramkach do docelowej sieci i do docelowego komputera.
 \end{itemize}
 
-\subsection{Adresacja IPv4}
+\subsection{Model ISO/OSI}
+OSI (Open Systems Interconnection) utworzony przez Międzynarodową Organizację
+Normalizacyjną (ISO International Organization for Standarization w Genewie)
+stanowi \textbf{model referencyjny} (wzorcowy).
 
+\begin{itemize}
+    \item ułatwienie zrozumienia procesów zachodzących podczas komunikowania się komputerów
+    \item ułatwienie projektowania protokołów komunikacyjnych
+\end{itemize}
+
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Numer warstwy} & \textbf{Nazwa warstwy}\\
+\hline
+7 & Aplikacji\\
+\hline
+6 & Prezentacji\\
+\hline
+5 & Sesji\\
+\hline
+4 & Transportu\\
+\hline
+3 & Sieci\\
+\hline
+2 & Łącza danych\\
+\hline
+1 & Fizyczna\\
+\hline
+\end{tabular}
+
+Każdą z warstw można rozpatrywać w aspekcie dwóch zasadniczych funkcji: odbierania i
+nadawania.
+\begin{itemize}
+\item \textbf{Warstwa fizyczna} - standard połączenia fizycznego, charakterystyki wydajnościowe nośników. Same media transmisyjne pozostają poza dziedziną jej
+zainteresowania (czasem określane są terminem warstwa zerowa).
+\item \textbf{Warstwa łącza danych} – grupowanie danych wejściowych (z warstwy fizycznej) w bloki zwane \textbf{ramkami} danych („jednostki
+danych usług warstwy fizycznej”), mechanizmy kontroli poprawności
+transmisji (FCS).
+\item \textbf{Warstwa sieci} - określenie trasy przesyłania
+danych między komputerami poza lokalnym segmentem sieci LAN, protokoły trasowane takie jak IP (ze stosu protokołów TCP/IP), IPX
+(Novell IPX/SPX), DDP (AppleTalk) (adresowanie logiczne).
+\item \textbf{Warstwa transportu} - kontrola błędów i przepływu danych
+poza lokalnymi segmentami LAN, protokoły zapewniające
+komunikację procesów uruchomionych na odległych komputerach (np. oprogramowanie klient/serwer), w tym komunikację z zapewnieniem
+niezawodności dostarczania danych. Protokoły tej warstwy to np. TCP oraz UDP (z
+TCP/IP), SPX (Novell IPX/SPX), ATP, NBP, AEP (AppleTalk).
+\item \textbf{Warstwa sesji} - zarządzanie przebiegiem komunikacji podczas
+połączenia między komputerami (sesji).
+\item \textbf{Warstwa prezentacji} - kompresja, kodowanie i
+translacja między niezgodnymi schematami kodowania oraz szyfrowanie.
+\item \textbf{Warstwa aplikacji} - interfejs między aplikacjami a
+usługami sieci.
+\end{itemize}
+
+Określona sesja komunikacyjna nie musi wykorzystywać protokołów ze wszystkich warstw
+modelu. Przy nadawaniu dane kierowane są od warstwy 7 do 1, przy odbiorze od 1 do 7.
+
+Używane są też inne modele warstwowe, np. jeden z takich
+prostszych modeli – model TCP/IP – jest często wykorzystywany przy opisie zestawu (stosu)
+protokołów TCP/IP (Internet). Nie ma warstwy prezentacji ani warstwy sesji, ponieważ zestaw TCP/IP nie zawiera
+żadnych protokołów, które można byłoby przypisać do tych warstw. Nieco inny model
+„dydaktyczny” został zaproponowany przez Tannenbauma.
+
+\begin{tabular}{|c|c|c|c| }
+\hline
+Nr warstwy OSI & Nazwa warstwy OSI & Nazwa warstwy TCP/IP & Nazwa warstwy Tannenbaum\\
+\hline
+7 & Aplikacji & Aplikacji & Aplikacji\\
+6 & Prezentacji & & \\
+5 & Sesji & & \\
+4 & Transportu & Transportu & Transportu\\
+3 & Sieci & Intersieci & Sieci\\
+2 & Łącza danych & Interfejsu sieciowego & Łącza danych\\
+1 & Fizyczna & & Fizyczna\\
+\hline
+\end{tabular}
+
+\subsection{Zestaw (stos) protokołów TCP/IP}
+Składa się z protokołów, które stanowią obecnie podstawę działania Internetu. TCP/IP jest standardem w komunikacji sieciowej.
+
+\begin{tabular}{|c|c|}
+    \hline
+    Warstwa TCP/IP & Warstwa modelu OSI\\
+    \hline
+    Aplikacji & Aplikacji\\
+    & Prezentacji\\
+    & Sesji\\
+    \hline
+    Transportu & Transportu\\
+    \hline
+    Internetowa (sieci, intersieci) & Sieci\\
+    \hline
+    Dostępu do sieci (interfejsu
+    sieciowego) & Łącza danych\\
+    & Fizyczna\\
+    \hline
+\end{tabular}
+
+Protokoły z zestawu TCP/IP:
+\begin{itemize}
+    \item TCP - warstwa transportu,
+    \item UDP - warstwa transpotu,
+    \item IP - IPv4 i IPv6, warstwa internetowa,
+    \item ARP - tłumaczy adresy między warstwą internetową a warstwą interfejsu
+    sieciowego, czasami zaliczany do tej ostatniej warstwy,
+    \item ICMP - m.in. komunikaty o problemach,
+    \item IGMP - komunikacja grupowa.
+\end{itemize}
+
+Na warstwę aplikacji składają się komponenty programowe sieci, wysyłające i odbierające
+informacje przez tzw. porty TCP lub UDP (z warstwy transportu).
+Protokoły warstwy aplikacji to między innymi:
+\begin{itemize}
+    \item FTP (File Transfer Protocol),
+    \item TELNET,
+    \item DNS (Domain Name System) związany z usługą DNS (Domain Name Service).
+\end{itemize}
+
+
+Dane przechodząc w dół stosu protokołów TCP/IP są opakowywane i otrzymują
+odpowiedni nagłówek. Porcje danych przesyłane w dół stosu mają różne
+nazwy:
+\begin{itemize}
+    \item \textbf{Komunikat} - porcja danych utworzona w warstwie aplikacji i przesłana do warstwy transportu.
+    \item \textbf{Segment} - porcja danych utworzona przez oprogramowanie implementujące protokół TCP w warstwie transportu. Zawiera w sobie komunikat.
+    \item \textbf{Datagram UDP} - porcja danych utworzona przez oprogramowanie implementujące protokół UDP w warstwie transportu.
+    \item \textbf{Datagram} - również porcja danych utworzona w warstwie internetowej przez oprogramowanie implementujące protokół IP. Datagram IP zawiera w sobie segment, bywa nazywany pakietem.
+    \item \textbf{Ramka} - porcja danych utworzona na poziomie dostępu do sieci.
+\end{itemize}
+
+Sekwencja zdarzeń przy wysłaniu danych:
+\begin{itemize}
+    \item Aplikacja przesyła dane do warstwy transportu.
+    \item Dalszy dostęp do sieci realizowany jest przez TCP albo UDP.
+    \begin{itemize}
+        \item TCP realizuje tzw. niezawodne połączenia i kontroluje przepływ danych zapewniając niezawodne dostarczenie danych.
+        \item UDP nie zapewnia niezawodności, ale jest szybszy.
+    \end{itemize}
+    \item Segment lub datagram UDP przesyłany jest do warstwy IP, gdzie protokół IP dołącza między innymi informacje o adresach IP źródła i celu tworząc datagram IP (pakiet).
+    \item Datagram z IP przechodzi do warstwy interfejsu sieciowego, gdzie tworzone są ramki. W sieci LAN ramki zawierają adres fizyczny (przypisany do karty sieciowej) otrzymany zprotokołu ARP.
+    \item Ramka przekształcana jest w ciąg sygnałów, który zostaje przesłany przez sieć.
+\end{itemize}
+
+\textbf{RFC} (Request for Comments) - miejsce publikowania oficjalnych standardów internetowych. Niektóre dokumenty RFC nie są standardami, ale pełnią funkcję informacyjną. Każdy dokument RFC posiada swój numer – większe numery oznaczają nowsze dokumenty.
+
+\subsubsection{ARP (Address Resolution Protocol)}
+ARP stosowany jest w sieciach Ethernet (jeśli w warstwie sieci wykorzystywany jest protokół
+IPv4), był też używany w sieciach Token Ring. W wersji IPv6 protokół ARP nie jest w ogóle wykorzystywany, zastępują go inne mechanizmy.\\
+
+\begin{itemize}
+    \item  Zadaniem ARP jest \textbf{odnalezienie adresu fizycznego MAC} na podstawie znanego wprost adresu IP (został wpisany przez użytkownika, lub uzyskany automatycznie na podstawie nazwy domenowej (www) dzięki DNS).
+    \item Ze względu na możliwość wymiany karty sieciowej w komputerze o określonym adresie IP ARP musi być \textbf{dynamiczny}.
+    \item ARP jest oparty na \textbf{metodzie rozgłoszeniowej} i zasadzie \textbf{żądania i odpowiedzi}.
+    \item ARP najpierw sprawdza w swojej pamięci podręcznej (\textbf{cache}) czy posiada wpis dla danego IP. Jeśli nie, to zostaje wysłana ramka rozgłoszeniowa \textbf{ARP Request} Message w fizyczneym segmencie sieci, do którego przyłączony jest nadawca (ARP requestor).
+    \begin{itemize}
+        \item Jeśli węzeł docelowy znajduje się w tym samym segmencie sieci lokalnej, ARP requestor pyta wprost o to kto ma docelowy adres IP. ARP responder odpowiada wysyłając ramkę ARP Reply pod adres MAC, z którego przyszło żądanie. Po wymianie ramek zarówno nadawca jak i odbiorca mają uaktualnione tablice w pamięci podręcznej (cache).
+        \item Jeśli węzeł docelowy znajduje się w innym segmencie sieci datagram jest kierowany do domyślnego routera (IP wpisane w konfiguracji TCP/IP lub wykorzystanie Proxy ARP. ARP requester pyta o adres IP routera domyślnego, router odpowiada wysyłając ramkę ARP respond i podaje swój adres MAC.
+    \end{itemize}
+    \item Po otrzymaniu ARP Request uaktualniane są również pamięci podręczne cache ARP w
+    komputerach, które miały w pamięci podręcznej IP ARP requestor. Otrzymanie ramki ARP request jest zatem metodą aktualizacji wpisów w
+    pamięci podręcznej ARP.
+    \item Wpisy w pamięci podręcznej ARP są usuwane po okresie nieużywania rzędu kilku minut. W
+    przypadku użycia wpisu czas ten może wzrosnąć, z pewnym limitem górnym.
+    \item TCP/IP w Microsoft Windows pozwala na użycie statycznych wpisów w pamięci podręcznej
+    ARP. Jednak są one przechowywane w RAM, więc wyłączaniu komputera przepadają.
+    \item Struktura ramki ARP:
+    \begin{itemize}
+        \item Typ sprzętu (2 oktety)
+        \item Typ protokołu (2 oktety)
+        \item Długość adresu sprzętu (1 oktet)
+        \item Długość adresu protokołu (1 oktet)
+        \item Kod operacji (2 oktety)
+        \item Adres sprzętu nadawcy (dla Ethernet 6 oktetów)
+        \item Adres protokołu nadawcy (dla IPv4 4 oktety)
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Wykrywanie zduplikowanych adresów IP}
+Tzw "zbędny ARP"
+\begin{itemize}
+    \item Węzeł wysyła ARP Request z zapytaniem o swój własny adres.
+    \begin{itemize}
+        \item Jeśli ARP Reply nie nadejdzie to znaczy, że w lokalnym segmencie nie ma konfliktu adresów.
+        \item Jeśli odpowiedź nadejdzie, oznacza to konflikt.
+    \end{itemize}
+    \item Węzeł już skonfigurowany traktowany jest jako węzeł z poprawnym adresem (\textbf{węzeł zgodny}, defending node), węzeł
+    wysyłający „zbędny ARP” jest \textbf{węzłem konfliktowym} (offending node).
+    \item \textbf{Węzeł konfliktowy wprowadza błąd} w pamięci podręcznej ARP komputerów w \textbf{całym segmencie} sieci. ARP Reply z węzła zgodnego nie naprawia sytuacji (ramka ARP Reply nie jest ramką rozgłoszeniową), więc zgodny wysyła ARP Request ze swoim adresem po wykryciu konfliktu.
+\end{itemize}
+Datagramy IP wysłane na w ramkach z niepoprawnym adresem MAC odbiorcy
+przepadają. Protokół IP nie zapewnia niezawodnej dostawy datagramów i nie
+spowoduje powtórnego przesłania datagramu w nowej ramce. Za niezawodność
+odpowiedzialne są protokoły warstwy transportu.
+
+\subsubsection{Proxy ARP}
+Router ze skonfigurowanym mechanizmem Proxy ARP odpowiada na ramki ARP Request w
+imieniu wszystkich węzłów – komputerów spoza segmentu sieci lokalnej. Może
+być używany jest np. w sytuacji, gdy komputery w sieci nie mają ustawionego domyślnego
+routera (domyślna brama, default gateway). Routery mogą mieć włączoną standardowo
+opcję Proxy ARP, wówczas jeśli jakiś komputer wyśle ARP Request z adresem spoza danej
+sieci lokalnej (zwykle to nie następuje), to router odpowie „w imieniu” komputera
+zewnętrznego.
+
+
+\section{Adresacja IPv4}
 Adres IP jest przypisywany do karty sieciowej, nie do komputera.
 
 Są \textbf{trzy typy adresów IPv4}:
@@ -330,82 +555,252 @@ sieci oraz maskę. Obecnie w Internecie powszechnie jest wykorzystywane adresowa
 bezklasowe.
 Przykład adresowania bezklasowego: 145.217.123.7 /20 (maska: 255.255.240.0)
 
-\section{Model ISO/OSI}
-OSI (Open Systems Interconnection) utworzony przez Międzynarodową Organizację
-Normalizacyjną (ISO International Organization for Standarization w Genewie)
-stanowi \textbf{model referencyjny} (wzorcowy).
 
+\section{Routing}
+\textbf{Routowanie} - proces przesyłania pakietów (datagramów IP) od hosta nadawczego do
+odbiorcy na ogół z wykorzystaniem routerów pośredniczących. Każdy host oraz router podejmuje decyzję jak przesłać datagram, podejmowaną na podstawie tzw. tabel routowania oraz pewnych reguł.
+\textbf{Routing statyczny} - gdy w routerze tabela routowania jest wypełniona wpisami statycznymi i nie zmienia się.\\
+\textbf{Routing dynamiczny} - tabela routowania zmienia się dynamicznie na podstawie protokołów routowania.\\
+Protokoły routowalne: \textbf{IPv4}, IPX firmy Novell (należący do stosu IPX/SPX), AppleTalk, IPv6. Routery mogą realizować trasowanie dla pakietów z
+protokołów innych niż IPv4.\\
+Dla routerów tablica routowania na ogół jest modyfikowana dynamicznie na podstawie \textbf{protokołów routowania}. Określają one w jaki sposób routery mają wymieniać między sobą informacje na temat połączeń między routerami w sieci i jak na podstawie tych informacji mają aktualizować swoje tablice routowania.\\
+Protokoły routowania: RIP, RIP2, OSPF, IGRP, EIGRP, BGP.
+\textbf{Brama domyślna} to router, do którego kierowany jest datagram, jeśli nie została znaleziona dla niego lepsza trasa w tablicy routowania.\\
+
+Typy bezpośrednich połączeń:
 \begin{itemize}
-    \item ułatwienie zrozumienia procesów zachodzących podczas komunikowania się komputerów
-    \item ułatwienie projektowania protokołów komunikacyjnych
+    \item rozgłoszenia - np. Ethernet; działa protokół ARP,
+    \item punkt-punkt - np. analogowa linia telefoniczna; technologie sieci rozległych WAN, ARP nie jest wykorzystywany;
+    \item wielodostęp nierozgłoszeniowy (NBMA) -  technologie przełączania pakietów WAN Frame Relay, ATM; ARP nie jest wykorzystywany.
 \end{itemize}
 
+\subsubsection{Tablica routowania IP}
+Zawiera wpisy dotyczące tras do hostów, routerów i sieci. Zwykle w
+hostach liczba wpisów jest dużo mniejsza niż w routerach i zawiera informacje o bramie domyślnej.\\
+
+W każdym hoście i routerze dla każdego przesyłanego pakietu IP na podstawie tablicy
+routowania wyznaczane są dwie wartości:
+\begin{itemize}
+    \item interfejs – reprezentacja fizycznego urządzenia, przez które ma być wysłany pakiet,
+    \item adres następnego skoku - adres IP następnego routera, do którego ma być skierowany datagram lub adres
+docelowy hosta, jeśli jest bezpośrednio dołączony do nadawcy\
+\end{itemize}
+
+Tablica routowania zawiera następnujące pola:
+\begin{itemize}
+    \item \textbf{Przeznaczenie (Destination)}\\
+     W koniunkcji (logiczne AND) z polem Maska zawiera informację o zakresach adresów IP, które są dostępne przy użyciu tej trasy. Pole to może zawierać ID
+     sieci lub adres IP konkretnego hosta lub routera. W prawidłowym wpisie nie może zawierać jedynek w miejscu, gdzie w Masce sieci są zera.
+    \item \textbf{Maska sieci}\\
+     Zawiera maskę sieci, może też zawierać same jedynki (255.255.255.255).
+     \item \textbf{Adres następnego skoku}\\
+     Adres IP, do którego datagram będzie przesłany w następnym kroku, jeśli zostanie wybrana ta trasa. Bez znaczenia dla połączeń punkt-punkt.
+     \item \textbf{Interfejs}\\
+     Oznaczenie interfejsu, przez który datagram będzie przesłany do miejsca określonego przez adres następnego skoku.
+     \item \textbf{Metryka}\\
+     Liczba wskazująca na koszt trasy. Im wyższa wartość, tym „gorsza” trasa.
+     \item \textbf{Odległość administracyjna}\\
+     Liczba przypisywana na podstawie tego, w jaki sposób router poznał trasę do danego miejsca docelowego. „Wygrywa” trasa z najmniejszą liczbą. Trasa domyślna może być oznaczana przez 0.0.0.0 w polu Przeznaczenie i 0.0.0.0 w polu Maska sieci.
+\end{itemize}
+
+Proces określania trasy na podstawie tablicy routowania:
+\begin{itemize}
+    \item Dla każdej trasy w tablicy routowania określa się, czy jest ona \textbf{zgodna z adresem IP} w przesyłanym pakiecie. Trasa domyślna jest traktowana zawsze jako zgodna.
+    \item Spośród tras zgodnych wybierana jest ta (lub kilka), dla której w polu \textbf{Maska sieci} jest \textbf{największa liczba jedynek}. Może się zdarzyć, że jedyną trasą zgodną jest trasa domyślna.
+    \item Spośród tras, które zostały wybrane w punkcie 2 wybierane są trasy o \textbf{najmniejszej metryce}.
+    \item Spośród tras wybranych w punkcie 3 wybierana jest dowolna trasa.
+\end{itemize}
+Routery potrafią również wykonywać równoważenie obciążeń.
+
+\subsubsection{Komunikaty ICMP o przekierowaniu}
+Komunikaty ICMP o przekierowaniu pozwalają hostom TCP/IP na konfigurację tylko jednego
+routera – bramy domyślnej nawet w sytuacji, gdy w sieci lokalnej są dwa lub więcej
+routerów, które są odpowiedzialne za pewne miejsca docelowe.
+Hosty mogą zacząć pracę z jedną domyślną trasą i uczyć się topologii sieci (w szczególności
+informacji o routowaniu) poprzez otrzymywanie komunikatów ICMP.\\
+
+Komunikaty ICMP o przekierowaniu powinny być generowane przez routery, ale korzystać z
+nich mogą tylko hosty.
+Jeśli datagram IP zostanie celowo usuwanięty przez router, to może być wysłany odpowiedni komunikat protokołu ICMP do nadawcy.
+
+
+\section{Protokół IPv4}
+\begin{itemize}
+    \item Protokół warstwy trzeciej modelu ISO OSI.
+    \item Oprogramowanie implementujące protokół IP jest odpowiedzialne za:
+    \begin{itemize}
+        \item adresowanie IP,
+        \item tworzenie datagramów IP (pakietów)
+        \item uczestniczenie w kierowaniu ich w sieci z punktu początkowego do punktu docelowego.
+    \end{itemize}
+    \item realizuje usługę zawodną. Jeśli komunikacja powinna zawierać mechanizmy niezawodności, to muszą one być dostarczone przez protokoły warstwy wyższej.
+    \item Datagram IP składa się z nagłówka (header) i bloku danych (payload).
+    \begin{itemize}
+        \item \textbf{Nagłówek} dzięki informacjom w nim zawartym umożliwia obsługę routowania, identyfikację bloku danych, określenie rozmiaru nagłówka i datagramu oraz obsługę fragmentacji. W nagłówku mogą się znaleźć również tzw. opcje rozszerzające. Ma zmienną długość (20 do 60 bajtów, co 4 bajty).
+        \item \textbf{Blok danych} może mieć długość do 65515 bajtów.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Nagłówek IPv4}
+\begin{itemize}
+    \item \textbf{Wersja} (4 bity) (=0100)
+    \item \textbf{Długość nagłówka IP} (IHL – Internet Header Length) (4 bity)\\
+    Najczęściej nagłówek ma 20 bajtów, a więc 5 bloków (0101 binarnie). Maksymalnie długość nagłówka może wynosić 60 bajtów.
+    \item \textbf{Typ usługi}: TOS (Type of Service) lub DS. (Differentiaded Services) (8 bitów)\\
+    Zawiera dodatkowe informacje, które mogą być użyte w routingu. Pierwotnie pole TOS było zdefiniowane następująco:
+    \begin{itemize}
+        \item Bits 0-2: Precedence.
+        \item Bit 3: 0 = Normal Delay, 1 = Low Delay.
+        \item Bits 4: 0 = Normal Throughput, 1 = High Throughput.
+        \item Bits 5: 0 = Normal Relibility, 1 = High Relibility.
+        \item Bit 6-7: Reserved for Future Use (0).
+    \end{itemize}
+    TOS było ustawiane przez hosta nadającego i nie było modyfikowane przez routery, miały być używane do obsługi QoS (Quality of Service). W rzeczywistości jego wykorzystanie było problematyczne.\\
+    Zmieniono nazwę pola na DS (Differentiated Services) i sześć najstarszych bitównazwano DSCP. Następnie pozostałe dwa bity przeznaczono na ECN.
+    \begin{itemize}
+        \item Bits 0-5: DCSP
+        \item Bits 6-7: ECN
+    \end{itemize}
+    ECN jest rozszerzeniem protokołów IP oraz TCP. Umożliwia powiadamianie punktów końcowych IP/TCP o nadchodzącym zatorze bez usuwania pakietów, poprzez ustawienie warość 11 na bitach ECN. Jest opcjonalny.\\
+    Standardowo (bez obsługi ECN) zator w sieci TCP/IP przejawia się usuwaniem pakietów.
+    Dopuszczalne wartości na bitach ECN:
+    \begin{itemize}
+        \item 00 – Non ECN-Capable Transport, Non-ECT
+        \item 10 – ECN Capable Transport, ECT(0)
+        \item 01 – ECN Capable Transport, ECT(1)
+        \item 11 – Congestion Encountered, CE.
+    \end{itemize}
+    Odbiorca pakietu przesyła informację do źródła, wykorzystując odpowiednie flagi nagłówka TCP (ze względu na to, że zatorowi może przeciwdziałać TCP, nie IP). Pierwotne źródło danych redukuje prędkość transmisji zmniejszając rozmiar okna przeciążeniowego. Protokół TCP wspiera ECN przez wykorzystanie specjalnych trzech flag w nagłówku: TCP: Nonce Sum (NS), ECN-Echo (ECE) oraz Congestion Windows Reduced (CWR).
+    \item \textbf{Długość całkowita} (16 bitów)\\
+    Na podstawie tego pola oraz pola Długość nagłówka można określić wielkość bloku danych oraz początek tego bloku. Całkowita długość podawana jest w bajtach, maksymalna możliwa długość może wynosić 65535.
+    \item \textbf{Identyfikator} (16 bitów)\\
+    Identyfikator kolejnych datagramów. Wartość jest wpisywana przez host nadający i dla kolejnych datagramów jest zwiększana.
+    \item \textbf{Flagi} (3 bity)\\
+    3 bity tworzące dwie flagi używane przy fragmentacji datagramów.
+    \item \textbf{Przesunięcie fragmentu} (13 bitów)\\
+    Używane przy fragmentacji datagramów.
+    \item \textbf{Czas życia} (TTL) (8 bitów)\\
+    Określa przez ile łączy może przejść (skoków) datagram zanim zostanie odrzucony przez router. Host docelowy nie sprawdza TTL. Jeśli pakiet jest odrzucany to wysyłany jest komunikat ICMP „Time Expired – TTL Expired”.
+    \item \textbf{Protokół} (8 bitów)\\
+    Określa do jakiego protokołu warstwy wyższej należy przekazać datagram. Przykładowe wartości to 1 – ICMP, 6 – TCP, 17 – UDP.
+    \item \textbf{Suma kontrolna nagłówka} (16 bitów)\\
+    Liczona jest tylko dla nagłówka. Jest on dzielony na słowa 16-to bitowe. Są one dodawane a wynik negowany. Wynik umieszczany jest w polu sumy kontrolnej. W miejscu docelowym suma kontrolna jest ponownie obliczana. Ponieważ nagłówek w miejscu docelowym zawiera sumę kontrolną, to ponownie wyliczona suma powinna składać się z samych jedynek. Jeśli jest inna to oprogramowanie IP odrzuca odebrany pakiet (brak komunikatu o błędzie). Po przejściu przez router jest modyfikowane pole TTL, zatem suma kontrolna powinna ulec zmianie.
+    \item \textbf{Adres IP źródła} (32 bity)
+    \item \textbf{Adres IP docelowy} (32 bity)
+    \item \textbf{Dodatkowe opcje i wypełnienie} (32 bity + ew. więcej).\\
+    Opcje mogą zająć maksymalnie 40 bajtów i mogą zawierać m.in.:
+    \begin{itemize}
+        \item zapis trasy (RR - Record Route)\\
+        \begin{itemize}
+            \item kod - typ opcji; 1 bajt, RR=7
+            \item length - liczba bajtów opcji; 1 bajt, max=39
+            \item ptr – numer bajta wolnego miejsca na wpisanie kolejnego adresu IP; 1 bajt, na początku = 4
+            \item adres IP 1 (4 bajty)
+            \item $\cdots$
+            \item adres IP 9 (4 bajty)
+        \end{itemize}
+        \item zapis czasu – timestamp
+        \begin{itemize}
+            \item kod - typ opcji; 1 bajt,  timestamp = 0x44
+            \item  length - liczba bajtów opcji; 1 bajt, zwykle 36 lub 40
+            \item ptr - numer bajtu wolnego miejsca na kolejny wpis; 1 bajt, na początku = 5
+            \item OF - flaga przepełnienia. Jeśli router nie może dopisać swojego czasu, bo nie ma już miejsca, to powiększa OF o jeden; 4 bity, na początku = 0
+            \item FL - znacznik: 0 – zapisuj tylko czasy, 1 – zapisuj adres IP i czas, 2 – wysyłający wpisuje adresy IP, router o danym IP wpisuje czas
+            \item timestamp 1 (4 bajty)
+            \item $\cdots$
+            \item timestamp 9 (4 bajty)
+        \end{itemize}
+        \item routowanie źrodłowe\\
+        Normalnie to routery wybierają dynamicznie trasę datagramów. Można jednak określić trasę datagramu w opcjach nagłówka IP.
+        \begin{itemize}
+            \item  dokładne – wysyłający komputer określa dokładną trasę, jaką musi przejść datagram. Jeśli kolejne routery na tej trasie są przedzielone jakimś innym routerem, to wysyła komunikat ICMP „source route failed” i datagram jest odrzucany.
+            \item swobodne – wysyłający określa listę adresów IP, przez jakie musi przejść datagram, ale datagram może przechodzić również przez inne routery.
+        \end{itemize}
+    \end{itemize}
+    Pole opcji zawsze zajmuje wielokrotność 4 bajtów, stąd czasem jest uzupełniane zerami.
+\end{itemize}
+Za nagłówkiem IP w datagramie znajdują się dane (segment TCP, datagram UDP, komunikat ICMP).
+
+\subsection{Fragmentacja datagramów IPv4}
+\textbf{MTU} (Maximum Transmission Unit) to największa porcja danych, jaka może być przesłana w ramce przez pewną sieć (sieci) przy wykorzystaniu konkretnej technologii. Jeśli datagram IP jest większy niż wynika to z MTU dla warstwy łącza, to IP dokonuje fragmentacji. Najmniejsze MTU po drodze przejścia datagramu nazywa się \textbf{ścieżką MTU}. Jeśli nastąpiła fragmentacja, to w miejscu docelowym oprogramowanie warstwy IP składa fragmenty z powrotem w pakiety oryginalnej wielkości.
+Fragmenty też mogą być dalej dzielone, stają się samodzielnymi pakietami.\\
+
+Pole identyfikator w nagłówku IP zawiera numer wysłanego pakietu. Pole powinno być inicjowane przez protokół warstwy wyższej. Warstwa IP zwiększa identyfikator
+o 1 dla kolejnych pakietów.\\
+Pole flagi (3 bity) :
+\begin{itemize}
+    \item Bit 0: zarezerwowane, musi być zero
+    \item Bit 1: (DF) 0 = May Fragment, 1 = Don't Fragment.
+    \item Bit 2: (MF) 0 = Last Fragment, 1 = More Fragments.
+\end{itemize}
+Jeśli bit 1 jest ustawiony, to znaczy, że pakiet nie może być dzielony. W przypadku konieczności dzielenia jest odrzucany i do nadawcy wysyłany jest
+komunikat ICMP (typ 3 z polem kod = 4).
+Pole przesunięcie fragmentu zawiera informację o przesunięciu fragmentu względem początku oryginalnego pakietu. Wyrażane jest w blokach ośmiobajtowych.
+Jeśli zgubiony zostanie chociaż jeden fragment, wówczas cały wyjściowy pakiet jest odrzucony, więc fragmentacja jest niekorzystna.
+Do tego może ona bardzo obciążać routery.
+
+\subsection{ICMP (Internet Control Message Protocol)}\
+\begin{itemize}
+    \item raportowanie routingu,
+    \item dostarczanie informacji o błędach podczas przesyłania ze źródła do komputera docelowego,
+    \item dostarczanie funkcji sprawdzających możliwość komunikacji komputerów wykorzystaniem protokołu IP,
+    \item pomoc w automatycznej konfiguracji hostów.
+\end{itemize}
+Komunikaty ICMP wysyłane są w pakietach IP. W efekcie w ramce znajduje się nagłówek IP, nagłówek ICMP oraz dane komunikatu ICMP.\\
+
+Struktura komunikatu ICMP
+\begin{itemize}
+    \item Typ (1 oktet)
+    \item Kod (1 oktet)
+    \item Suma kontrolna (2 oktety)
+    \item Dane charakterystyczne dla typu (różna długość)
+\end{itemize}
+
+Typy komunikatów ICMP
 \begin{tabular}{|c|c|}
-\hline
-\textbf{Numer warstwy} & \textbf{Nazwa warstwy}\\
-\hline
-7 & Aplikacji\\
-\hline
-6 & Prezentacji\\
-\hline
-5 & Sesji\\
-\hline
-4 & Transportu\\
-\hline
-3 & Sieci\\
-\hline
-2 & Łącza danych\\
-\hline
-1 & Fizyczna\\
-\hline
+    \hline
+    0 & Odpowiedź echa (echo reply)\\
+    \hline
+    3 & Miejsce docelowe nieosiągalne (destination unreachable)\\
+    \hline
+    4 & Tłumienie źródła (source quench)\\
+    \hline
+    5 & Przekierowanie (redirect)\\
+    \hline
+    8 & Żądanie echa (echo request)\\
+    \hline
+    9 & Ogłoszenie routera (router advertisement)\\
+    \hline
+    10 & Wybór routera (router selection)\\
+    \hline
+    11 & Przekroczenie czasu (time exceeded)\\
+    \hline
+    12 & Problem parametru (parameter problem)\\
+    \hline
 \end{tabular}
 
-Każdą z warstw można rozpatrywać w aspekcie dwóch zasadniczych funkcji: odbierania i
-nadawania.
+\textbf{Żądanie i odpowiedź echa}
+Cel – wysłanie prostego komunikatu do węzła IP i odebranie echa tego komunikatu. Bardzo
+użyteczne przy usuwaniu problemów i naprawianiu sieci. Narzędzia takie jak ping oraz tracert i traceroute używają tych komunikatów ICMP do
+uzyskania informacji o dostępności węzła docelowego.\\
+
+Żądanie echa:
 \begin{itemize}
-\item \textbf{Warstwa fizyczna} - standard połączenia fizycznego, charakterystyki wydajnościowe nośników. Same media transmisyjne pozostają poza dziedziną jej
-zainteresowania (czasem określane są terminem warstwa zerowa).
-\item \textbf{Warstwa łącza danych} – grupowanie danych wejściowych (z warstwy fizycznej) w bloki zwane \textbf{ramkami} danych („jednostki
-danych usług warstwy fizycznej”), mechanizmy kontroli poprawności
-transmisji (FCS).
-\item \textbf{Warstwa sieci} - określenie trasy przesyłania
-danych między komputerami poza lokalnym segmentem sieci LAN, protokoły trasowane takie jak IP (ze stosu protokołów TCP/IP), IPX
-(Novell IPX/SPX), DDP (AppleTalk) (adresowanie logiczne).
-\item \textbf{Warstwa transportu} - kontrola błędów i przepływu danych
-poza lokalnymi segmentami LAN, protokoły zapewniające
-komunikację procesów uruchomionych na odległych komputerach (np. oprogramowanie klient/serwer), w tym komunikację z zapewnieniem
-niezawodności dostarczania danych. Protokoły tej warstwy to np. TCP oraz UDP (z
-TCP/IP), SPX (Novell IPX/SPX), ATP, NBP, AEP (AppleTalk).
-\item \textbf{Warstwa sesji} - zarządzanie przebiegiem komunikacji podczas
-połączenia między komputerami (sesji).
-\item \textbf{Warstwa prezentacji} - kompresja, kodowanie i
-translacja między niezgodnymi schematami kodowania oraz szyfrowanie.
-\item \textbf{Warstwa aplikacji} - interfejs między aplikacjami a
-usługami sieci.
+    \item Typ = 8
+    \item Kod = 0
+    \item Suma kontrolna (2 oktety)
+    \item Identyfikator (2 oktety)
+    \item Numer sekwencji (2 oktety)
+    \item Opcjonalne dane (różna długość)
 \end{itemize}
 
-Określona sesja komunikacyjna nie musi wykorzystywać protokołów ze wszystkich warstw
-modelu. Przy nadawaniu dane kierowane są od warstwy 7 do 1, przy odbiorze od 1 do 7.
-
-Używane są też inne modele warstwowe, np. jeden z takich
-prostszych modeli – model TCP/IP – jest często wykorzystywany przy opisie zestawu (stosu)
-protokołów TCP/IP (Internet). Nie ma warstwy prezentacji ani warstwy sesji, ponieważ zestaw TCP/IP nie zawiera
-żadnych protokołów, które można byłoby przypisać do tych warstw. Nieco inny model
-„dydaktyczny” został zaproponowany przez Tannenbauma.
-
-\begin{tabular}{|c|c|c|c| }
-\hline
-Nr warstwy OSI & Nazwa warstwy OSI & Nazwa warstwy TCP/IP & Nazwa warstwy Tannenbaum\\
-\hline
-7 & Aplikacji & Aplikacji & Aplikacji\\
-6 & Prezentacji & & \\
-5 & Sesji & & \\
-4 & Transportu & Transportu & Transportu\\
-3 & Sieci & Intersieci & Sieci\\
-2 & Łącza danych & Interfejsu sieciowego & Łącza danych\\
-1 & Fizyczna & & Fizyczna\\
-\hline
-\end{tabular}
+Odpowiedź echa:
+\begin{itemize}
+    \item Typ = 0
+    \item Kod = 0
+    \item Suma kontrolna (2 oktety)
+    \item Identyfikator, Numer sekwencji, Opcjonalne dane przepisane z Echo request.
+\end{itemize}
 
 \section{Routing dynamiczny}
 Sposób obsługi routowania przez warstwę IP to \textbf{mechanizm routowania} -
