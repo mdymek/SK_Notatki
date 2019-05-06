@@ -1136,17 +1136,186 @@ sekwencyjnego pierwszego oktetu danych aby uzyskać numer ostatniego bajta szcze
 ważnych danych w segmencie (dane te są na początku segmentu). Pole to jest brane pod
 uwagę tylko, jeśli bit URG jest ustawiony na 1.
     \item \textbf{Opcje.}\\
-     Rodzaj opcji (bajt), długość opcji (bajt), opcja. Najważniejsza opcja to \textbf{MSS}. Może być uzyskana jako MTU (Maximum Transmission Unit) minus rozmiar nagłówka IP oraz TCP. 
+     Rodzaj opcji (bajt), długość opcji (bajt), opcja. Najważniejsza opcja to \textbf{MSS}. Może być uzyskana jako MTU (Maximum Transmission Unit) minus rozmiar nagłówka IP oraz TCP.
+\end{itemize}
+
+\textbf{Specyfika stanu TIME WAIT}\\
+Spóźnione segmenty są w czasie 2 MSL odrzucane. Para
+punktów końcowych definiujących połączenie nie może być powtórnie użyta przed upływem
+2MSL. Eliminuje to ewentualne kłopoty związane z odbieraniem z sieci segmentów jeszcze ze
+starego połączenia.
+
+\textbf{Półzamknięcie TCP}\\
+Strona, która zakończyła połączenie i nie nadaje danych, może dane odbierać od partnera
+TCP. Takie połączenie nazywane jest połączeniem półzamkniętym (half-closed).
+
+\textbf{Segmenty RST}\\
+Segment RST wysyłany jest przez oprogramowanie implementujące TCP, kiedy nadchodzi
+segment niepoprawny z punktu widzenia dowolnego połączenia. Segment RST nie jest potwierdzany. W protokole UDP generowany jest komunikat ICMP o tym, że port jest nieosiągalny.
+Segment RST jest wysyłany również wtedy, gdy przekroczona jest maksymalna dopuszczalna
+liczba połączeń TCP.
+
+
+\textbf{Połączenia półotwarte} (połowicznie otwarte)\\
+Jest to połączenie nie poprawnie nawiązane. Występuje, jeśli jedna ze stron przerwała połączenie bez informowania drugiej. Segment z ustawioną na 1 flagą SYN został przesłany od
+klienta do serwera, serwer odpowiedział segmentem z ustawionymi na 1 flagami SYN i ACK,
+ale klient nie odpowiedział segmentem z ustawioną na 1 flagą ACK.
+Jeden ze sposobów atakowania serwisów (np. WWW) polegał na otwieraniu bardzo dużej
+liczby połączeń półotwartych. Obecnie implementacje TCP są odporne na tego typu ataki.
+Dopuszczalne jest, by oprogramowanie realizujące TCP mogło sprawdzać stan połączenia
+przez okresowe przesyłanie segmentów sprawdzających aktywność. Segment taki to zawiera
+ustawioną na 1 flagę ACK i nie zawiera żadnych danych. Dodatkowo ma on ustawiony numer
+sekwencyjny na o 1 mniejszy od tego, którego normalnie spodziewa się strona wysyłająca
+ACK. Partner odpowiada też segmentem z ustawioną na 1 flagą ACK ze standardowo
+ustawionymi prawidłowymi wartościami numerów sekwencyjnych.
+
+
+\subsubsection{Opcje TCP}
+\begin{itemize}
+    \item \textbf{Koniec listy opcji}: 1 bajt - 0.
+    \item \textbf{Brak operacji}: 1 bajt - 1. Opcja ta jest stosowana do dopełnienia pola do wielokrotności 4 bajtów.
+    \item \textbf{MSS}: typ = 2, długość = 4, dane – 2 bajty ustawione na mniejszą wartość z wartości MSS podanych przez strony połączenia. MSS podawany jest w segmentach SYN.
+    \item \textbf{Skala okna}: typ = 3, długość = 3, dane – 1 bajt = współczynnik skali (licnzik przesunięć), określa liczbę mnożeń przez 2 wielkości rozmiar okna, max. 14.
+    \item \textbf{Pozwolenie na selektywne potwierdzanie}: typ opcji = 4, długość = 2.
+    \item \textbf{Selektywne potwierdzanie}: typ = 5, długość = 10, 18, 26 lub 34 (potwierdzenie jednego, dwóch, trzech lub czterech nieciągłych bloków danych).
+    \item \textbf{Sygnatury czasowe}: typ = 8, długość = 10, timestamp – 4 bajty, echo timestamp – 4 bajty.
+    Stosowana jest do określania RTO (retransmission time-out).
+
+\end{itemize}
+
+\subsubsection{Przepływ danych w TCP}
+\textbf{Potwierdzenia}
+\begin{itemize}
+    \item \textbf{Skumulowane potwierdzanie}\\
+    Segment TCP z ustawionym znacznikiem ACK jest segmentem potwierdzającym. Numer
+potwierdzenia to numer następnego bajta, który nadawca ACK spodziewa się otrzymać od nadawcy potwierdzanych danych.Taki sposób potwierdzania nie jest korzystny w
+środowisku z dużą liczbą gubionych segmentów.
+    \item \textbf{Opóźnione potwierdzenia}\\
+    Potwierdzenie otrzymania segmentu nie jest wysyłane natychmiast. Zalety takiego podejścia
+są następujące:
+    \begin{itemize}
+        \item Podczas trwania opóźnienia mogą zostać odebrane następne segmenty i potwierdzenie może je obejmować.
+        \item Można dołączyć ACK do segmentu przesyłanych danych (piggybacking).
+        \item Oprogramowanie TCP realizuje utrzymanie połączenia.
+    \end{itemize}
+    \item \textbf{Selektywne potwierdzenia}\\
+    Realizowane przez jedną z opcji TCP. Przydaje się w łączach które są szerokopasmowe i mają duże opóźnienie. Rozmiar okna może tu być duży, nadawca może na raz transmitować dużą liczbę segmentów. Jeśli pierwszy segment zaginie, to nadawca niepotrzebnie retransmituje wszystkie. Selektywne potwierdzanie temu zapobiega.
+\end{itemize}
+
+\textbf{Ruchome okna TCP} (sliding windows)\\
+Połączenie TCP obejmuje dwa strumienie danych. W każdym strumieniu określony jest
+nadawca i odbiorca. Kontrolę przesyłania oktetów w strumieniu umożliwiają mechanizmy
+tzw. przesuwnych (ruchomych) okien, które można sobie wyobrazić jako nałożone na
+strumień. Dla strumienia określone jest okno nadawcy oraz okno odbiorcy. Nadawca może
+wysyłać tylko te dane, które są w tej chwili w jego oknie nadawczym, przy czym może to
+zrobić tylko za zgodą odbiorcy. Okno nadawcze jest przesuwane nad wyjściowym
+strumieniem bajtów, okno odbiorcze nad strumieniem wejściowym.
+
+\textbf{Okno nadawcze}
+Nadawca określa, które oktety w jego strumieniu wyjściowym zostały:
+\begin{itemize}
+    \item wysłane i potwierdzone,
+    \item wysłane, ale jeszcze nie potwierdzone,
+    \item jeszcze nie wysłane, ale już znajdujące się w oknie nadawczym
+    \item jeszcze nie wysłane i znajdujące się poza oknem nadawczym
+\end{itemize}
+Dane w oknie nadawczym mogą być wysłane przez nadawcę, gdyż odbiorca na to zezwolił, lub jeszcze raz wysyłane wskutek realizacji strategii powolnego startu lub zapobiegania zatorom.
+Okno nadawcze rozciąga się od oktetu, którego spodziewa się partner w ostatnim
+potwierdzeniu ACK.\\
+Okno nadawcze ma lewą i prawą krawędź. W trakcie potwierdzania kolejnych segmentów
+lewa krawędź okna nadawczego przesuwa się w prawo powodując tzw. zamykanie okna. Jeśli
+numer potwierdzenia + rozmiar okna wskazują na konieczność przesunięcia prawej krawędzi,
+to jest ona przesuwana powodując tzw. otwieranie okna.\\
+Jeśli bufor odbiorczy się wypełni to odbiorca przesyła z
+potwierdzeniem ostatniego segmentu proponowany rozmiar okna równy zero.
+Kiedy bufor odbiorczy zostane całkowicie opróżniony odbiorca wysyła
+„zbędny” segment ACK bez danych i z numerem potwierdzenia takim jak poprzedni ACK. Ten
+segment nie jest potwierdzany ani retransmitowany.\\
+
+\textbf{Okno odbiorcze}
+Odbiorca określa, które oktety w jego strumieniu wejściowym zostały:
+\begin{itemize}
+    \item odebrane, potwierdzone i pobrane do warstwy aplikacji
+    \item odebrane, potwierdzone, ale jeszcze nie pobrane do warstwy aplikacji
+    \item odebrane, ale jeszcze nie potwierdzone
+    \item nie odebrane, ale znajdujące się w tzw. bieżącym oknie odbiorczym (wolna przestrzeń buforu odbiorczego)
+    \item nie odebrane i znajdujące się poza oknem odbiorczym (nie zostaną odebrane)
+\end{itemize}
+
+Maksymalne okno odbiorcze obejmuje wszystkie oktety odebrane. Ma ono stałą wielkość równą buforowi do
+odbierania danych w połączeniu TCP. Bieżące okno odbiorcze obejmuje odebrane niepotwierdzone i będące w bieżącym oknie odbiorczym. \\
+Ze względu na to, że oktety są ponumerowane łatwo można
+określić, w którym miejscu strumienia powinny się znaleźć. W każdym segmencie jest
+przekazywany numer pierwszego oktetu danych.
+Bieżące okno odbiorcze ma lewą i prawą krawędź, analogicznie jak dla okna nadawczego. Prawa krawędź odbiorczego okna bieżącego pokrywa się z prawą krawędzią maksymalnego okna odbiorczego. Jeśli aplikacja
+odbiera dane z bufora, to krawędź ta przesuwa się w prawo (podobnie jak lewa krawędź
+maksymalnego okna odbiorczego). Potwierdzanie ACK przesuwa lewą krawędź okna
+bieżącego w prawo.\\
+
+\subsubsection{Przesyłanie małych segmentów}
+Tak określa się segmenty o rozmiarze mniejszym od MSS.
+Przesyłanie małych segmentów zmniejsza efektywność sieci.
+Aby temu zapobiec stosowane są takie mechanizmy, jak algorytm Nagle’a i unikanie
+„syndromu głupiego okna”.
+\begin{itemize}
+    \item \textbf{Algorytm Nagle’a}\\
+    „Dopasowuje się” do sieci, w której przesyłane są segmenty.
+    \begin{itemize}
+        \item TCP powinno przesyłać tylko pojedyncze małe niepotwierdzone segmenty.
+        \item W czasie oczekiwania na potwierdzenie, dane są gromadzone w buforze.
+        \item W sieci o szerokim paśmie i małym opóźnieniu akumulacja jest mała, efektywność
+        mniejsza, ale kompensowana szybkością sieci. W sieciach o małym paśmie i dużych
+        opóźnieniach akumulacja zwiększa efektywność.
+    \end{itemize}
+    Algorytm Nagle’a może być wyłączany przez oprogramowanie TCP.
+    \item \textbf{Syndrom głupiego okna} (SWS)\\
+    \begin{itemize}
+        \item Jeśli odbiorca ma zerowy rozmiar okna (i nadawca też) oraz warstwa aplikacji pobierze 1
+        bajt, to okno odbiorcze otwiera się o jeden bajt.
+        \item Odbiorca może wysłać ACK z proponowaną wielkością okna równą 1. Gdyby tak było, to
+        druga strona połączenia też powiększy okno nadawcze o jeden bajt i prześle segment
+        zawierający 1 bajt danych itd.
+        \item Aby uniknąć SWS odbiorca ogłasza nowy rozmiar okna dopiero, gdy rozmiar ten wynosi co
+        najmniej MSS lub połowę maksymalnego rozmiaru okna odbiorczego.
+        \item Nadawca unika SWS wstrzymując się z wysyłaniem danych dopóki rozmiar okna proponowanego przez odbiorcę nie jest równy co najmniej MSS. „Interaktywne” dane mogą być wysyłane z flagą PSH wg algorytmu Nagle’a.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Dodatkowa kontrola przepływu po stronie nadawcy}\\
+Nadawca może przesłać wszystkie segmenty, które znajdują się w oknie nadawczym. Takie działanie może jednak doprowadzić do zatorów. Poniższe algorytmy bazują na pojęciu okna przeciążeniowego (okna zatoru, congestion window) i zapobiegają zatorom oraz powodują unikanie powtórnej zapaści.
+\begin{itemize}
+    \item \textbf{Algorytm powolnego startu}\\
+    Po otwarciu połączenia lub dłuższym czasie nie przesyłania danych wielkość okna
+przeciążeniowego ustawiana jest na 2*MSS. Każde przychodzące potwierdzenie (ACK)
+powoduje zwiększenie okna przeciążeniowego o jeden MSS. Może to prowadzić do wykładniczego wzrostu wielkości tego okna Rozmiar okna nadawczego ustalany jest jako minimum z wielkości okna przeciążeniowego
+oraz ogłoszonego przez odbiorcę bieżącego okna przeciążeniowego.
+    \item \textbf{Algortym unikania zatoru}\\
+Tu stosuje się wolniejszy wzrost wielkości okna przeciążeniowego, np. o jeden
+segment na kilka przychodzących ACK. Algorytm ten działa zwykle od pewnego progu (najpierw działa powolny start).
 \end{itemize}
 
 
+\subsubsection{Retransmisje segmentów w TCP}
+W każdym połączeniu definiowana jest zmienna RTO (Retransmission Time-out). Jeśli TCP nie
+odbierze ACK w czasie RTO dla pewnego nadanego segmentu, to segment musi być
+retransmitowany. RTO powinien być większy od stale obliczanego RTT (Round Trip Time).
+Segmenty ACK (bez danych) nie są potwierdzane.
+Wyznaczenie prawidłowej wartości RTO jest ważne dla uniknięcia zapaści spowodowanej
+przeciążeniem (np. RTT rośnie szybciej niż wyliczany RTO, segmenty będą retransmitowane
+co jeszcze zwiększy ruch w sieci).
 
+\textbf{Zasady retransmisji}
+Jeśli nie określono innych: dla początkowego segmentu przyjmuje się bieżące znane RTO dla
+połączenia. Po upłynięciu RTO wartość RTO jest podwajana, a segment wysyłany ponownie.
 
-
-
-
-
-
+Potwierdzenie dla retransmitowanego segmentu jest niejednoznaczne, nie wiadomo czy jest
+to opóźnione potwierdzenie pierwszej kopii, czy potwierdzenie drugiej kopii.
+Rodzi to problemy z szacowanym RTT.
+\textbf{Niejednoznaczność potwierdzenia – Algorytm Karna}
+Pomiary RTT dla retransmitowanych segmentów są pomijane. Może to rodzić problemy, jeśli
+RTT gwałtownie wzrośnie. Dlatego tymczasowo stosowane jest dublowanie RTO dla
+kolejnych retransmitowanych segmentów. Dopiero przyjęcie ACK segmentu nie
+retransmitowanego powoduje obliczenie RTT i RTO dla tego nowego czasu RTT.
 
 
 
