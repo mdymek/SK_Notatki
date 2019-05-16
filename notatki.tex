@@ -1544,5 +1544,55 @@ DHCP umożliwia budowanie systemów konfigurujących się automatycznie.
 Oprócz przydzielenia adresu IP serwer DHCP przesyła do komputera klienta również 
 \end{itemize}
 
+\section{EIGRP}
+
+\subsection{System autonomiczny (AS)}
+Pojęcie System Autonomiczny w sieciach komputerowych jest używane w różnych
+znaczeniach. Główne znaczenie związane jest z protokołem routowania zewnętrznego BGP
+(Border Gateway Protocol). AS pojawia się również w protokołach routowania wewnętrznego, np. w IGRP i EIGRP.\\
+Nazwę AS wyjaśnia dokument RFC 1930: „The classic definition of an Autonomous System is a set of routers
+under a single technical administration, using an interior gateway
+protocol and common metrics to route packets within the AS, and using an
+exterior gateway protocol to route packets to other ASes. Since this
+classic definition was developed, it has become common for a single AS to
+use several interior gateway protocols and sometimes several sets of
+metrics within an AS. The use of the term Autonomous System here stresses
+the fact that, even when multiple IGPs and metrics are used, the
+administration of an AS appears to other ASes to have a single coherent
+interior routing plan and presents a consistent picture of what networks
+are reachable through it.”
+I dalej:
+„An AS is a connected group of one or more IP prefixes run by one or more
+network operators which has a SINGLE and CLEARLY DEFINED routing policy.”
+Użyty tu termin prefiks określa sieć (lub sumę, agregację sieci) i oznacza pewną liczbę
+najbardziej znaczących bitów adresu IPv4 lub IPv6. W IPv6 termin ten jest powszechnie
+używany do określania sieci i zastępuje złożenie adresu IPv4 i maski.
+Zatem system autonomiczny oznacza grupę złożoną z jednego lub większej liczby prefiksów
+sieci należących do jednego lub więcej operatorów, która to grupa ma jedną jasno
+zdefiniowaną politykę routowania.
+Protokołem routowania zewnętrznego (tj. między systemami autonomicznymi) jest obecnie
+BGP4.
+Numery AS są 2 bajtowe (0-65535), a od 2007 roku również 4 bajtowe.
+W niektórych protokołach routowania wewnętrznego należy określić identyfikator procesu. W EIGRP jest on określony jako Autonomous
+System number. Numer ten jednak nie musi być unikalny w skali świata i nie jest
+przekazywany do protokołu routowania zewnętrznego (BGP4). Jeśli zarządca pewnego
+obszaru wykorzystuje BGP4 i ma przydzielony numer AS, wówczas numer ten może być użyty
+w EIGRP jako numer procesu. Jeśli protokół routowania zewnętrznego nie jest
+wykorzystywany, to można używać numeru np. z zakresu numerów prywatnych (64512-
+65535) lub nawet wykorzystać własną numerację.
+
+\subsection{Protokół IGRP}
+IGRP jest protokołem wektora odległości. IGRP przy konfiguracji wymaga podania numeru
+systemu autonomicznego AS -  pewnego numeru
+określającego numer procesu IGRP. Numer ten musi być taki sam we
+wszystkich routerach, które na pewnym obszarze komunikują się przy pomocy IGRP.
+IGRP został utworzony przez firmę Cisco jako rozwiązanie pewnych problemów związanych
+ze stosowaniem RIP – głównie chodziło o rozróżnienie między technologiami sieciowymi o
+różnych przepustowościach.
+\textbf{IGRP nie jest już wspierany przez firmę Cisco, jest wycofany. Zastąpił go protokół EIGRP.}
+Metryka w IGRP jest tworzona na podstawie wartości metryk cząstkowych oraz zmiennych
+określających wagę każdej użytej metryki. \\
+
+
 
 \end{document}
