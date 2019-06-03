@@ -1,0 +1,182 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+    \begin{itemize}
+        \item Protokół warstwy trzeciej modelu ISO OSI.
+        \item Oprogramowanie implementujące protokół IP jest odpowiedzialne za:
+        \begin{itemize}
+            \item adresowanie IP,
+            \item tworzenie datagramów IP (pakietów)
+            \item uczestniczenie w kierowaniu ich w sieci z punktu początkowego do punktu docelowego.
+        \end{itemize}
+        \item realizuje usługę zawodną. Jeśli komunikacja powinna zawierać mechanizmy niezawodności, to muszą one być dostarczone przez protokoły warstwy wyższej.
+        \item Datagram IP składa się z nagłówka (header) i bloku danych (payload).
+        \begin{itemize}
+            \item \textbf{Nagłówek} dzięki informacjom w nim zawartym umożliwia obsługę routowania, identyfikację bloku danych, określenie rozmiaru nagłówka i datagramu oraz obsługę fragmentacji. W nagłówku mogą się znaleźć również tzw. opcje rozszerzające. Ma zmienną długość (20 do 60 bajtów, co 4 bajty).
+            \item \textbf{Blok danych} może mieć długość do 65515 bajtów.
+        \end{itemize}
+    \end{itemize}
+
+    \subsection{Nagłówek IPv4}
+    \begin{itemize}
+        \item \textbf{Wersja} (4 bity) (=0100)
+        \item \textbf{Długość nagłówka IP} (IHL – Internet Header Length) (4 bity)\\
+        Najczęściej nagłówek ma 20 bajtów, a więc 5 bloków (0101 binarnie). Maksymalnie długość nagłówka może wynosić 60 bajtów.
+        \item \textbf{Typ usługi}: TOS (Type of Service) lub DS. (Differentiaded Services) (8 bitów)\\
+        Zawiera dodatkowe informacje, które mogą być użyte w routingu. Pierwotnie pole TOS było zdefiniowane następująco:
+        \begin{itemize}
+            \item Bits 0-2: Precedence.
+            \item Bit 3: 0 = Normal Delay, 1 = Low Delay.
+            \item Bits 4: 0 = Normal Throughput, 1 = High Throughput.
+            \item Bits 5: 0 = Normal Relibility, 1 = High Relibility.
+            \item Bit 6-7: Reserved for Future Use (0).
+        \end{itemize}
+        TOS było ustawiane przez hosta nadającego i nie było modyfikowane przez routery, miały być używane do obsługi QoS (Quality of Service). W rzeczywistości jego wykorzystanie było problematyczne.\\
+        Zmieniono nazwę pola na DS (Differentiated Services) i sześć najstarszych bitównazwano DSCP. Następnie pozostałe dwa bity przeznaczono na ECN.
+        \begin{itemize}
+            \item Bits 0-5: DCSP
+            \item Bits 6-7: ECN
+        \end{itemize}
+        ECN jest rozszerzeniem protokołów IP oraz TCP. Umożliwia powiadamianie punktów końcowych IP/TCP o nadchodzącym zatorze bez usuwania pakietów, poprzez ustawienie warość 11 na bitach ECN. Jest opcjonalny.\\
+        Standardowo (bez obsługi ECN) zator w sieci TCP/IP przejawia się usuwaniem pakietów.
+        Dopuszczalne wartości na bitach ECN:
+        \begin{itemize}
+            \item 00 – Non ECN-Capable Transport, Non-ECT
+            \item 10 – ECN Capable Transport, ECT(0)
+            \item 01 – ECN Capable Transport, ECT(1)
+            \item 11 – Congestion Encountered, CE.
+        \end{itemize}
+        Odbiorca pakietu przesyła informację do źródła, wykorzystując odpowiednie flagi nagłówka TCP (ze względu na to, że zatorowi może przeciwdziałać TCP, nie IP). Pierwotne źródło danych redukuje prędkość transmisji zmniejszając rozmiar okna przeciążeniowego. Protokół TCP wspiera ECN przez wykorzystanie specjalnych trzech flag w nagłówku: TCP: Nonce Sum (NS), ECN-Echo (ECE) oraz Congestion Windows Reduced (CWR).
+        \item \textbf{Długość całkowita} (16 bitów)\\
+        Na podstawie tego pola oraz pola Długość nagłówka można określić wielkość bloku danych oraz początek tego bloku. Całkowita długość podawana jest w bajtach, maksymalna możliwa długość może wynosić 65535.
+        \item \textbf{Identyfikator} (16 bitów)\\
+        Identyfikator kolejnych datagramów. Wartość jest wpisywana przez host nadający i dla kolejnych datagramów jest zwiększana.
+        \item \textbf{Flagi} (3 bity)\\
+        3 bity tworzące dwie flagi używane przy fragmentacji datagramów.
+        \item \textbf{Przesunięcie fragmentu} (13 bitów)\\
+        Używane przy fragmentacji datagramów.
+        \item \textbf{Czas życia} (TTL) (8 bitów)\\
+        Określa przez ile łączy może przejść (skoków) datagram zanim zostanie odrzucony przez router. Host docelowy nie sprawdza TTL. Jeśli pakiet jest odrzucany to wysyłany jest komunikat ICMP „Time Expired – TTL Expired”.
+        \item \textbf{Protokół} (8 bitów)\\
+        Określa do jakiego protokołu warstwy wyższej należy przekazać datagram. Przykładowe wartości to 1 – ICMP, 6 – TCP, 17 – UDP.
+        \item \textbf{Suma kontrolna nagłówka} (16 bitów)\\
+        Liczona jest tylko dla nagłówka. Jest on dzielony na słowa 16-to bitowe. Są one dodawane a wynik negowany. Wynik umieszczany jest w polu sumy kontrolnej. W miejscu docelowym suma kontrolna jest ponownie obliczana. Ponieważ nagłówek w miejscu docelowym zawiera sumę kontrolną, to ponownie wyliczona suma powinna składać się z samych jedynek. Jeśli jest inna to oprogramowanie IP odrzuca odebrany pakiet (brak komunikatu o błędzie). Po przejściu przez router jest modyfikowane pole TTL, zatem suma kontrolna powinna ulec zmianie.
+        \item \textbf{Adres IP źródła} (32 bity)
+        \item \textbf{Adres IP docelowy} (32 bity)
+        \item \textbf{Dodatkowe opcje i wypełnienie} (32 bity + ew. więcej).\\
+        Opcje mogą zająć maksymalnie 40 bajtów i mogą zawierać m.in.:
+        \begin{itemize}
+            \item zapis trasy (RR - Record Route)\\
+            \begin{itemize}
+                \item kod - typ opcji; 1 bajt, RR=7
+                \item length - liczba bajtów opcji; 1 bajt, max=39
+                \item ptr – numer bajta wolnego miejsca na wpisanie kolejnego adresu IP; 1 bajt, na początku = 4
+                \item adres IP 1 (4 bajty)
+                \item $\cdots$
+                \item adres IP 9 (4 bajty)
+            \end{itemize}
+            \item zapis czasu – timestamp
+            \begin{itemize}
+                \item kod - typ opcji; 1 bajt,  timestamp = 0x44
+                \item  length - liczba bajtów opcji; 1 bajt, zwykle 36 lub 40
+                \item ptr - numer bajtu wolnego miejsca na kolejny wpis; 1 bajt, na początku = 5
+                \item OF - flaga przepełnienia. Jeśli router nie może dopisać swojego czasu, bo nie ma już miejsca, to powiększa OF o jeden; 4 bity, na początku = 0
+                \item FL - znacznik: 0 – zapisuj tylko czasy, 1 – zapisuj adres IP i czas, 2 – wysyłający wpisuje adresy IP, router o danym IP wpisuje czas
+                \item timestamp 1 (4 bajty)
+                \item $\cdots$
+                \item timestamp 9 (4 bajty)
+            \end{itemize}
+            \item routowanie źrodłowe\\
+            Normalnie to routery wybierają dynamicznie trasę datagramów. Można jednak określić trasę datagramu w opcjach nagłówka IP.
+            \begin{itemize}
+                \item  dokładne – wysyłający komputer określa dokładną trasę, jaką musi przejść datagram. Jeśli kolejne routery na tej trasie są przedzielone jakimś innym routerem, to wysyła komunikat ICMP „source route failed” i datagram jest odrzucany.
+                \item swobodne – wysyłający określa listę adresów IP, przez jakie musi przejść datagram, ale datagram może przechodzić również przez inne routery.
+            \end{itemize}
+        \end{itemize}
+        Pole opcji zawsze zajmuje wielokrotność 4 bajtów, stąd czasem jest uzupełniane zerami.
+    \end{itemize}
+    Za nagłówkiem IP w datagramie znajdują się dane (segment TCP, datagram UDP, komunikat ICMP).
+
+    \subsection{Fragmentacja datagramów IPv4}
+    \textbf{MTU} (Maximum Transmission Unit) to największa porcja danych, jaka może być przesłana w ramce przez pewną sieć (sieci) przy wykorzystaniu konkretnej technologii. Jeśli datagram IP jest większy niż wynika to z MTU dla warstwy łącza, to IP dokonuje fragmentacji. Najmniejsze MTU po drodze przejścia datagramu nazywa się \textbf{ścieżką MTU}. Jeśli nastąpiła fragmentacja, to w miejscu docelowym oprogramowanie warstwy IP składa fragmenty z powrotem w pakiety oryginalnej wielkości.
+    Fragmenty też mogą być dalej dzielone, stają się samodzielnymi pakietami.\\
+
+    Pole identyfikator w nagłówku IP zawiera numer wysłanego pakietu. Pole powinno być inicjowane przez protokół warstwy wyższej. Warstwa IP zwiększa identyfikator
+    o 1 dla kolejnych pakietów.\\
+    Pole flagi (3 bity) :
+    \begin{itemize}
+        \item Bit 0: zarezerwowane, musi być zero
+        \item Bit 1: (DF) 0 = May Fragment, 1 = Don't Fragment.
+        \item Bit 2: (MF) 0 = Last Fragment, 1 = More Fragments.
+    \end{itemize}
+    Jeśli bit 1 jest ustawiony, to znaczy, że pakiet nie może być dzielony. W przypadku konieczności dzielenia jest odrzucany i do nadawcy wysyłany jest
+    komunikat ICMP (typ 3 z polem kod = 4).
+    Pole przesunięcie fragmentu zawiera informację o przesunięciu fragmentu względem początku oryginalnego pakietu. Wyrażane jest w blokach ośmiobajtowych.
+    Jeśli zgubiony zostanie chociaż jeden fragment, wówczas cały wyjściowy pakiet jest odrzucony, więc fragmentacja jest niekorzystna.
+    Do tego może ona bardzo obciążać routery.
+
+    \subsection{ICMP (Internet Control Message Protocol)}\
+\begin{itemize}
+                                                             \item raportowanie routingu,
+                                                             \item dostarczanie informacji o błędach podczas przesyłania ze źródła do komputera docelowego,
+                                                             \item dostarczanie funkcji sprawdzających możliwość komunikacji komputerów wykorzystaniem protokołu IP,
+                                                             \item pomoc w automatycznej konfiguracji hostów.
+    \end{itemize}
+    Komunikaty ICMP wysyłane są w pakietach IP. W efekcie w ramce znajduje się nagłówek IP, nagłówek ICMP oraz dane komunikatu ICMP.\\
+
+    Struktura komunikatu ICMP
+    \begin{itemize}
+        \item Typ (1 oktet)
+        \item Kod (1 oktet)
+        \item Suma kontrolna (2 oktety)
+        \item Dane charakterystyczne dla typu (różna długość)
+    \end{itemize}
+
+    Typy komunikatów ICMP
+    \begin{tabular}{|c|c|}
+        \hline
+        0 & Odpowiedź echa (echo reply)\\
+        \hline
+        3 & Miejsce docelowe nieosiągalne (destination unreachable)\\
+        \hline
+        4 & Tłumienie źródła (source quench)\\
+        \hline
+        5 & Przekierowanie (redirect)\\
+        \hline
+        8 & Żądanie echa (echo request)\\
+        \hline
+        9 & Ogłoszenie routera (router advertisement)\\
+        \hline
+        10 & Wybór routera (router selection)\\
+        \hline
+        11 & Przekroczenie czasu (time exceeded)\\
+        \hline
+        12 & Problem parametru (parameter problem)\\
+        \hline
+    \end{tabular}
+
+    \textbf{Żądanie i odpowiedź echa}
+    Cel – wysłanie prostego komunikatu do węzła IP i odebranie echa tego komunikatu. Bardzo
+    użyteczne przy usuwaniu problemów i naprawianiu sieci. Narzędzia takie jak ping oraz tracert i traceroute używają tych komunikatów ICMP do
+    uzyskania informacji o dostępności węzła docelowego.\\
+
+    Żądanie echa:
+    \begin{itemize}
+        \item Typ = 8
+        \item Kod = 0
+        \item Suma kontrolna (2 oktety)
+        \item Identyfikator (2 oktety)
+        \item Numer sekwencji (2 oktety)
+        \item Opcjonalne dane (różna długość)
+    \end{itemize}
+
+    Odpowiedź echa:
+    \begin{itemize}
+        \item Typ = 0
+        \item Kod = 0
+        \item Suma kontrolna (2 oktety)
+        \item Identyfikator, Numer sekwencji, Opcjonalne dane przepisane z Echo request.
+    \end{itemize}
+
+
+\end{document}

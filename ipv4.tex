@@ -1,0 +1,131 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+    Adres IP jest przypisywany do karty sieciowej, nie do komputera.
+
+    Są \textbf{trzy typy adresów IPv4}:
+    \begin{itemize}
+        \item \textbf{Adresy jednostkowe} (unicast) – pojedynczy interfejs sieciowy (komunikacja one-to-one).
+        \item \textbf{Adresy rozgłoszeniowe} (broadcast) – wszystkie węzły w tym samym segmencie sieci (one-to-everyone).
+        \item \textbf{Adresy grupowe} (multicast) – jeden lub wiele komputerów w jednej lub w różnych segmentach sieci (one-to-many).
+    \end{itemize}
+
+    W \textbf{adresie IP} zapisanym binarnie można wyróżnić \textbf{dwie części}:
+    \begin{itemize}
+        \item \textbf{Identyfikator sieci} (Network ID) - pewna liczba bitów z lewej strony adresu
+        \item \textbf{Identyfikator hosta} (Host ID) - pozostałe bity.
+    \end{itemize}
+    Terminem host określa się komputer, który jest końcowym konsumentem usług sieciowych.
+
+    \textbf{Granica} między identyfikatorem sieci a identyfikatorem hosta może być wyznaczona przez
+    tzw. \textbf{maskę sieci}.
+
+    \textbf{Identyfikator sieci}
+    \begin{itemize}
+        \item \textbf{nie} może się składać z \textbf{samych jedynek}.
+        \item \textbf{nie} może się składać z \textbf{samych zer}.
+        \item \textbf{nie może się powtarzać} w złożonej sieci.
+        \item W \textbf{pierwszym oktecie} adresu \textbf{nie} może się znaleźć wartość \textbf{127} (jest ona zarezerwowana dla adresu tzw. pętli zwrotnej).
+    \end{itemize}
+
+    \textbf{Identyfikator hosta}
+    \begin{itemize}
+        \item \textbf{nie} może się składać z \textbf{samych jedynek}.
+        \item \textbf{nie} może się składać z \textbf{samych zer}.
+        \item musi być \textbf{unikalny} w segmencie sieci lokalnej.
+    \end{itemize}
+
+    Adres IP, który zawiera \textbf{same zera} w części hosta jest traktowany jako \textbf{adres sieci}.
+
+    \textbf{Adres ograniczonego rozgłoszenia - 255.255.255.255 = 11111111 11111111 11111111 11111111} -  adres rozgłoszenia
+    w danym segmencie sieci ograniczonym routerami.\\
+    \textbf{Adresy rozgłoszenia do sieci lub podsieci mają jedynki tylko w części hosta}.
+
+    \textbf{Adresy nieunikalne}, powtarzalne - przykłady:
+    \begin{itemize}
+        \item adresy rozpoczynające się od liczby 127, które oznaczają zawsze komputer lokalny (zwykle 127.0.0.1).
+        \item adresy tzw. transmisji grupowej.
+        \item grupy tzw. adresów prywatnych.
+    \end{itemize}
+
+    \subsection{Adresowanie oparte na klasach}
+
+    Pierwszy bajt adresu determinuje do jakiej klasy należy sieć.
+
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Klasa & Adres sieci & Adresy & Zakres 1-go bajtu & Najstarsze bity\\
+        \hline
+        A & w.0.0.0 & 1.0.0.0 - 126.0.0.0 & 1 – 126 & 0\\
+        \hline
+        B & w.x.0.0 & 128.0.0.0 - 191.255.0.0 & 128 – 191 & 10\\
+        \hline
+        C & w.x.y.0 & 192.0.0.0 - 223.255.255.0 & 192 – 223 & 110\\
+        \hline
+        D & nie dotyczy & nie dotyczy & 224 – 239 & 1110\\
+        \hline
+        E & nie dotyczy & nie dotyczy & 240 – 255 & 11110\\
+        \hline
+    \end{tabular}
+
+
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+        \hline
+        Klasa & Ilość sieci & Komp. w sieci & ID sieci & ID hosta & "pierwszy" & "ostatni"\\
+        \hline
+        A & 126 & $2^{24}-2$ & 1 bajt & 3 bajty & w.0.0.1 & w.255.255.254\\
+        \hline
+        B & $(191-128+1)*256$ & $2^{16}-2 = 65 534$ & 2 bajty & 2 bajty & w.x.0.1 & w.x.255.254\\
+        \hline
+        C & $(192-223+1)*256*256$ & $2^8 -2 = 254$ & 3 bajty & 1 bajt & w.x.z.1 & w.x.z.254\\
+        \hline
+    \end{tabular}
+
+    \begin{itemize}
+        \item \textbf{Adresy klasy D} - przeznaczone są do transmisji grupowych.
+        \item \textbf{Adresy klasy E} - zarezerwowane (nie wykorzystywane normalnie do transmisji pakietów).
+        \item \textbf{Adresy pętli zwrotnej} (loopback) - postaci 127.x.y.z (na ogół 127.0.0.1). Cały ruch przesyłany na ten adres nie wychodzi z komputera.
+    \end{itemize}
+
+    Identyfikator sieci można określić na podstawie adresu IP oraz tzw. \textbf{maski sieci}. Jest to \textbf{liczba binarna 32 bitowa}, zapisywana podobnie jak adres IP, jednak \textbf{maska zawsze z lewej strony ma jedynki, natomiast z prawej ma zera}.\\
+    Przykłady masek:\\
+    255.0.0.0 = 11111111.00000000.00000000.00000000 = /8,\\
+    255.255.0.0 = 11111111. 11111111.00000000.00000000 = /16.\\
+    \\
+    Adres sieci = AdresIP \& Maska\\
+
+
+    \textbf{Dzielenie sieci na podsieci}\\
+    Dzielenie sieci na fragmenty nazywane \textbf{podsieciami} w celu zwiększenia efektywności działania.
+    \begin{itemize}
+        \item zmniejszenie ruchu w segmentach,
+        \item zmniejszenoe tzw. dziedziny rozgłaszania (obszary przekazywania ramek rozgłoszeniowych,
+        tj. z adresem MAC ff-ff-ff-ff-ff-ff-)
+        \item zwiększenie bezpieczeństwa. Routery mogą działać jako filtry pakietów, które
+        przepuszczają między sobą tylko pakiety spełniające określone kryteria.
+    \end{itemize}
+    Adres podsieci można określić przez użycie niestandardowych masek sieci (\textbf{masek podsieci}).
+
+    Dzielenie klasy A - maski 255.255.0.0, 255.255.255.0, dla B - 255.255.255.0.
+
+    Routery przechowują w tablicach routowania informacje o znanych im trasach do pewnych sieci. Administrator w trakcie konfiguracji routera wprowadza informacje o sieciach bezpośrednio przyłączonych do routera. Potem, po włączeniu opcji dynamicznego rutowania
+    routery wymieniają się informacjami o sieciach wg protokołów rutowania i na tej podstawie budują sobie pewien obraz
+    sieci i potrafią wyznaczać trasy datagramów.
+
+    Przykład: komputer A: 162.168.1.100, komputer B: 162.168.2.101\\
+    Maska 255.255.0.0 - komputery są względem siebie lokalne.\\
+    Maska 255.255.255.0 - komputery są względem siebie odległe (przedzielone routerem).
+
+    \subsection{Adresowanie bezklasowe}
+    Pytanie: czy nie można podzielić sieci na podsieci
+    z \textbf{użyciem dowolnej liczby jedynek}? Na przykład, jeśli w sieci klasy B o
+    adresie 149.159.0.0 /16 zastosowalibyśmy maskę podsieci nie 24 bitową (co daje 254 lub
+    256 podsieci z możliwością adresowania do 254 komputerów) tylko 22 bitową.
+    Otrzymalibyśmy 62 lub 64 sieci, z których każda mogłaby mieć 1022 komputery. Do określenia sieci należy podać adres
+    sieci oraz maskę. Obecnie w Internecie powszechnie jest wykorzystywane adresowanie
+    bezklasowe.
+    Przykład adresowania bezklasowego: 145.217.123.7 /20 (maska: 255.255.240.0)
+
+
+
+\end{document}

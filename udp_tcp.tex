@@ -1,0 +1,344 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+    \begin{itemize}
+        \item Informacje o \textbf{docelowym i źródłowym procesie} zawarte są w nagłówkach protokołów warstwy transportu.
+        \item Protokoły UDP i TCP umożliwiają dostarczenie danych do procesu działającego na komputerze, przy czym wykorzystywane są tzw. \textbf{porty}. Porty są ponumerowane, numer portu jest liczbą
+        dwubajtową.
+        \item Aplikacja rezerwuje na swoje potrzeby pewne zasoby (komunikacyjne bufory w pamięci
+        operacyjnej), ma do dyspozycji tzw. \textbf{gniazda}.
+        \item Każde gniazdo jest identyfikowane przez numer IP oraz numer portu. \textbf{Interfejs komunikacyjny}  umożliwiający komunikowanie się programów z wykorzystaniem TCP/UDP nazywa się \textbf{interfejsem gniazd}.
+    \end{itemize}
+
+    \subsection{UDP – User Datagram Protocol}
+    \begin{itemize}
+        \item Prosty protokół bezpołączeniowy warstwy transportu.
+        \item Umożliwia przesyłanie danych między procesami dzięki określeniu adresów IP komputerów oraz 16 bitowych numerów portów.
+        \item Porcja danych zgodna z protokołem UDP nazywana jest datagramem/pakietem UDP.
+        \item Nie zapewnia niezawodności. Ewentualne zapewnienie niezawodności musi być realizowane przez protokoły warstwy aplikacji.
+        \item Niewielki nagłówek (8 bajtów), nie zawiera mechanizmów ustanawiania połączenia ani sterowania przepływem datagramów, zatem jest szybszy od TCP.
+        \item Datagramy UDP mogą być przesyłane w pakietach IP z adresem docelowym przesyłania grupowego.
+        \item Przykłady zastosowań: strumieniowanie audio/wideo, wideokonferencje, transmisje głosu; RIP (port 520).
+    \end{itemize}
+
+    Aplikacja jest odpowiedzialna za rozmiar wysyłanego datagramu. Jeśli wielkość przekroczy
+    MTU sieci, wówczas datagram IP (zawierający w sobie datagram UDP) jest dzielony
+    (następuje fragmentacja IP).
+
+
+    \subsubsection{Porty}
+    Aktualne przyporządkowanie numerów portów można znaleźć na stronie IANA.
+    \begin{itemize}
+        \item Poprawne numery portów: $1 \dots 65535$.
+        \item Numer 0 może być używany jako numer portu źródłowego, jeśli nadawca nie oczekuje odpowiedzi.
+        \\
+        \item IANA dzieli porty na trzy grupy:
+        \begin{itemize}
+            \item $1 \dots 1023$ – porty ogólnie znane, mogą być przypisywane przez procesy systemowe lub działające z uprawnieniami użytkownika uprzywilejowanego.
+            \item $1024 \dots 49151$ – zarejestrowane, do użytku przez różne aplikacje.
+            \item $49152 \dots 65535$ – dynamiczne lub prywatne, np. dla testowanych aplikacji klient-serwer. Mogą być przydzielane dynamicznie np. dla przeglądarki WWW.
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Enkapsulacja datagramu UDP}
+
+    \begin{tabular}{|c|c|c|}
+        \hline
+        nagłówek IP & nagłówek UDP & dane UDP\\
+        20 bajtów & 8 bajtów & $\dots$\\
+        \hline
+    \end{tabular}
+
+    \textbf{Nagłówek UDP}
+    \begin{itemize}
+        \item Numer portu źródłowego (16 bitów)
+        \item Numer portu docelowego (16 bitów)
+        \item Długość UDP (nagłówek + dane) – wypełniana opcjonalnie (16 bitów)
+        \item Suma kontrolna UDP (16 bitów)
+        \item Dane, jeśli są
+    \end{itemize}
+
+    \textbf{Suma kontrolna}\\
+    \begin{itemize}
+        \item Jedyny mechanizm sprawdzenia poprawności datagramu w UDP.
+        \item Opcjonalna, jeśli datagram UDP jest przesyłany w pakiecie IPv4.
+        \item Obowiązkowa, jeśli datagram UDP jest przesyłany w pakiecie IPv6.
+        \item Dodawane są liczby 16 bitowe, stąd możliwa konieczność dodania do obliczeń
+        dodatkowego bajtu z samymi zerami (jeśli długość datagramu liczona w bajtach jest liczbą
+        nieparzystą).
+        \item Do obliczenia sumy kontrolnej używany jest tzw. pseudonagłówek. Pseudonagłówek nie jest przesyłany.
+    \end{itemize}
+
+    \textbf{Pseudonagłówek} (12 bajtów) w pakiecie IPv4:
+    \begin{itemize}
+        \item Adres IP źródła (32 bity)
+        \item Adres IP celu (32 bity)
+        \item 8 zer
+        \item Typ protokołu (8 bitów, UDP = 17)
+        \item Długość UDP (16 bitów)
+    \end{itemize}
+    Algorytm jest taki sam jak dla sumy kontrolnej nagłówka IPv4 (jednak w IPv4 suma kontrolna
+    obejmowała sam nagłówek, w UDP obejmuje również przesyłane za nagłówkiem dane).
+
+    \subsection{TCP – Transmission Control Protocol}
+    Oprogramowanie TCP tworzy połączenia między dwoma procesami z
+    jednoczesną dwukierunkową transmisją. Punkty końcowe są identyfikowane przez parę: numer IP, numer
+    portu. Połączenie identyfikowane jest przez cztery liczby: dwa numery IP oraz dwa
+    numery portów.\\
+    Pomiędzy procesami przesyłane są dwa strumienie 8-bitowych oktetów, po jednym
+    w każdą stronę (\textbf{strumień oktetów}). Bajty wysyłane są w
+    segmentach, ale proces docelowy nie jest w stanie z góry określić
+    wielkości nadchodzących porcji. Ilość bajtów danych przesyłanych w jednym segmencie nie powinna być większa niż ustalony MSS (\textbf{Maximum Segment Size}).\\
+
+    \textbf{Cechy TCP}
+    \begin{itemize}
+        \item Partnerzy (procesy) tworzą połączenie z wykorzystaniem mechanizmu (trójfazowego) uzgodnienia.
+        \item Zamknięcie połączenia odbywa się z wykorzystaniem mechanizmu uzgodnienia (zgoda na zamknięcie).
+        \item TCP zapewnia sterowanie przepływem. Informuje partnera o tym ile bajtów danych ze strumienia danych może od niego przyjąć (okno oferowane). Rozmiar okna zmienia się dynamicznie i jest równy rozmiarowi wolnego miejsca w buforze odbiorcy. Zero oznacza, że nadawca musi zaczekać, aż program użytkowy
+        odbierze dane z bufora.
+        \item Dane ze strumienia danych dzielone są na fragmenty, które według TCP mają najlepszy
+        do przesłania rozmiar. Jednostka przesyłania danych nazywa się \textbf{segmentem}.
+        \item TCP zapewnia \textbf{niezawodność} połączenia.
+    \end{itemize}
+
+    \textbf{Mechanizmy niezawodności}
+    \begin{itemize}
+        \item \textbf{Potwierdzanie otrzymania segmentów z mechanizmem zegara.}\\
+        Odebrany segment musi być potwierdzony przez odbiorcę przez wysłanie segmentu potwierdzającego. Jeśli
+        potwierdzenie nie nadejdzie w odpowiednim czasie, segment zostanie przesłany powtórnie.
+        \item \textbf{Sumy kontrolne.}\\
+        Jeśli segment zostanie nadesłany z niepoprawna sumą kontrolną, to jest
+        odrzucany. Nadawca po odczekaniu odpowiedniego czasu prześle segment jeszcze raz.
+        \item \textbf{Przywracanie kolejności nadchodzących segmentów.}\\
+        Segmenty mogą nadchodzić w kolejności innej niż zostały wysłane, oprogramowanie TCP przywraca prawidłową kolejność przed przekazaniem do aplikacji.
+        \item \textbf{Odrzucanie zdublowanych danych.}
+    \end{itemize}
+
+    \subsubsection{Nagłówek TCP}
+    \begin{itemize}
+        \item \textbf{Numer sekwencji.}\\
+        Dla segmentu z ustawionym tylko znacznikiem SYN w to pole wpisywany
+        jest (losowy) numer sekwencji początkowej (Initial Sequence Number). Taki segment jest
+        wysyłany w celu rozpoczęcia nawiązywania połączenia. Pierwszy oktet przesyłanych danych
+        ze strumienia w rzeczywistości będzie miał numer ISN+1.
+        W kolejnych segmentach w połączeniu TCP w polu numer sekwencji jest numer pierwszego
+        oktetu danych w segmencie.
+        Numer potwierdzenia jest ważny tylko przy włączonym znaczniku ACK. Znacznik ACK jest
+        włączany tylko wówczas, jeśli segment zawiera potwierdzenie odebrania jakiegoś segmentu.
+        Numer potwierdzenia jest to kolejny numer bajta (w strumieniu danych), którego spodziewa
+        się wysyłający potwierdzenie.
+        \item \textbf{Długość nagłówka} (przesunięcie danych).\\
+        Wielkość nagłówka wyrażona w liczbie bloków 4-bajtowych.
+        \item \textbf{Jednobitowe znaczniki} (flagi):
+        \begin{itemize}
+            \item NS, CWR, ECE – związane z przeciwdziałaniem przeciążeniom na routerach.
+            \item NS – jednobitowa suma kontrolna wartości flag związanych z
+            mechanizmem ECN weryfikująca ich integralność;
+            \item ECE – Jeśli flaga SYN=0, to flaga ECE jest ustawiana na 1 przez odbiorcę
+            segmentu, jeśli segment ten dotarł w pakiecie IP z ustawionym kodem CE w bitach ECN nagłówka IP;
+            Jeśli SYN=1, wówczas ECE=1 oznacza, że mechanizm
+            ECN będzie stosowany (czyli jest to element nawiązania połączenia, w którym druga strona
+            połączenia jest informowana o tym, że można stosować ECN),
+            \item CWR – flaga potwierdzająca odebranie ECE i
+            zredukowanie wielkości okna przeciążeniowego.
+            \item  URG – wskaźnik ponaglenia
+            \item ACK – segment potwierdzenia,
+            \item PSH – segment „push” – wypchnięcie danych,
+            \item RST – zresetowanie połączenia,
+            \item SYN – synchronizacja,
+            \item FIN – nadawca zakończył przesyłanie danych.
+        \end{itemize}
+        \item \textbf{Rozmiar okna.}\\
+        Oznacza liczbę bajtów, które odbiorca może zaakceptować.
+        \item \textbf{Suma kontrolna.}\\
+        Liczona dla nagłówka i danych, z użyciem pseudonagłówka (algorytm
+        analogiczny jak w UDP oraz IP).
+        \item \textbf{Wskaźnik ważności.}\\
+        Dodatnie przesunięcie, które musi być dodane do numeru przesunięcia
+        sekwencyjnego pierwszego oktetu danych aby uzyskać numer ostatniego bajta szczególnie
+        ważnych danych w segmencie (dane te są na początku segmentu). Pole to jest brane pod
+        uwagę tylko, jeśli bit URG jest ustawiony na 1.
+        \item \textbf{Opcje.}\\
+        Rodzaj opcji (bajt), długość opcji (bajt), opcja. Najważniejsza opcja to \textbf{MSS}. Może być uzyskana jako MTU (Maximum Transmission Unit) minus rozmiar nagłówka IP oraz TCP.
+    \end{itemize}
+
+    \textbf{Specyfika stanu TIME WAIT}\\
+    Spóźnione segmenty są w czasie 2 MSL odrzucane. Para
+    punktów końcowych definiujących połączenie nie może być powtórnie użyta przed upływem
+    2MSL. Eliminuje to ewentualne kłopoty związane z odbieraniem z sieci segmentów jeszcze ze
+    starego połączenia.
+
+    \textbf{Półzamknięcie TCP}\\
+    Strona, która zakończyła połączenie i nie nadaje danych, może dane odbierać od partnera
+    TCP. Takie połączenie nazywane jest połączeniem półzamkniętym (half-closed).
+
+    \textbf{Segmenty RST}\\
+    Segment RST wysyłany jest przez oprogramowanie implementujące TCP, kiedy nadchodzi
+    segment niepoprawny z punktu widzenia dowolnego połączenia. Segment RST nie jest potwierdzany. W protokole UDP generowany jest komunikat ICMP o tym, że port jest nieosiągalny.
+    Segment RST jest wysyłany również wtedy, gdy przekroczona jest maksymalna dopuszczalna
+    liczba połączeń TCP.
+
+
+    \textbf{Połączenia półotwarte} (połowicznie otwarte)\\
+    Jest to połączenie nie poprawnie nawiązane. Występuje, jeśli jedna ze stron przerwała połączenie bez informowania drugiej. Segment z ustawioną na 1 flagą SYN został przesłany od
+    klienta do serwera, serwer odpowiedział segmentem z ustawionymi na 1 flagami SYN i ACK,
+    ale klient nie odpowiedział segmentem z ustawioną na 1 flagą ACK.
+    Jeden ze sposobów atakowania serwisów (np. WWW) polegał na otwieraniu bardzo dużej
+    liczby połączeń półotwartych. Obecnie implementacje TCP są odporne na tego typu ataki.
+    Dopuszczalne jest, by oprogramowanie realizujące TCP mogło sprawdzać stan połączenia
+    przez okresowe przesyłanie segmentów sprawdzających aktywność. Segment taki to zawiera
+    ustawioną na 1 flagę ACK i nie zawiera żadnych danych. Dodatkowo ma on ustawiony numer
+    sekwencyjny na o 1 mniejszy od tego, którego normalnie spodziewa się strona wysyłająca
+    ACK. Partner odpowiada też segmentem z ustawioną na 1 flagą ACK ze standardowo
+    ustawionymi prawidłowymi wartościami numerów sekwencyjnych.
+
+
+    \subsubsection{Opcje TCP}
+    \begin{itemize}
+        \item \textbf{Koniec listy opcji}: 1 bajt - 0.
+        \item \textbf{Brak operacji}: 1 bajt - 1. Opcja ta jest stosowana do dopełnienia pola do wielokrotności 4 bajtów.
+        \item \textbf{MSS}: typ = 2, długość = 4, dane – 2 bajty ustawione na mniejszą wartość z wartości MSS podanych przez strony połączenia. MSS podawany jest w segmentach SYN.
+        \item \textbf{Skala okna}: typ = 3, długość = 3, dane – 1 bajt = współczynnik skali (licnzik przesunięć), określa liczbę mnożeń przez 2 wielkości rozmiar okna, max. 14.
+        \item \textbf{Pozwolenie na selektywne potwierdzanie}: typ opcji = 4, długość = 2.
+        \item \textbf{Selektywne potwierdzanie}: typ = 5, długość = 10, 18, 26 lub 34 (potwierdzenie jednego, dwóch, trzech lub czterech nieciągłych bloków danych).
+        \item \textbf{Sygnatury czasowe}: typ = 8, długość = 10, timestamp – 4 bajty, echo timestamp – 4 bajty.
+        Stosowana jest do określania RTO (retransmission time-out).
+
+    \end{itemize}
+
+    \subsubsection{Przepływ danych w TCP}
+    \textbf{Potwierdzenia}
+    \begin{itemize}
+        \item \textbf{Skumulowane potwierdzanie}\\
+        Segment TCP z ustawionym znacznikiem ACK jest segmentem potwierdzającym. Numer
+        potwierdzenia to numer następnego bajta, który nadawca ACK spodziewa się otrzymać od nadawcy potwierdzanych danych.Taki sposób potwierdzania nie jest korzystny w
+        środowisku z dużą liczbą gubionych segmentów.
+        \item \textbf{Opóźnione potwierdzenia}\\
+        Potwierdzenie otrzymania segmentu nie jest wysyłane natychmiast. Zalety takiego podejścia
+        są następujące:
+        \begin{itemize}
+            \item Podczas trwania opóźnienia mogą zostać odebrane następne segmenty i potwierdzenie może je obejmować.
+            \item Można dołączyć ACK do segmentu przesyłanych danych (piggybacking).
+            \item Oprogramowanie TCP realizuje utrzymanie połączenia.
+        \end{itemize}
+        \item \textbf{Selektywne potwierdzenia}\\
+        Realizowane przez jedną z opcji TCP. Przydaje się w łączach które są szerokopasmowe i mają duże opóźnienie. Rozmiar okna może tu być duży, nadawca może na raz transmitować dużą liczbę segmentów. Jeśli pierwszy segment zaginie, to nadawca niepotrzebnie retransmituje wszystkie. Selektywne potwierdzanie temu zapobiega.
+    \end{itemize}
+
+    \textbf{Ruchome okna TCP} (sliding windows)\\
+    Połączenie TCP obejmuje dwa strumienie danych. W każdym strumieniu określony jest
+    nadawca i odbiorca. Kontrolę przesyłania oktetów w strumieniu umożliwiają mechanizmy
+    tzw. przesuwnych (ruchomych) okien, które można sobie wyobrazić jako nałożone na
+    strumień. Dla strumienia określone jest okno nadawcy oraz okno odbiorcy. Nadawca może
+    wysyłać tylko te dane, które są w tej chwili w jego oknie nadawczym, przy czym może to
+    zrobić tylko za zgodą odbiorcy. Okno nadawcze jest przesuwane nad wyjściowym
+    strumieniem bajtów, okno odbiorcze nad strumieniem wejściowym.
+
+    \textbf{Okno nadawcze}
+    Nadawca określa, które oktety w jego strumieniu wyjściowym zostały:
+    \begin{itemize}
+        \item wysłane i potwierdzone,
+        \item wysłane, ale jeszcze nie potwierdzone,
+        \item jeszcze nie wysłane, ale już znajdujące się w oknie nadawczym
+        \item jeszcze nie wysłane i znajdujące się poza oknem nadawczym
+    \end{itemize}
+    Dane w oknie nadawczym mogą być wysłane przez nadawcę, gdyż odbiorca na to zezwolił, lub jeszcze raz wysyłane wskutek realizacji strategii powolnego startu lub zapobiegania zatorom.
+    Okno nadawcze rozciąga się od oktetu, którego spodziewa się partner w ostatnim
+    potwierdzeniu ACK.\\
+    Okno nadawcze ma lewą i prawą krawędź. W trakcie potwierdzania kolejnych segmentów
+    lewa krawędź okna nadawczego przesuwa się w prawo powodując tzw. zamykanie okna. Jeśli
+    numer potwierdzenia + rozmiar okna wskazują na konieczność przesunięcia prawej krawędzi,
+    to jest ona przesuwana powodując tzw. otwieranie okna.\\
+    Jeśli bufor odbiorczy się wypełni to odbiorca przesyła z
+    potwierdzeniem ostatniego segmentu proponowany rozmiar okna równy zero.
+    Kiedy bufor odbiorczy zostane całkowicie opróżniony odbiorca wysyła
+    „zbędny” segment ACK bez danych i z numerem potwierdzenia takim jak poprzedni ACK. Ten
+    segment nie jest potwierdzany ani retransmitowany.\\
+
+    \textbf{Okno odbiorcze}
+    Odbiorca określa, które oktety w jego strumieniu wejściowym zostały:
+    \begin{itemize}
+        \item odebrane, potwierdzone i pobrane do warstwy aplikacji
+        \item odebrane, potwierdzone, ale jeszcze nie pobrane do warstwy aplikacji
+        \item odebrane, ale jeszcze nie potwierdzone
+        \item nie odebrane, ale znajdujące się w tzw. bieżącym oknie odbiorczym (wolna przestrzeń buforu odbiorczego)
+        \item nie odebrane i znajdujące się poza oknem odbiorczym (nie zostaną odebrane)
+    \end{itemize}
+
+    Maksymalne okno odbiorcze obejmuje wszystkie oktety odebrane. Ma ono stałą wielkość równą buforowi do
+    odbierania danych w połączeniu TCP. Bieżące okno odbiorcze obejmuje odebrane niepotwierdzone i będące w bieżącym oknie odbiorczym. \\
+    Ze względu na to, że oktety są ponumerowane łatwo można
+    określić, w którym miejscu strumienia powinny się znaleźć. W każdym segmencie jest
+    przekazywany numer pierwszego oktetu danych.
+    Bieżące okno odbiorcze ma lewą i prawą krawędź, analogicznie jak dla okna nadawczego. Prawa krawędź odbiorczego okna bieżącego pokrywa się z prawą krawędzią maksymalnego okna odbiorczego. Jeśli aplikacja
+    odbiera dane z bufora, to krawędź ta przesuwa się w prawo (podobnie jak lewa krawędź
+    maksymalnego okna odbiorczego). Potwierdzanie ACK przesuwa lewą krawędź okna
+    bieżącego w prawo.\\
+
+    \subsubsection{Przesyłanie małych segmentów}
+    Tak określa się segmenty o rozmiarze mniejszym od MSS.
+    Przesyłanie małych segmentów zmniejsza efektywność sieci.
+    Aby temu zapobiec stosowane są takie mechanizmy, jak algorytm Nagle’a i unikanie
+    „syndromu głupiego okna”.
+    \begin{itemize}
+        \item \textbf{Algorytm Nagle’a}\\
+        „Dopasowuje się” do sieci, w której przesyłane są segmenty.
+        \begin{itemize}
+            \item TCP powinno przesyłać tylko pojedyncze małe niepotwierdzone segmenty.
+            \item W czasie oczekiwania na potwierdzenie, dane są gromadzone w buforze.
+            \item W sieci o szerokim paśmie i małym opóźnieniu akumulacja jest mała, efektywność
+            mniejsza, ale kompensowana szybkością sieci. W sieciach o małym paśmie i dużych
+            opóźnieniach akumulacja zwiększa efektywność.
+        \end{itemize}
+        Algorytm Nagle’a może być wyłączany przez oprogramowanie TCP.
+        \item \textbf{Syndrom głupiego okna} (SWS)\\
+        \begin{itemize}
+            \item Jeśli odbiorca ma zerowy rozmiar okna (i nadawca też) oraz warstwa aplikacji pobierze 1
+            bajt, to okno odbiorcze otwiera się o jeden bajt.
+            \item Odbiorca może wysłać ACK z proponowaną wielkością okna równą 1. Gdyby tak było, to
+            druga strona połączenia też powiększy okno nadawcze o jeden bajt i prześle segment
+            zawierający 1 bajt danych itd.
+            \item Aby uniknąć SWS odbiorca ogłasza nowy rozmiar okna dopiero, gdy rozmiar ten wynosi co
+            najmniej MSS lub połowę maksymalnego rozmiaru okna odbiorczego.
+            \item Nadawca unika SWS wstrzymując się z wysyłaniem danych dopóki rozmiar okna proponowanego przez odbiorcę nie jest równy co najmniej MSS. „Interaktywne” dane mogą być wysyłane z flagą PSH wg algorytmu Nagle’a.
+        \end{itemize}
+    \end{itemize}
+
+    \textbf{Dodatkowa kontrola przepływu po stronie nadawcy}\\
+    Nadawca może przesłać wszystkie segmenty, które znajdują się w oknie nadawczym. Takie działanie może jednak doprowadzić do zatorów. Poniższe algorytmy bazują na pojęciu okna przeciążeniowego (okna zatoru, congestion window) i zapobiegają zatorom oraz powodują unikanie powtórnej zapaści.
+    \begin{itemize}
+        \item \textbf{Algorytm powolnego startu}\\
+        Po otwarciu połączenia lub dłuższym czasie nie przesyłania danych wielkość okna
+        przeciążeniowego ustawiana jest na 2*MSS. Każde przychodzące potwierdzenie (ACK)
+        powoduje zwiększenie okna przeciążeniowego o jeden MSS. Może to prowadzić do wykładniczego wzrostu wielkości tego okna Rozmiar okna nadawczego ustalany jest jako minimum z wielkości okna przeciążeniowego
+        oraz ogłoszonego przez odbiorcę bieżącego okna przeciążeniowego.
+        \item \textbf{Algortym unikania zatoru}\\
+        Tu stosuje się wolniejszy wzrost wielkości okna przeciążeniowego, np. o jeden
+        segment na kilka przychodzących ACK. Algorytm ten działa zwykle od pewnego progu (najpierw działa powolny start).
+    \end{itemize}
+
+
+    \subsubsection{Retransmisje segmentów w TCP}
+    W każdym połączeniu definiowana jest zmienna RTO (Retransmission Time-out). Jeśli TCP nie
+    odbierze ACK w czasie RTO dla pewnego nadanego segmentu, to segment musi być
+    retransmitowany. RTO powinien być większy od stale obliczanego RTT (Round Trip Time).
+    Segmenty ACK (bez danych) nie są potwierdzane.
+    Wyznaczenie prawidłowej wartości RTO jest ważne dla uniknięcia zapaści spowodowanej
+    przeciążeniem (np. RTT rośnie szybciej niż wyliczany RTO, segmenty będą retransmitowane
+    co jeszcze zwiększy ruch w sieci).
+
+    \textbf{Zasady retransmisji}
+    Jeśli nie określono innych: dla początkowego segmentu przyjmuje się bieżące znane RTO dla
+    połączenia. Po upłynięciu RTO wartość RTO jest podwajana, a segment wysyłany ponownie.
+
+    Potwierdzenie dla retransmitowanego segmentu jest niejednoznaczne, nie wiadomo czy jest
+    to opóźnione potwierdzenie pierwszej kopii, czy potwierdzenie drugiej kopii.
+    Rodzi to problemy z szacowanym RTT.
+    \textbf{Niejednoznaczność potwierdzenia – Algorytm Karna}
+    Pomiary RTT dla retransmitowanych segmentów są pomijane. Może to rodzić problemy, jeśli
+    RTT gwałtownie wzrośnie. Dlatego tymczasowo stosowane jest dublowanie RTO dla
+    kolejnych retransmitowanych segmentów. Dopiero przyjęcie ACK segmentu nie
+    retransmitowanego powoduje obliczenie RTT i RTO dla tego nowego czasu RTT.
+
+
+\end{document}

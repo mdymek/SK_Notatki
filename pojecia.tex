@@ -1,0 +1,346 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+    \textbf{Sieć komputerowa} - zbiór połączonych komputerów i urządzeń z możliwością komunikacji. Obejmują	również	wszystko co	umożliwia
+    komunikację i współdzielenie zasobów, w szczególności oprogramowanie, protokoły komunikacyjne, media transmisyjne (kable).
+    \\
+    Dwie główne kategorie sieci:
+    \begin{itemize}
+        \item \textbf{LAN} - Local Area Networks
+        \item \textbf{WAN} - Wide Area Networks
+    \end{itemize}
+
+    Przybliżone  kryterium	 rozróżnienia: odległości między łączonymi	komputerami. Są techlonolgie charakterystyczne dla
+    sieci	lokalnych (Gigabit Ethernet),	inne dla sieci rozległych (T1,	E1	czy	Frame	Relay).
+    \\
+    Inny podział wg kryterium odległości:
+    \begin{itemize}
+        \item \textbf{Nanoscale} – obecnie przedmiot badań, zastosowanie w nanomedycynie (IEEE).
+        \item \textbf{NFC} (Near Field Communication) – odległości	rzędu	centymetrów.
+        \item \textbf{BAN} (Body Area Network),	\textbf{WBAN} (Wireless	BAN),	inaczej to	BSN	(Body	Sensor	Network) – łączenie	czujników,	„wearable	devices”.
+        \item \textbf{PAN} (Personal Area Network) – od centymetrów	do	kilku metrów (bezprzedowowe: IrDA,	Bluetooth,	Wireless USB,	oraz	przewodowe	jak	USB,	FireWire,
+        Thunderbolt).
+        \item \textbf{NAN} (Near-me	Area	Network)	– komunikacja	między	urządzeniami bezprzewodowymi, które	są	blisko	siebie. Ścieżka	komunikacyjna	między	urządzeniami	w	jednej	sieci	NAN	może jednak	być	długa	i	może	nawet	obejmować	technologie	sieci	WAN,	np.	jeśli	do	NAN	należą telefony	zarejestrowane	w	różnych	firmach	telekomunikacyjnych.
+        \item \textbf{SAN} (Storage	Area	Network).
+        \item \textbf{CAN} – Campus	Area	Network,	sieci	kampusowe.
+        \item \textbf{MAN} (Metropolitan	Area	Network)	– obejmuje	obszar	miasta,	dużego	kampusu.
+    \end{itemize}
+
+    \textbf{Internet jest globalną	 siecią	 komputerową} złożoną z	 wielu	 sieci	 komputerowych wykorzystujących	 \textbf{protokół IP} (zestaw protokołów TCP/IP). Od strony	 logicznej	 Internet można	identyfikować	z	\textbf{przestrzenią	adresową	protokołu	IP}	 (są	w użyciu	dwie wersje:	IPv4 i nowsza IPv6).\\
+    Na	każdą	sieć	komputerową	składają	się	sprzętowe	oraz	programowe	elementy	składowe.
+
+    \subsection{Sprzętowe	elementy	składowe	sieci	komputerowych}
+    Podstawowymi	elementami	sprzętowymi	są:
+    \begin{itemize}
+        \item \textbf{Nośniki	transmisji}	(media	transmisyjne)\\
+        Nośniki	 transportu	 sygnałów	 przesyłanych	 przez	 sieć. Są to na przykład kable koncentryczne, tzw.
+        skrętki, kable miedziane,  kable	 światłowodowe,	 ale	 też	 przestrzeń (przesyłanie	fal	radiowych,	mikrofal,	światła).
+        \item \textbf{Urządzenia	dostępu do	nośnika}\\
+        Są odpowiedzialne za	formatowanie danych	tak, by nadawały się do	 przesyłania poprzez nośnik	 transmisji, umieszczanie	 tych	 danych	 w nośniku	transmisji	oraz	odbieranie	odpowiednio zaadresowanych	danych	(np. karty sieciowe w sieci LAN).
+        \item \textbf{Urządzenia	wzmacniające,	filtrujące	i	kierujące	przesyłane	sygnały},	np.	przełączniki warstwy	drugiej, routery.\\
+        Sygnały	 umieszczane w	 nośniku transmisji ulegają zakłóceniom.
+        \begin{itemize}
+            \item \textbf{Tłumienie} (osłabienie siły sygnału)\\
+            Sposoby unikania tłumienia:  ograniczenie	 długości	 połączeń	 (kabli), zainstalowanie	urządzenia,	które odczytuje	przesyłane	sygnały,	wzmacnia	je	i
+            wysyła	z	powrotem	do	sieci.
+            \item \textbf{Zniekształcenie} (niepożądanazmiana kształtu przebiegu czasowego)\\
+            Przeciwdziałanie	 zniekształceniom polega	 na	 przestrzeganiu	 zaleceń dotyczących	 nośnika	 (odpowiedni typ nośnika, poprawna instalacja, odpowiednie	 długości	 przewodów) oraz korzystaniu z protokołów obsługujących korektę	błędów	transmisji.
+        \end{itemize}
+        Zadania	filtrujące	i	kierujące	sygnały	spełniają	takie	urządzenia	jak	mosty (pomosty,	bridges już	 raczej	 nie	 używane),	 koncentratory (hubs)	 przełączniki (switches), punkty	 dostępowe (access points), routery (routers),	bramy (gateways).
+    \end{itemize}
+
+    Karty	sieciowe	pakują	dane	w	tzw.	ramki. Ramki	są	podstawowymi	porcjami	danych	przesyłanymi	w	sieciach	komputerowych.
+
+
+    \subsection{Programowe	elementy	składowe	sieci	komputerowych.}
+    Elementami	programowymi	sieci	są:
+    \begin{itemize}
+        \item \textbf{Protokoły	 komunikacyjne} (sieciowe)\\
+        Zestawy standardów i zasad obowiązujących przy	 przesyłaniu danych	przez	sieć. Określają sposoby komunikowania się urządzeń	i	programów.
+        \item \textbf{Oprogramowanie	komunikacyjne}\\
+        Implementuje protokoły sieciowe. Są to programy	 umożliwiające	 użytkownikom	 korzystanie	 z
+        sieci	 komputerowych	 np. program telnet, przeglądarki WWW, klienci pocztowi, oprogramowanie	umożliwiające mapowanie	dysków	sieciowych	itd.
+        \item \textbf{Programy	 poziomu	 sprzętowego}\\
+        Sterują pracą elementów	 sprzętowych. Sterowniki, programy	 obsługi, mikroprogramy umożliwiające	działanie	takich	urządzeń,	jak	karty	sieciowe.
+    \end{itemize}
+
+    \subsection{Ramki}
+    Dane przesyłane są w \textbf{porcjach zwanych ramkami}. Urządzenie	zapewniające dostęp	do nośnika przesyła	pewne sygnały, które są \textbf{interpretowane jako bity}. Od strony	logicznej wysyłany	ciąg bitów zawiera	pewne informacje i może	być	podzielony na porcje zwane \textbf{polami}.
+
+    Typowa ramka zawiera następujące pola:
+    \begin{itemize}
+        \item ogranicznik początku ramki (jest	to	ustalony	wzór	bitów)
+        \item tzw.	adres fizyczny nadawcy (źródła	danych)
+        \item adres	fizyczny odbiorcy (miejsca	docelowego)
+        \item dane
+        \item ogranicznik końca	ramki (sekwencja	kontrolna	ramki).
+    \end{itemize}
+    Ogranicznik	 początku ramki być poprzedzony lub może zawierać tzw. \textbf{preambułę}, która w pewnych technologiach sieciowych jest stosowana do synchronizacji nadajnika i
+    odbiornika. Wielkość pól określana jest w oktetach (8 bitów, uniknięcia niejednoznaczności "bajtu" mogącego mieć więcej bitów). \textbf{Kapsułkowanie} - wstawienie danych do struktury ramki. Istnieją różne formaty ramek, różne sposoby kapsułkowania i różne sposoby fizycznego adresowania komputerów.
+
+    \subsection{Topologia sieci lokalnych}
+    Dwa rodzaje topologii:
+    \begin{itemize}
+        \item Topologie fizyczne
+        \item Topologie logiczne
+    \end{itemize}
+
+    Jeżeli przy fizycznej topologii gwiazdy komputer przesyła dane bezpośrednio do komputera docelowego (przełącznik), to mamy logiczną topologię gwiazdy. Jeżeli ramka jest wysyłana do wszystkich dostępnych komputerów (koncentrator), to logicznie jest to topologia magistrali.
+
+    \subsubsection{Komunikacja między komputerami}
+
+    Założenia:
+    \begin{itemize}
+        \item Komputer źródłowy - Komputer 1: IP1, MAC1
+        \item Komputer docelowy - Komputer 2: IP2, MAC2
+    \end{itemize}
+    Połączone switchem. Na komputerze docelowym  jest serwer strony WWW2.
+
+    Jeżeli na komputerze 1 ktoś spróbuje otworzyć WWW2, to:
+
+    \begin{itemize}
+        \item Zadziała system DNS: komputer	1 skontaktuje się ze swoim serwerem	DNS i zapyta jaki jest adres IP	komputera związanego z nazwą domenową WW2. Serwer DNS znajdzie	odpowiedni adres w swoich zasobach i odeśle informację do	komputera 1.
+        \item Przeglądarka utworzy komunikat (wg protokołu	HTTP).	Do komunikatu zostanie dodany nagłówek	(wg	protokołu TCP),	który zawiera m.in.	port docelowy (standardowo	serwery
+        WWW	wykorzystują port o numerze	80)	oraz port źródłowy (przeglądarka wykorzystuje porty	dynamicznie	przydzielane, zwykle o „wysokich” numerach). Komunikat razem z dołączonym	nagłówkiem	TCP	nazywa	się	segmentem	TCP.
+        \item Do segmentu TCP zostanie dodany nagłówek I – w ten sposób	powstanie pakiet (datagram) IP.	Nagłówek IP	zawiera	m.in. adres	IP	źródłowy (IP1) i adres P docelowy (IP2).
+        \item Pakiet  musi być przesłany w ramce. Do pakietu musi zostać dodany nagłówek ramki, zawierający	źródłowy adres MAC (MAC1 – komputer	1 tworzący ramkę zna swój adres	MAC)	 oraz docelowy adres	MAC (powinien to być MAC2). \textbf{Komputer 1 nie zna adresu MAC komputera 2}. Zna	 tylko jego	 adres IP. W IPv4 do poznania adresu docelowego MAC wykorzystywany jest \textbf{protokół ARP} – Address	 Resolution	 Protocol.
+        \begin{itemize}
+            \item Komputer 1 wysyła specjalną ramkę	\textbf{ARP Request} (zapytanie	ARP, ramka ta NIE zawiera w	pakietu	IP), która ma adres	docelowy składający	się	z samych jedynek (48	jedynek: ffff-ff-ff-ff-ff).	Adres	ten	nazywa	się	\textbf{adresem	rozgłoszeniowym}. Ramka ARP Request jest przesyłana przez przełącznik do wszystkich przyłączonych komputerów. Ramka ta zawiera zapytanie o adres MAC	komputera,	którego adres IP jest przesyłany w ramce.
+            \item Każdy	komputer przyłączony do	przełącznika ma	obowiązek odebrać ramkę	wysłaną na	adres rozgłoszeniowy MAC. Jednak tylko komputer o zadanym IP odpowie na ARP Request.
+            \item Odpowiedź to	specjalna ramka \textbf{ARP	Reply}	(odpowiedź	ARP).	Odpowiedź	ARP	jest wysyłana na adres MAC komputera 1.
+        \end{itemize}
+        \item Po tym, jak komputer 1 pozna adres MAC komputera 2, może już zbudować ramkę przeznaczoną do komputera 2. Ramka ta zawiera wcześniej zbudowany pakiet IP (który z
+        kolei zawiera segment TCP, który z kolei zawiera komunikat HTTP). Ramka	jest wysyłana do przełącznika, a przełącznik dostarcza ją tylko	do komputera 2.
+        \begin{itemize}
+            \item Przełącznik uczy się adresów MAC przyłączonych komputerów i routerów i zapamiętuje w tablicy przypisanie adresu MAC do konkretnego swojego portu. Jeśli przełącznik dostanie ramkę ze znanym mu	 adresem MAC, to kieruje tę ramkę tylko do odpowiedniego portu, w przeciwnym wypadku wysyła kopię ramki do wszystkich swoich portów (z	wyjątkiem tego, na którym	dostał ramkę).
+        \end{itemize}
+        \item Komputer 2 (jego karta sieciowa) odbiera ramkę, sprawdza adres MAC docelowy i sumę kontrolną, po czym „wyjmuje” z ramki pakiet IP. Sprawdza adres docelowy IP i „wyjmuje”	z pakietu segment TCP. Sprawdza do którego portu należy przekazać zawartość (komunikat HTTP) i ostatecznie „wyjmuje” komunikat http z segmentu i przekazuje do portu 80, na którym nasłuchuje serwer WWW.
+        \item Serwer WWW skonstruuje odpowiedź – stronę WWW zapisaną z wykorzystaniem języka HTML). Strona ta zostanie umieszczona w komunikacie http, który następnie musi być przesłany do komputera 1. Mechanizm jest analogiczny jak poprzednio.
+    \end{itemize}
+    W rzeczywistości zanim może zostać przesłany segment TCP, komputery wykorzystujące ten protokół do komunikacji, muszą zbudować tzw. połączenie TCP.
+
+
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Nagłówek ramki & Nagłówek IP & Nagłówek TCP & Komunikat HTTP & Suma kontrolna\\
+        (numery MAC) & (numery IP) & (numery portów) & & \\
+        & 20 bajtów & 20 bajtów & & 4 bajty\\
+        \hline
+    \end{tabular}
+
+    \textbf{W przypadku komunikacji między komputerami rozdzielonymi przynajmniej jednym routerem}
+    \begin{itemize}
+        \item Wszystko do skonstruowania pakietu IP włącznie działa tak samo. Komputer tworzący ramkę musi więc wykorzystując ARP Request poznać
+        MAC adres routera, czyli swojej \textbf{bramy domyślnej} (default gateway). Stąd elementem konfiguracji komputera jest podanie mu nie tylko
+        jego adresu IP, ale również adresu IP bramy.
+        \item Ramka jest wysyłana do routera.
+        \item Router (brama) po otrzymaniu ramki „wyjmuje” z niej pakiet IP, zagląda do nagłówka i sprawdza jaki jest adres docelowy IP. Na podstawie
+        tego adresu i tablicy routowania wyznacza router następnego skoku i konstruuje i wysyła do niego nową ramkę, w której umieszcza przesyłany pakiet IP. Analogicznie aż pakiet dotrze w kolejnych ramkach do docelowej sieci i do docelowego komputera.
+    \end{itemize}
+
+    \subsection{Model ISO/OSI}
+    OSI (Open Systems Interconnection) utworzony przez Międzynarodową Organizację
+    Normalizacyjną (ISO International Organization for Standarization w Genewie)
+    stanowi \textbf{model referencyjny} (wzorcowy).
+
+    \begin{itemize}
+        \item ułatwienie zrozumienia procesów zachodzących podczas komunikowania się komputerów
+        \item ułatwienie projektowania protokołów komunikacyjnych
+    \end{itemize}
+
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Numer warstwy} & \textbf{Nazwa warstwy}\\
+        \hline
+        7 & Aplikacji\\
+        \hline
+        6 & Prezentacji\\
+        \hline
+        5 & Sesji\\
+        \hline
+        4 & Transportu\\
+        \hline
+        3 & Sieci\\
+        \hline
+        2 & Łącza danych\\
+        \hline
+        1 & Fizyczna\\
+        \hline
+    \end{tabular}
+
+    Każdą z warstw można rozpatrywać w aspekcie dwóch zasadniczych funkcji: odbierania i
+    nadawania.
+    \begin{itemize}
+        \item \textbf{Warstwa fizyczna} - standard połączenia fizycznego, charakterystyki wydajnościowe nośników. Same media transmisyjne pozostają poza dziedziną jej
+        zainteresowania (czasem określane są terminem warstwa zerowa).
+        \item \textbf{Warstwa łącza danych} – grupowanie danych wejściowych (z warstwy fizycznej) w bloki zwane \textbf{ramkami} danych („jednostki
+        danych usług warstwy fizycznej”), mechanizmy kontroli poprawności
+        transmisji (FCS).
+        \item \textbf{Warstwa sieci} - określenie trasy przesyłania
+        danych między komputerami poza lokalnym segmentem sieci LAN, protokoły trasowane takie jak IP (ze stosu protokołów TCP/IP), IPX
+        (Novell IPX/SPX), DDP (AppleTalk) (adresowanie logiczne).
+        \item \textbf{Warstwa transportu} - kontrola błędów i przepływu danych
+        poza lokalnymi segmentami LAN, protokoły zapewniające
+        komunikację procesów uruchomionych na odległych komputerach (np. oprogramowanie klient/serwer), w tym komunikację z zapewnieniem
+        niezawodności dostarczania danych. Protokoły tej warstwy to np. TCP oraz UDP (z
+        TCP/IP), SPX (Novell IPX/SPX), ATP, NBP, AEP (AppleTalk).
+        \item \textbf{Warstwa sesji} - zarządzanie przebiegiem komunikacji podczas
+        połączenia między komputerami (sesji).
+        \item \textbf{Warstwa prezentacji} - kompresja, kodowanie i
+        translacja między niezgodnymi schematami kodowania oraz szyfrowanie.
+        \item \textbf{Warstwa aplikacji} - interfejs między aplikacjami a
+        usługami sieci.
+    \end{itemize}
+
+    Określona sesja komunikacyjna nie musi wykorzystywać protokołów ze wszystkich warstw
+    modelu. Przy nadawaniu dane kierowane są od warstwy 7 do 1, przy odbiorze od 1 do 7.
+
+    Używane są też inne modele warstwowe, np. jeden z takich
+    prostszych modeli – model TCP/IP – jest często wykorzystywany przy opisie zestawu (stosu)
+    protokołów TCP/IP (Internet). Nie ma warstwy prezentacji ani warstwy sesji, ponieważ zestaw TCP/IP nie zawiera
+    żadnych protokołów, które można byłoby przypisać do tych warstw. Nieco inny model
+    „dydaktyczny” został zaproponowany przez Tannenbauma.
+
+    \begin{tabular}{|c|c|c|c| }
+        \hline
+        Nr warstwy OSI & Nazwa warstwy OSI & Nazwa warstwy TCP/IP & Nazwa warstwy Tannenbaum\\
+        \hline
+        7 & Aplikacji & Aplikacji & Aplikacji\\
+        6 & Prezentacji & & \\
+        5 & Sesji & & \\
+        4 & Transportu & Transportu & Transportu\\
+        3 & Sieci & Intersieci & Sieci\\
+        2 & Łącza danych & Interfejsu sieciowego & Łącza danych\\
+        1 & Fizyczna & & Fizyczna\\
+        \hline
+    \end{tabular}
+
+    \subsection{Zestaw (stos) protokołów TCP/IP}
+    Składa się z protokołów, które stanowią obecnie podstawę działania Internetu. TCP/IP jest standardem w komunikacji sieciowej.
+
+    \begin{tabular}{|c|c|}
+        \hline
+        Warstwa TCP/IP & Warstwa modelu OSI\\
+        \hline
+        Aplikacji & Aplikacji\\
+        & Prezentacji\\
+        & Sesji\\
+        \hline
+        Transportu & Transportu\\
+        \hline
+        Internetowa (sieci, intersieci) & Sieci\\
+        \hline
+        Dostępu do sieci (interfejsu
+        sieciowego) & Łącza danych\\
+        & Fizyczna\\
+        \hline
+    \end{tabular}
+
+    Protokoły z zestawu TCP/IP:
+    \begin{itemize}
+        \item TCP - warstwa transportu,
+        \item UDP - warstwa transpotu,
+        \item IP - IPv4 i IPv6, warstwa internetowa,
+        \item ARP - tłumaczy adresy między warstwą internetową a warstwą interfejsu
+        sieciowego, czasami zaliczany do tej ostatniej warstwy,
+        \item ICMP - m.in. komunikaty o problemach,
+        \item IGMP - komunikacja grupowa.
+    \end{itemize}
+
+    Na warstwę aplikacji składają się komponenty programowe sieci, wysyłające i odbierające
+    informacje przez tzw. porty TCP lub UDP (z warstwy transportu).
+    Protokoły warstwy aplikacji to między innymi:
+    \begin{itemize}
+        \item FTP (File Transfer Protocol),
+        \item TELNET,
+        \item DNS (Domain Name System) związany z usługą DNS (Domain Name Service).
+    \end{itemize}
+
+
+    Dane przechodząc w dół stosu protokołów TCP/IP są opakowywane i otrzymują
+    odpowiedni nagłówek. Porcje danych przesyłane w dół stosu mają różne
+    nazwy:
+    \begin{itemize}
+        \item \textbf{Komunikat} - porcja danych utworzona w warstwie aplikacji i przesłana do warstwy transportu.
+        \item \textbf{Segment} - porcja danych utworzona przez oprogramowanie implementujące protokół TCP w warstwie transportu. Zawiera w sobie komunikat.
+        \item \textbf{Datagram UDP} - porcja danych utworzona przez oprogramowanie implementujące protokół UDP w warstwie transportu.
+        \item \textbf{Datagram} - również porcja danych utworzona w warstwie internetowej przez oprogramowanie implementujące protokół IP. Datagram IP zawiera w sobie segment, bywa nazywany pakietem.
+        \item \textbf{Ramka} - porcja danych utworzona na poziomie dostępu do sieci.
+    \end{itemize}
+
+    Sekwencja zdarzeń przy wysłaniu danych:
+    \begin{itemize}
+        \item Aplikacja przesyła dane do warstwy transportu.
+        \item Dalszy dostęp do sieci realizowany jest przez TCP albo UDP.
+        \begin{itemize}
+            \item TCP realizuje tzw. niezawodne połączenia i kontroluje przepływ danych zapewniając niezawodne dostarczenie danych.
+            \item UDP nie zapewnia niezawodności, ale jest szybszy.
+        \end{itemize}
+        \item Segment lub datagram UDP przesyłany jest do warstwy IP, gdzie protokół IP dołącza między innymi informacje o adresach IP źródła i celu tworząc datagram IP (pakiet).
+        \item Datagram z IP przechodzi do warstwy interfejsu sieciowego, gdzie tworzone są ramki. W sieci LAN ramki zawierają adres fizyczny (przypisany do karty sieciowej) otrzymany zprotokołu ARP.
+        \item Ramka przekształcana jest w ciąg sygnałów, który zostaje przesłany przez sieć.
+    \end{itemize}
+
+    \textbf{RFC} (Request for Comments) - miejsce publikowania oficjalnych standardów internetowych. Niektóre dokumenty RFC nie są standardami, ale pełnią funkcję informacyjną. Każdy dokument RFC posiada swój numer – większe numery oznaczają nowsze dokumenty.
+
+    \subsubsection{ARP (Address Resolution Protocol)}
+    ARP stosowany jest w sieciach Ethernet (jeśli w warstwie sieci wykorzystywany jest protokół
+    IPv4), był też używany w sieciach Token Ring. W wersji IPv6 protokół ARP nie jest w ogóle wykorzystywany, zastępują go inne mechanizmy.\\
+
+    \begin{itemize}
+        \item  Zadaniem ARP jest \textbf{odnalezienie adresu fizycznego MAC} na podstawie znanego wprost adresu IP (został wpisany przez użytkownika, lub uzyskany automatycznie na podstawie nazwy domenowej (www) dzięki DNS).
+        \item Ze względu na możliwość wymiany karty sieciowej w komputerze o określonym adresie IP ARP musi być \textbf{dynamiczny}.
+        \item ARP jest oparty na \textbf{metodzie rozgłoszeniowej} i zasadzie \textbf{żądania i odpowiedzi}.
+        \item ARP najpierw sprawdza w swojej pamięci podręcznej (\textbf{cache}) czy posiada wpis dla danego IP. Jeśli nie, to zostaje wysłana ramka rozgłoszeniowa \textbf{ARP Request} Message w fizyczneym segmencie sieci, do którego przyłączony jest nadawca (ARP requestor).
+        \begin{itemize}
+            \item Jeśli węzeł docelowy znajduje się w tym samym segmencie sieci lokalnej, ARP requestor pyta wprost o to kto ma docelowy adres IP. ARP responder odpowiada wysyłając ramkę ARP Reply pod adres MAC, z którego przyszło żądanie. Po wymianie ramek zarówno nadawca jak i odbiorca mają uaktualnione tablice w pamięci podręcznej (cache).
+            \item Jeśli węzeł docelowy znajduje się w innym segmencie sieci datagram jest kierowany do domyślnego routera (IP wpisane w konfiguracji TCP/IP lub wykorzystanie Proxy ARP. ARP requester pyta o adres IP routera domyślnego, router odpowiada wysyłając ramkę ARP respond i podaje swój adres MAC.
+        \end{itemize}
+        \item Po otrzymaniu ARP Request uaktualniane są również pamięci podręczne cache ARP w
+        komputerach, które miały w pamięci podręcznej IP ARP requestor. Otrzymanie ramki ARP request jest zatem metodą aktualizacji wpisów w
+        pamięci podręcznej ARP.
+        \item Wpisy w pamięci podręcznej ARP są usuwane po okresie nieużywania rzędu kilku minut. W
+        przypadku użycia wpisu czas ten może wzrosnąć, z pewnym limitem górnym.
+        \item TCP/IP w Microsoft Windows pozwala na użycie statycznych wpisów w pamięci podręcznej
+        ARP. Jednak są one przechowywane w RAM, więc wyłączaniu komputera przepadają.
+        \item Struktura ramki ARP:
+        \begin{itemize}
+            \item Typ sprzętu (2 oktety)
+            \item Typ protokołu (2 oktety)
+            \item Długość adresu sprzętu (1 oktet)
+            \item Długość adresu protokołu (1 oktet)
+            \item Kod operacji (2 oktety)
+            \item Adres sprzętu nadawcy (dla Ethernet 6 oktetów)
+            \item Adres protokołu nadawcy (dla IPv4 4 oktety)
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Wykrywanie zduplikowanych adresów IP}
+    Tzw "zbędny ARP"
+    \begin{itemize}
+        \item Węzeł wysyła ARP Request z zapytaniem o swój własny adres.
+        \begin{itemize}
+            \item Jeśli ARP Reply nie nadejdzie to znaczy, że w lokalnym segmencie nie ma konfliktu adresów.
+            \item Jeśli odpowiedź nadejdzie, oznacza to konflikt.
+        \end{itemize}
+        \item Węzeł już skonfigurowany traktowany jest jako węzeł z poprawnym adresem (\textbf{węzeł zgodny}, defending node), węzeł
+        wysyłający „zbędny ARP” jest \textbf{węzłem konfliktowym} (offending node).
+        \item \textbf{Węzeł konfliktowy wprowadza błąd} w pamięci podręcznej ARP komputerów w \textbf{całym segmencie} sieci. ARP Reply z węzła zgodnego nie naprawia sytuacji (ramka ARP Reply nie jest ramką rozgłoszeniową), więc zgodny wysyła ARP Request ze swoim adresem po wykryciu konfliktu.
+    \end{itemize}
+    Datagramy IP wysłane na w ramkach z niepoprawnym adresem MAC odbiorcy
+    przepadają. Protokół IP nie zapewnia niezawodnej dostawy datagramów i nie
+    spowoduje powtórnego przesłania datagramu w nowej ramce. Za niezawodność
+    odpowiedzialne są protokoły warstwy transportu.
+
+    \subsubsection{Proxy ARP}
+    Router ze skonfigurowanym mechanizmem Proxy ARP odpowiada na ramki ARP Request w
+    imieniu wszystkich węzłów – komputerów spoza segmentu sieci lokalnej. Może
+    być używany jest np. w sytuacji, gdy komputery w sieci nie mają ustawionego domyślnego
+    routera (domyślna brama, default gateway). Routery mogą mieć włączoną standardowo
+    opcję Proxy ARP, wówczas jeśli jakiś komputer wyśle ARP Request z adresem spoza danej
+    sieci lokalnej (zwykle to nie następuje), to router odpowie „w imieniu” komputera
+    zewnętrznego.
+
+
+\end{document}
