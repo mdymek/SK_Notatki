@@ -1,0 +1,163 @@
+\documentclass[a4paper]{article}
+
+\usepackage{fullpage} % Package to use full page
+\usepackage{parskip} % Package to tweak paragraph skipping
+\usepackage{tikz} % Package for drawing
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[MeX]{polski}
+\usepackage[T1]{fontenc}
+\usepackage{subfiles}
+\usepackage{graphicx}
+\usepackage{float}
+
+\title{Notatki z kursu Sieci Komputerowe}
+\author{Małgorzata Dymek}
+\date{2018/19, semestr letni}
+
+\begin{document}
+    \maketitle
+
+
+
+    % \section{Laboratorium 1}
+    % Zasady zaliczenia: trzy kolokwia (dwa pisane (adresacja + routing i switching)  + jedno praktyczne ( naprawienie zepsutych rzeczy ) )
+    % \begin{itemize}
+    %     \item dwa kolokwia pisemne (20 + 20)
+    %     \begin{itemize}
+    %         \item adresacja
+    %         \item routing i switching
+    %     \end{itemize}
+    %     \item kolokwium praktyczne (30)
+    %     \begin{itemize}
+    %         \item naprawienie zepsutych rzeczy
+    %     \end{itemize}
+    %     \item obecność - 15*2 = 30
+    % \end{itemize}
+    % W sumie 100 punktów.
+    %
+    % \begin{tabular}{|c|c|}
+    % \hline
+    % 0 - 50 & ndst\\
+    % \hline
+    % 51 - 60 & dst\\
+    % \hline
+    % 61 - 70 & dst+\\
+    % \hline
+    % 71 - 80 & db\\
+    % \hline
+    % 81 - 90 & db+\\
+    % \hline
+    % 91 - 100 & bdb\\
+    % \hline
+    % \end{tabular}
+    %
+    %
+    % Bridge - fizyczne połączenie do fizycznej karty sieciowej (kabel rj5) jakby jedna szyna (wszystko do fizycznej wpada do wirtualnej)
+    % Host only - tylko z komputera bez wyjścia na zewnątrz
+    % NAP - adres z fizycznego komputera, nie z wirtualki
+    %
+    % settings - vnet3 - nr wirtualnego switcha
+    % brama domyślna - wyjście na świat - pc2
+    %
+    % \section{Laboratorium 2}
+    % Routing
+    %
+    % menedżer urządzeń -> nr COMu -> PuTTy serial COM -> konsola - wpisać no ->
+    %
+    %
+    % \begin{itemize}
+    %     \item Z listwy SERIAL (numer monitora nad) kablem prostym do konsoli routera.
+    %     \item Z listwy LAN (numer monitora nad) kablem prostym do f0/1
+    %     \item Z f0/0 kablem prostym do switcha.
+    %     \item Odpowiednio seriale zgodnie z rysunkiem tymi płaskimi niebieskimi kablami.
+    %     \item Menedżer urządzeń - sprawdzamy numer COM.
+    %     \item PuTTy - wpisujemy odpowiedni numer COM.
+    %
+    %     \item Cisco
+    %     enable\\
+    %     configure terminal\\
+    %
+    %     interface x/x\\
+    %     ip address \textit{IP_addr maska}\\
+    %     interafce loopback nr \\
+    %     clock rate – tylko na serialach, nie trzeba ustawiać na Cisco\\
+    %     encapsulation ppp – ustawienie enkapsulacji (tylko na serialach)\\
+    %     encapsulation hdlc - ustawienie enkapsulacji (tylko na serialach)\\
+    %     no shutdown\\
+    % \end{itemize}
+
+
+    \section{Charakterystyka sieci LAN, WAN. Topologie połączeń. Komutacja obwodów vs. komutacja
+    pakietów i komutacja komórek.}
+    \subfile{1}
+
+    \section{Model ISO OSI, model TCP/IP.}
+    \subfile{2}
+
+    \section{Standaryzacja w sieciach komputerowych, co to są dokumenty RFC.}
+    \subfile{3}
+
+    \section{Ethernet: sposób dostępu do nośnika, ramki.}
+    \subfile{4}
+
+    \section{Ethernet: działanie przełączników i koncentratorów (podstawy).}
+    \subfile{5}
+
+    \section{Protokół IPv4: adresacja, pola w nagłówku, fragmentacja.}
+    \subfile{6}
+
+    \section{Multiemisja (multicast) w IPv4 (IGMP, IGMP-snooping, współpraca technologii Ethernet z
+    multiemisją – adresy MAC multiemisji).}
+    \subfile{7}
+
+    \section{Protokół ARP.}
+    \subfile{8}
+
+    \section{Protokół ICMP.}
+    \subfile{9}
+
+    \section{Protokół UDP: charakterystyka, nagłówek.}
+    \subfile{10}
+
+    \section{Protokół TCP: charakterystyka, mechanizmy, nagłówek.}
+    \subfile{11}
+
+    \section{Protokoły routowania typu wektor odległości: sposób działania, wady i zalety,
+    podstawowe parametry protokołów RIP, RIP2, IGRP, EIGRP. (M.in. pętle routowania,
+    zliczanie do nieskończoności, dzielony horyzont, zegary).}
+    \subfile{12}
+
+    \section{Protokoły routowania stanu łącza: sposób działania, charakterystyka protokołu OSPF,
+    rodzaje obszarów.}
+    \subfile{13} %TODO
+
+    \section{DNS.}
+    \subfile{14} %TODO aesthetics
+
+    \section{Działanie przełączników Ethernet: tryby działania, protokół STP, sieci VLAN, łącza
+    trunkingowe, przełączniki warstwy 3.}
+    \subfile{15} %TODO
+
+    \section{Podstawy kryptografii: szyfrowanie z kluczem symetrycznym, szyfrowanie z kluczem
+    publicznym i prywatnym, funkcje skrótu, podpis cyfrowy, certyfikaty.}
+    \subfile{16}
+
+    \section{Bezpieczne protokoły: SSL, TLS, IPSec (ze szczególnym naciskiem na protokół IPSec).}
+    \subfile{17}
+
+    \section{Protokół IPv6: adresacja, nagłówki, mechanizmy, ICMPv6 (m.in. jak odnaleźć adres MAC
+    na podstawie adresu IPv6), mechanizmy przejścia między IPv4 i IPv6, mobilny IP.}
+    %\subfile{18} TODO!!!
+
+    \section{Charakterystyka protokołu BGP (w zakresie omówionym na wykładzie).}
+
+    \section{Podstawy programowania w interfejsie gniazd (w zakresie omówionym na wykładzie).}
+
+
+
+
+
+\end{document}

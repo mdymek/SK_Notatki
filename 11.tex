@@ -1,0 +1,129 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+
+
+    \subsection{TCP – Transmission Control Protocol}
+    Ilość bajtów danych przesyłanych w jednym segmencie nie powinna być większa niż ustalony MSS (\textbf{Maximum Segment Size}).\\
+
+    \textbf{Cechy TCP}
+    \begin{itemize}
+        \item Partnerzy (procesy) tworzą połączenie z wykorzystaniem mechanizmu (trójfazowego) uzgodnienia.
+        \item Zamknięcie połączenia odbywa się z wykorzystaniem mechanizmu uzgodnienia (zgoda na zamknięcie).
+        \item TCP zapewnia sterowanie przepływem. Informuje partnera o tym ile bajtów danych ze strumienia danych może od niego przyjąć (okno oferowane). Rozmiar okna zmienia się dynamicznie i jest równy rozmiarowi wolnego miejsca w buforze odbiorcy. Zero oznacza, że nadawca musi zaczekać, aż program użytkowy
+        odbierze dane z bufora.
+        \item Dane ze strumienia danych dzielone są na fragmenty, które według TCP mają najlepszy
+        do przesłania rozmiar. Jednostka przesyłania danych nazywa się \textbf{segmentem}.
+        \item TCP zapewnia \textbf{niezawodność} połączenia.
+    \end{itemize}
+
+    \textbf{Mechanizmy niezawodności}
+    \begin{itemize}
+        \item \textbf{Potwierdzanie otrzymania segmentów z mechanizmem zegara.}\\
+        Odebrany segment musi być potwierdzony przez odbiorcę przez wysłanie segmentu potwierdzającego. Jeśli
+        potwierdzenie nie nadejdzie w odpowiednim czasie, segment zostanie przesłany powtórnie.
+        \item \textbf{Sumy kontrolne.}\\
+        Jeśli segment zostanie nadesłany z niepoprawna sumą kontrolną, to jest
+        odrzucany. Nadawca po odczekaniu odpowiedniego czasu prześle segment jeszcze raz.
+        \item \textbf{Przywracanie kolejności nadchodzących segmentów.}\\
+        Segmenty mogą nadchodzić w kolejności innej niż zostały wysłane, oprogramowanie TCP przywraca prawidłową kolejność przed przekazaniem do aplikacji.
+        \item \textbf{Odrzucanie zdublowanych danych.}
+    \end{itemize}
+
+    \subsubsection{Nagłówek TCP}
+    \begin{itemize}
+        \item \textbf{Numer sekwencji.}\\
+        \item \textbf{Długość nagłówka} (przesunięcie danych).\\
+        \item \textbf{Jednobitowe znaczniki} (flagi):
+        \item \textbf{Rozmiar okna} - liczba bajtów, które odbiorca może zaakceptować.
+        \item \textbf{Suma kontrolna.}\\
+        \item \textbf{Wskaźnik ważności.}\\
+        \item \textbf{Opcje} - rodzaj opcji (bajt), długość opcji (bajt), opcja. Najważniejsza opcja to \textbf{MSS}. Może być uzyskana jako MTU (Maximum Transmission Unit) minus rozmiar nagłówka IP oraz TCP.
+    \end{itemize}
+
+    \textbf{Specyfika stanu TIME WAIT}\\
+    Spóźnione segmenty są w czasie 2 MSL odrzucane. Para
+    punktów końcowych definiujących połączenie nie może być powtórnie użyta przed upływem
+    2MSL. Eliminuje to ewentualne kłopoty związane z odbieraniem z sieci segmentów jeszcze ze
+    starego połączenia.
+
+    \textbf{Półzamknięcie TCP}\\
+    Strona, która zakończyła połączenie i nie nadaje danych, może dane odbierać od partnera
+    TCP. Takie połączenie nazywane jest połączeniem półzamkniętym (half-closed).
+
+    \textbf{Segmenty RST}\\
+    Segment RST wysyłany jest przez oprogramowanie implementujące TCP, kiedy nadchodzi
+    segment niepoprawny z punktu widzenia dowolnego połączenia. Segment RST nie jest potwierdzany. W protokole UDP generowany jest komunikat ICMP o tym, że port jest nieosiągalny.
+    Segment RST jest wysyłany również wtedy, gdy przekroczona jest maksymalna dopuszczalna
+    liczba połączeń TCP.
+
+
+    \textbf{Połączenia półotwarte} (połowicznie otwarte)\\
+    Jest to połączenie nie poprawnie nawiązane. Występuje, jeśli jedna ze stron przerwała połączenie bez informowania drugiej. Segment z ustawioną na 1 flagą SYN został przesłany od
+    klienta do serwera, serwer odpowiedział segmentem z ustawionymi na 1 flagami SYN i ACK,
+    ale klient nie odpowiedział segmentem z ustawioną na 1 flagą ACK.
+    Jeden ze sposobów atakowania serwisów (np. WWW) polegał na otwieraniu bardzo dużej
+    liczby połączeń półotwartych. Obecnie implementacje TCP są odporne na tego typu ataki.
+    Dopuszczalne jest, by oprogramowanie realizujące TCP mogło sprawdzać stan połączenia
+    przez okresowe przesyłanie segmentów sprawdzających aktywność. Segment taki to zawiera
+    ustawioną na 1 flagę ACK i nie zawiera żadnych danych. Dodatkowo ma on ustawiony numer
+    sekwencyjny na o 1 mniejszy od tego, którego normalnie spodziewa się strona wysyłająca
+    ACK. Partner odpowiada też segmentem z ustawioną na 1 flagą ACK ze standardowo
+    ustawionymi prawidłowymi wartościami numerów sekwencyjnych.
+
+
+
+    \subsubsection{Przepływ danych w TCP}
+    \textbf{Potwierdzenia}
+    \begin{itemize}
+        \item \textbf{Skumulowane potwierdzanie} - wysyłamy dużo segmentów, oczekujemy jednego skumulowanego potwierdzenia.
+        \item \textbf{Opóźnione potwierdzenia} - serwer może wysłać potwierdzenie z opóźnieniem.
+        \item \textbf{Selektywne potwierdzenia} - selektywnie potwierdzamy co dostaliśmy [przedziały], więc jeśli zginęło tylko kilka datagramów, to można retransmitować tylko je a nie całość.
+    \end{itemize}
+
+    \textbf{Ruchome okna TCP} (sliding windows)\\
+    Połączenie TCP obejmuje dwa strumienie danych. W każdym strumieniu określony jest
+    nadawca i odbiorca. Kontrolę przesyłania oktetów w strumieniu umożliwiają mechanizmy
+    tzw. przesuwnych (ruchomych) okien, które można sobie wyobrazić jako nałożone na
+    strumień. Dla strumienia określone jest okno nadawcy oraz okno odbiorcy. Nadawca może
+    wysyłać tylko te dane, które są w tej chwili w jego oknie nadawczym, przy czym może to
+    zrobić tylko za zgodą odbiorcy. Okno nadawcze jest przesuwane nad wyjściowym
+    strumieniem bajtów, okno odbiorcze nad strumieniem wejściowym.\\
+
+    \subsubsection{Przesyłanie małych segmentów}
+    Tak określa się segmenty o rozmiarze mniejszym od MSS.
+    \begin{itemize}
+        \item \textbf{Algorytm Nagle’a}\\
+        „Dopasowuje się” do sieci, w której przesyłane są segmenty.
+        \begin{itemize}
+            \item małe niepotwierdzone segmenty są gromadzone w buforze, wysyłane razem.
+        \end{itemize}
+        Algorytm Nagle’a może być wyłączany przez oprogramowanie TCP.
+        \item \textbf{Syndrom głupiego okna} (SWS)\\
+        \begin{itemize}
+            \item Jeśli odbiorca ma zerowy rozmiar okna (i nadawca też) oraz warstwa aplikacji pobierze 1
+            bajt, to okno odbiorcze otwiera się o jeden bajt.
+            \item Nadawca unika SWS wstrzymując się z wysyłaniem danych dopóki rozmiar okna proponowanego przez odbiorcę nie jest równy co najmniej MSS.
+        \end{itemize}
+    \end{itemize}
+
+    \textbf{Dodatkowa kontrola przepływu po stronie nadawcy}\\
+    \begin{itemize}
+        \item \textbf{Algorytm powolnego startu}\\
+        Po otwarciu połączenia lub dłuższym czasie nie przesyłania danych wielkość okna
+        przeciążeniowego ustawiana jest na 2*MSS. Każde przychodzące potwierdzenie (ACK)
+        powoduje zwiększenie okna przeciążeniowego o jeden MSS. Może to prowadzić do wykładniczego wzrostu wielkości tego okna.
+        \item \textbf{Algortym unikania zatoru}\\
+        Tu stosuje się wolniejszy wzrost wielkości okna przeciążeniowego, np. o jeden
+        segment na kilka przychodzących ACK. Algorytm ten działa zwykle od pewnego progu (najpierw działa powolny start).
+    \end{itemize}
+
+
+    \subsubsection{Retransmisje segmentów w TCP}
+    W każdym połączeniu definiowana jest zmienna RTO (Retransmission Time-out). Jeśli TCP nie
+    odbierze ACK w czasie RTO dla pewnego nadanego segmentu, to segment musi być
+    retransmitowany.
+
+
+\end{document}

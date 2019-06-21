@@ -1,0 +1,93 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+
+    \subsection{Szyfrowanie z kluczem}
+    \begin{itemize}
+        \item liczba lub kilka liczb, składająca się z kilkudziesięciu do kilku tysięcy bitów
+        \item służy do szyfrowania i odszyfrowywania rzeczy
+        \item teoretycznie możliwy do złamania brute forcem (w praktyce niezbyt)
+        \item różne algorytmy szyfrowania
+        \begin{itemize}
+            \item Szyfrowanie z kluczem symetrycznym\\
+            Szyfrowanie dużych porcji danych przy użyciu jednego klucza ułatwia złamanie
+            szyfru. Dlatego klucz symetryczny powinien być zmieniany. Może być przesłany zaszyfrowany przy pomocy techniki z kluczem
+            publicznym i prywatnym. Można generować oddzielne klucze sesji i szyfrować je
+            wcześniej uzgodnionym tajnym kluczem symetrycznym. Klucze symetryczne mogą być też
+            zmieniane co określony czas lub co określoną liczbę bajtów, z użyciem specjalnych
+            protokołów.
+            \begin{itemize}
+                \item Data Encryption Standard DES, 3DES
+                \item RC - szyfr strumieniowy wykorzystywany w szyfrowaniu ramek w sieciach bezprzewodowych WiFi/WPA
+                \item Advanced Encryption Standard AES - szyfr blokowy, np WPA2
+            \end{itemize}
+            \item Szyfrowanie z kluczem asymetrycznym
+            \begin{itemize}
+                \item Szyfrowanie i odszyfrowanie jest tu realizowane przy pomocy pary kluczy - prywatnym
+                (tajnym) i publiczny (znany). Jeden szyfruje, drugi odszyfrowywuje.
+                \item Odgadnięcię jednego z kluczy praktycznie niemożliwe nawet przy znajomości drugiego
+                \item Szyfrujemy coś czyimś kluczem publicznym, by tylko ten ktoś mógł to odszyfrować (swoim kluczem prywatnym)
+                \item wielokrotnie kosztowniejsze
+                czasowo od szyfrowania z kluczem symetrycznym
+                \item używane do uzgodnienia kluczy symetrycznych
+                \item algorytm RSA
+            \end{itemize}
+        \end{itemize}
+
+    \end{itemize}
+
+    \subsubsection{Skrót (hash)}
+    \begin{itemize}
+        \item skrót wiadomości w podpisach cyfrowych, tworzony za pomocą funkcji haszujacej
+        \item 128 bitów (MD5), 160 bitów(SHA-1), 224-512 bitów (rodzina SHA-2)
+        \item jeśli w oryginalnej wiadomości (pliku)
+        zmieniony zostanie chociaż jeden bit, to skrót będzie zupełnie inny niż ten, który został
+        utworzony przed zmianą.
+        \item  Algorytmy haszujące są deterministyczne,
+        \item odtworzenie oryginalnej wiadomości ze skrótu jest prawie niemożliwe
+    \end{itemize}
+
+
+
+    \subsubsection{Podpis cyfrowy}
+    \begin{itemize}
+        \item Zaszyfrowanie kluczem prywatnym daje gwarancję, że zaszyfrowana wiadomość pochodzi z
+        odpowiedniego źródła
+        \item Samej podpisywanej wiadomości nie musi się szyfrować. Generowany jest jej skrót
+        i ten skrót szyfrowany jest z wykorzystaniem klucza
+        prywatnego osoby podpisującej. Zaszyfrowany skrót stanowi podpis cyfrowy. Niezaszyfrowana wiadomość może być przesłana jawnie razem z zaszyfrowanym skrótem
+        (czyli podpisem cyfrowym).
+        \item Odbiorca odszyfrowuje skrót używając klucza
+        publicznego nadawcy. Potem tworzy skrót wiadomości używając tej samej funkcji haszującej. Jeśli wyniki
+        obu operacji są identyczne, to znaczy, że wiadomość na pewno
+        podpisał określony nadawca, a ponadto nikt po tej wiadomości nie zmienił już po podpisaniu.
+        \item Po podpisaniu dodatkowo możemy wiadomość zaszyfrować, ale to nie
+        należy już do samego podpisu.
+    \end{itemize}
+
+    \subsubsection{Klucze publiczne i prywatne, infrastruktura kluczy publicznych}
+    \begin{itemize}
+        \item Klucze mogą być generowane na komputerze
+        lokalnym przy pomocy odpowiedniego oprogramowania i powinny być podpisane przez
+        jakieś centrum certyfikacyjne.
+        \item Centrum certyfikacyjne (CA) wydaje tzw. certyfikaty cyfrowe zawierające m.in:
+        \begin{itemize}
+            \item Identyfikator osoby/firmy/obiektu
+            \item Identyfikator CA, który wydał certyfikat
+            \item Numer identyfikacyjny certyfikatu
+            \item Cel stosowania (np. podpisywanie bezpiecznych stron WWW albo podpisywanie listów elektronicznych)
+            \item Wartość klucza publicznego
+            \item Okres ważności
+            \item Podpis cyfrowy wydawcy
+        \end{itemize}
+        \item Jeśli ufamy danemu CA, to ufamy, że zawarty w certyfikacie klucz publiczny jest rzeczywiście prawdziwy.
+        W systemach operacyjnych oraz różnych programach
+        jest wpisana lista zaufanych CA.
+        Zarządzanie centrum certyfikacyjnym jest realizowane na przez konsolę MMC.
+        \item Niezależnym standardem opisującym tworzenie kluczy, rejestrowanie i wykorzystywanie
+        certyfikatów jest PGP (Pretty Good Privacy). Powstał standard Open PGP.
+
+    \end{itemize}
+
+\end{document}

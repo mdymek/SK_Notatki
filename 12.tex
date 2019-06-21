@@ -1,0 +1,164 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+
+    \textbf{Protokoły routowania wektora odległości} - oparte na \textbf{algorytmie Bellmana Forda} obliczania najkrótszych ścieżek w grafie, "odległości od sieci".\\
+
+
+    \subsection{Niekorzystne zjawiska związane z routowaniem wg protokołów wektora odległości}
+    \begin{itemize}
+        \item Pętle routowania.
+        \item Efekt odbijania.
+        \item Zliczanie do nieskończoności.
+    \end{itemize}
+
+    Taktyki rozwiązania:
+    \begin{itemize}
+        \item \textbf{Dzielony horyzont (split horizon)}
+        \begin{itemize}
+            \item \textbf{Do łącza nie zostanie przekazana informacja o trasach wiodących przez to łącze}.
+            \item Dzielony horyzont nie zawsze, ale zazwyczaj likwiduje \textbf{pętle routowania}.
+        \end{itemize}
+
+        \item \textbf{Natychmiastowe/wymuszane aktualizacje (triggered updates)}
+        \begin{itemize}
+            \item W przypadku zmiany metryki trasy \textbf{musi nastąpić rozgłoszenie bez względu na okres
+            rozgłoszeń} charakterystyczny dla danego protokołu.
+            \item Powoduje to \textbf{szybszą zbieżność} i częściowo zapobiega \textbf{pętlom routowania}.
+        \end{itemize}
+
+        \item \textbf{Zegary hold-down (hold-down timers)}
+        \begin{itemize}
+            \item Router po otrzymaniu od sąsiada informacji o dezaktualizacji trasy włącza \textbf{specjalny zegar} (hold-down timer).
+            \item Jeśli przed upływem czasu progowego nastąpi:
+            \begin{itemize}
+                \item \textbf{aktualizacja od tego samego sąsiada} na trasę aktywną, to \textbf{trasa} jest zaznaczana jako \textbf{aktywna}.
+                \item router dostanie \textbf{od innego routera informację} o trasie do rozważanego miejsca docelowego z \textbf{metryką mniejszą bądź równą} tej zdezaktualizowanej, wówczas następuje \textbf{wpis zgłoszonej trasy}.
+                \item router dostanie \textbf{od innego routera informację} o trasie do rozważanego miejsca docelowego z \textbf{metryką większą} od tej zdezaktualizowanej, taka trasa \textbf{nie jest brana pod uwagę}.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsection{Protokół RIP}
+    \begin{itemize}
+        \item Metryką w RIP jest liczba skoków (hops) do celu. Metryka 16 oznacza umownie nieskończoność.
+        \item Wysyła cały wektor odległości.
+
+        \item Można ustawić trasę domyślną (adres 0.0.0.0).
+
+        \item Autosumaryzacja, system klasowy adresacji ip.
+
+        \item \textbf{Cztery zegary, liczniki} (timers, counters):
+        \begin{itemize}
+            \item \textbf{Update timer} (standardowo 30 sekund) – po przesłaniu wektora odległości
+            (routing update) zegar jest zerowany. Po osiągnięciu 30 s. wysyłany jest następny wektor.
+            \item \textbf{Invalid timer} (standardowo 180 sekund) – za każdym razem jak router dostaje uaktualnienie pewnej trasy zegar ten dla trasy jest zerowany. Po osiągnięciu wartości progowej trasa jest zaznaczana jako niepoprawna, ale pakiety jeszcze są kierowane tą trasą.
+            \item \textbf{Hold-down timer} (standardowo 180s.) – po przekroczeniu wartości progowej
+            przez invalid timer trasa jest ustawiana w stan hold-down. Trasa jest ustawiana w stan holddown również gdy router dostanie informację o tym, że sieć jest nieosiągalna (i nie ma innej, osiągalnej trasy).
+            \item \textbf{Flush-timer} (standardowo 240s.) – zegar dla trasy jest zerowany po otrzymaniu informacji o trasie. Po osiągnięciu czasu progowego trasa jest usuwana nawet, jeśli trasa jest jeszcze w stanie hold-down.
+        \end{itemize}
+
+        \item \textbf{Zalety RIP}
+        \begin{itemize}
+            \item prostota - procesor nie jest nadmiernie obciążony aktualizacją tablicy routowania i innymi działaniami,
+            \item łatwość konfiguracji.
+        \end{itemize}
+
+        \item \textbf{Wady RIP}
+        \begin{itemize}
+            \item wolne rozprzestrzenianie się informacji o zmianach w topologii sieci (wolna zbieżność),
+            \item stosunkowo częste (co 30s.) przesyłanie dużych porcji informacji w komunikatach RIP, co obciąża sieć.
+            \item Wadą RIPv1 jest to, że nie daje możliwości przesyłania masek.
+        \end{itemize}
+    \end{itemize}
+
+    \subsection{RIPv2}
+    RIPv2 przekazuje maski podsieci, można stosować sieci bezklasowe i podsieci o zmiennym rozmiarze.
+    Umożliwia prostą autentykację (przez hasła).
+    Przekazuje adresy następnego skoku w komunikatach.
+    Część wad RIP pozostała: 16 jako metryka oznaczająca nieskończoność, brak alternatywnych tras.
+
+    \subsection{Protokół IGRP}
+    \begin{itemize}
+        \item wymaga podania numeru AS przy konfiguracji, musi być taki sam
+        we wszystkich routerach na danym obszarze z komunikacją IGRP
+        \item obsługuje adresy klasowe,
+        \item metryka 24-bitowa w IGRP jest tworzona na podstawie wartości metryk cząstkowych oraz zmiennych
+        określających wagę każdej użytej metryki.
+        \begin{itemize}
+            \item Szerokość pasma (bandwidth); oznacza liczbę bitów, jakie może transmitować w
+            jednostce czasu dana technologia (patrz też objaśnienia w oddzielnym pliku).
+            \item Opóźnienie (delay) – czas wędrówki pakietu od źródła do celu; wartości od 1 do 224, przy
+            czym 1 oznacza 10 mikrosekund.
+            \item Obciążenie (load); wartość od 1 do 255. 1 oznacza sieć najmniej obciążoną, 255
+            najbardziej obciążoną.
+            \item Niezawodność (reliability); wartość od 1 do 255. Wartość liczona jest jako swoisty
+            „procent” pakietów, które dotarły do następnego routera, przy czym liczba 255 oznacza
+            100\%.
+        \end{itemize}
+        $metric = (K_1 * bandwidth + \frac{(K_2*bandwidth)}{(256 - load)} + K_3 * delay) *
+        \frac{K_5}{(reliability + K_4)}$
+        Standardowo $K_1 == K_3 == 1, K_2 == K_4 == K_5 == 0$.
+        \item przesyłane są również wartości MTU (Maximum Transfer Unit) – najmniejsze MTU na trasie do sieci oraz liczba skoków
+        \item przechowywanych jest kilka optymalnych tras do pewnego miejsca docelowego, mogą być przechowywane informacje o trasach nieoptymalnych
+        \item \textbf{NIE ma trasy domyślnej 0.0.0.0}. Są trasy zewnętrzne, przez tzw. 'router of last resort'
+        wybierane jeśli nie znaleziono żadnej innej.
+    \end{itemize}
+
+    \subsection{Protokół EIGRP}
+    \begin{itemize}
+        \item obsługuje adresowanie bezklasowe,
+        \item konfiguracja EIGRP wymaga określenia numeru AS, taki sam w komunikujących
+        się routerach
+        \item IGRP i EIGRP mogą ze sobą współpracować, jeśli mają ten sam numer; nastąpi przeliczenie metryki;
+        trasa z IGRP jest traktowana jak trasa zewnętrzna
+        \item metryka 32 bitowa; aktualizacje zawierają liczbę skoków dla
+        trasy, jednak liczba skoków nie jest brana pod uwagę przy wyliczaniu metryki
+    \end{itemize}
+
+
+    \textbf{Kluczowe technologie i idee wykorzystane w EIGRP}
+    \begin{itemize}
+        \item Wykrywanie sąsiadów.
+        \item Diffusing Update Algorithm DUAL.
+        \item Wysyłanie aktualizacji tylko po wykryciu nowego sąsiada i w przypadku wystąpienia
+        zmiany, dotyczące tylko zmiany.
+        \item Komunikaty HELLO.
+        \item Wyznaczają succesorów.
+    \end{itemize}
+
+    \textbf{Wybrane zalety EIGRP}
+    \begin{itemize}
+        \item Minimalne zużycie szerokości pasma gdy sieć jest stabilna. W czasie normalnego
+        stabilnego działania sieci jedynymi wymienianymi pakietami pomiędzy węzłami EIGRP są
+        pakiety HELLO (handshake).
+        \item Wydajne wykorzystanie szerokości pasma w czasie uzyskiwania zbieżności. Po zmianie
+        propagowane są jedynie zmiany, nie całe wektory odległości. Po wykryciu sąsiada
+        uaktualnienie wysyłane jest tylko do niego (unicast).
+        \item Szybka zbieżność po wykryciu zmiany w sieci.
+    \end{itemize}
+
+
+    EIGRP wykorzystuje specjalny niezawodny protokół w warstwie transportu – \textbf{Reliable
+    Transport Protocol}.
+    \begin{itemize}
+        \item Aktualizacje są przesyłane niezawodnie na adres grupowy 224.0.0.10. Potwierdzenia są przesyłane na adres
+        jednostkowy (unicast). Jeśli potwierdzenie z określonym numerem sekwencji nie nadejdzie w
+        czasie RTO (Retransmission TimeOut), pakiet z aktualizacją jest retransmitowany, tym razem
+        na adres jednostkowy.
+        \item Zwykłe pakiety HELLO oraz potwierdzenia nie są potwierdzane.
+        \item DUAL jest używany do wyznaczenia sukcesorów i tzw. wykonalnych
+        sukcesorów określających trasy zapasowe. W przypadku utraty pewnej trasy (uszkodzenia) router może natychmiast wyznaczyć
+        niezapętloną trasę zastępczą (jeśli jest wyznaczony FS).  Gdyby się zdarzyło, że nie ma
+        informacji o trasie zastępczej, to router prosi sąsiadów o odnalezienie takiej trasy, jeśli
+        sąsiedzi nie znajdują, to odpytują dalej. Zapytanie rozchodzi się (dyfunduje) coraz dalej, stąd
+        nazwa DUAL (Diffusion Algorithm).
+        \item Mechanizm wyznaczania tras zapasowych zapewnia, że nie ma w nich pętli routowania.
+    \end{itemize}
+
+
+
+
+
+\end{document}

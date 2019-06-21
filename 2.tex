@@ -1,0 +1,97 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+    OSI (Open Systems Interconnection) utworzony przez Międzynarodową Organizację
+    Normalizacyjną stanowi \textbf{model referencyjny}.
+
+
+    \begin{tabular}{|c|c|c|c| }
+        \hline
+        Nr warstwy OSI & Nazwa warstwy OSI & Nazwa warstwy TCP/IP & Nazwa warstwy Tannenbaum\\
+        \hline
+        7 & Aplikacji & Aplikacji & Aplikacji\\
+        6 & Prezentacji & & \\
+        5 & Sesji & & \\
+        \hline
+        4 & Transportu & Transportu & Transportu\\
+        \hline
+        3 & Sieci & Intersieci & Sieci\\
+        \hline
+        2 & Łącza danych & Interfejsu sieciowego & Łącza danych\\
+
+        1 & Fizyczna & & Fizyczna\\
+        \hline
+    \end{tabular}
+
+    \begin{itemize}
+        \item \textbf{Warstwa fizyczna} - standard połączenia fizycznego, charakterystyki wydajnościowe nośników. Same media transmisyjne pozostają poza dziedziną jej
+        zainteresowania (czasem określane są terminem warstwa zerowa).
+        \item \textbf{Warstwa łącza danych} – grupowanie danych wejściowych (z warstwy fizycznej) w bloki zwane \textbf{ramkami} danych („jednostki
+        danych usług warstwy fizycznej”), mechanizmy kontroli poprawności
+        transmisji (FCS).
+        \item \textbf{Warstwa sieci} - określenie trasy przesyłania
+        danych między komputerami poza lokalnym segmentem sieci LAN, protokoły trasowane takie jak IP (ze stosu protokołów TCP/IP).
+        \item \textbf{Warstwa transportu} - kontrola błędów i przepływu danych
+        poza lokalnymi segmentami LAN, protokoły zapewniające
+        komunikację procesów uruchomionych na odległych komputerach, protokoły TCP, UDP.
+        \item \textbf{Warstwa sesji} - zarządzanie przebiegiem komunikacji podczas
+        połączenia między komputerami.
+        \item \textbf{Warstwa prezentacji} - kompresja, kodowanie i
+        translacja między niezgodnymi schematami kodowania oraz szyfrowanie.
+        \item \textbf{Warstwa aplikacji} - interfejs między aplikacjami a
+        usługami sieci.
+    \end{itemize}
+
+    \subsection{Zestaw (stos) protokołów TCP/IP}
+
+    \textbf{Protokoły z zestawu TCP/IP}
+    \begin{itemize}
+        \item TCP, UDP - warstwa transportu,
+        \item IP - IPv4 i IPv6, warstwa internetowa,
+        \item ARP - tłumaczy adresy między warstwą internetową a warstwą interfejsu
+        sieciowego, czasami zaliczany do tej ostatniej warstwy,
+        \item ICMP - m.in. komunikaty o problemach,
+        \item IGMP - komunikacja grupowa.
+
+        \item TELNET, FTP, DNS - warstwa aplikacji
+    \end{itemize}
+
+    Na warstwę aplikacji składają się komponenty programowe sieci, wysyłające i odbierające
+    informacje przez tzw. porty TCP lub UDP (z warstwy transportu).
+    Protokoły warstwy aplikacji to między innymi:
+    \begin{itemize}
+        \item FTP (File Transfer Protocol),
+        \item TELNET,
+        \item DNS (Domain Name System) związany z usługą DNS (Domain Name Service).
+    \end{itemize}
+
+
+    Dane przechodząc w dół stosu protokołów TCP/IP są opakowywane i otrzymują
+    odpowiedni nagłówek. Porcje danych przesyłane w dół stosu mają różne
+    nazwy:
+    \begin{itemize}
+        \item \textbf{Komunikat} - porcja danych utworzona w warstwie aplikacji i przesłana do warstwy transportu.
+        \item \textbf{Segment} - porcja danych utworzona przez oprogramowanie implementujące protokół TCP w warstwie transportu. Zawiera w sobie komunikat.
+        \item \textbf{Datagram UDP} - porcja danych utworzona przez oprogramowanie implementujące protokół UDP w warstwie transportu.
+        \item \textbf{Datagram} - również porcja danych utworzona w warstwie internetowej przez oprogramowanie implementujące protokół IP. Datagram IP zawiera w sobie segment, bywa nazywany pakietem.
+        \item \textbf{Ramka} - porcja danych utworzona na poziomie dostępu do sieci.
+    \end{itemize}
+
+    Sekwencja zdarzeń przy wysłaniu danych:
+    \begin{itemize}
+        \item Aplikacja przesyła dane do warstwy transportu.
+        \item Dalszy dostęp do sieci realizowany jest przez TCP albo UDP.
+        \begin{itemize}
+            \item TCP realizuje tzw. niezawodne połączenia i kontroluje przepływ danych zapewniając niezawodne dostarczenie danych.
+            \item UDP nie zapewnia niezawodności, ale jest szybszy.
+        \end{itemize}
+        \item Segment lub datagram UDP przesyłany jest do warstwy IP, gdzie protokół IP dołącza między innymi informacje o adresach IP źródła i celu tworząc datagram IP (pakiet).
+        \item Datagram z IP przechodzi do warstwy interfejsu sieciowego, gdzie tworzone są ramki. W sieci LAN ramki zawierają adres fizyczny (przypisany do karty sieciowej) otrzymany zprotokołu ARP.
+        \item Ramka przekształcana jest w ciąg sygnałów, który zostaje przesłany przez sieć.
+    \end{itemize}
+
+
+
+
+\end{document}

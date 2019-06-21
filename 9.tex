@@ -1,0 +1,64 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+
+    \textbf{ICMP (Internet Control Message Protocol)}\\
+    \begin{itemize}
+        \item raportowanie routingu,
+        \item dostarczanie informacji o błędach podczas przesyłania ze źródła do komputera docelowego,
+        \item dostarczanie funkcji sprawdzających możliwość komunikacji komputerów wykorzystaniem protokołu IP,
+        \item pomoc w automatycznej konfiguracji hostów.
+    \end{itemize}
+    Komunikaty ICMP wysyłane są w pakietach IP. W efekcie w ramce znajduje się nagłówek IP, nagłówek ICMP oraz dane komunikatu ICMP.\\
+
+    Struktura komunikatu ICMP
+    \begin{itemize}
+        \item Typ (1 oktet)
+        \item Kod (1 oktet)
+        \item Suma kontrolna (2 oktety)
+        \item Dane charakterystyczne dla typu (różna długość)
+    \end{itemize}
+
+    Typy komunikatów ICMP
+    \begin{tabular}{|c|c|}
+        \hline
+        0 & Odpowiedź echa (echo reply)\\
+        \hline
+        3 & Miejsce docelowe nieosiągalne (destination unreachable)\\
+        \hline
+        4 & Tłumienie źródła (source quench)\\
+        \hline
+        5 & Przekierowanie (redirect)\\
+        \hline
+        8 & Żądanie echa (echo request)\\
+        \hline
+        9 & Ogłoszenie routera (router advertisement)\\
+        \hline
+        10 & Wybór routera (router selection)\\
+        \hline
+        11 & Przekroczenie czasu (time exceeded)\\
+        \hline
+        12 & Problem parametru (parameter problem)\\
+        \hline
+    \end{tabular}
+
+    \textbf{Żądanie i odpowiedź echa}\\
+    Cel – wysłanie prostego komunikatu do węzła IP i odebranie echa tego komunikatu. Bardzo
+    użyteczne przy usuwaniu problemów i naprawianiu sieci. Narzędzia takie jak ping oraz tracert i traceroute używają tych komunikatów ICMP do
+    uzyskania informacji o dostępności węzła docelowego.\\
+
+    \subsection{Komunikaty ICMP o przekierowaniu}
+    Komunikaty ICMP o przekierowaniu pozwalają hostom TCP/IP na konfigurację tylko jednego
+    routera – bramy domyślnej nawet w sytuacji, gdy w sieci lokalnej są dwa lub więcej
+    routerów, które są odpowiedzialne za pewne miejsca docelowe.
+    Hosty mogą zacząć pracę z jedną domyślną trasą i uczyć się topologii sieci (w szczególności
+    informacji o routowaniu) poprzez otrzymywanie komunikatów ICMP.\\
+
+    Komunikaty ICMP o przekierowaniu powinny być generowane przez routery, ale korzystać z
+    nich mogą tylko hosty.
+    Jeśli datagram IP zostanie celowo usuwanięty przez router, to może być wysłany odpowiedni komunikat protokołu ICMP do nadawcy.
+
+
+
+\end{document}

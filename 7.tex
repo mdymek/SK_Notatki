@@ -1,0 +1,118 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+    Multicast – transmisja grupowa, multiemisja.
+    \begin{itemize}
+        \item Wysłanie jednego pakietu ze źródła do wielu miejsc docelowych. Pakiety są kopiowane
+        w routerach i przełącznikach warstwy drugiej.
+        \item Mniejsze obciążenie
+        sieci, większa skalowalność w stosunku do unicastu
+        \item Schematy jeden-do-wielu, wiele-do-wielu.
+        \item Komunikaty w większości protokołów routowania mają zarezerwowane adresy multiemisji.
+        \begin{itemize}
+            \item 224.0.0.1 – wszystkie komputery uczestniczące w transmisji grupowej (również routery) w
+            segmencie sieci lokalnej.
+            \item 224.0.0.2 – wszystkie routery uczestniczące w transmisji grupowej (multicast routers) w
+            segmencie sieci lokalnej.
+            \item 224.0.0.4 – routery DVMRP.
+            \item 224.0.0.5 – wszystkie routery OSPF.
+            \item 224.0.0.6 – routery DR OSPF.
+            \item 224.0.0.9 – routery RIPv2 (RIPv1 wykorzystuje rozgłoszenie – broadcast, nie multicast).
+            \item 224.0.0.0 – 239.255.255.255 - klasa D adresów IPv4
+        \end{itemize}
+        \item Aby uczestniczyć w transmisji grupowej, komputer musi sprawdzać określone adresy w
+        przychodzących pakietach (IP) i generalnie w ramkach (MAC).
+        \item Transmisja grupowa odbywa się z wykorzystaniem różnych mechanizmów i protokołów.
+
+\end{itemize}
+
+    \subsection{IGMP - Internet Group Management Protocol}
+    \begin{itemize}
+        \item wykorzystywany do dynamicznego rejestrowania/wyrejestrowania
+        odbiornika w routerze
+        \item komunikaty IGMP są przesyłane w pakietach IP z adresem docelowym typu multicast i
+        ustawioną wartością TTL na 1.
+    \end{itemize}
+
+
+    \subsubsection{IGMPv1}
+
+    Są dwa typy komunikatów:
+    \begin{itemize}
+        \item Membership query (general membership query), wysyłany jest okresowo (co
+        kilkadziesiąt sekund) przez routery na wszystkiue komputery.
+        \item Membership report służy do zgłoszenia się jako odbiorca pakietów wysyłanych na ten adres; membership
+        report wysyłany jest też w odpowiedzi na membership query.
+    \end{itemize}
+
+
+    Host po otrzymaniu membership query czeka pewien pseudolosowy czas z
+    zakresu od 0 do 10 sekund) i wysyła membership report. Jeśli w tym pseudolosowym czasie
+    host usłyszy membership report od innego hosta, to nie wysyła swojego raportu.
+
+    W IGMPv1 host „po cichu” opuszcza grupę. Jeśli router nie dostanie raportu w odpowiedzi
+    na trzy kolejne membership query,
+    router usuwa grupę z tablicy multicastu i przestaje przesyłać pakiety kierowane do tej grupy.
+
+    \subsubsection{IGMPv2}
+
+    W IGMPv2 są cztery typy komunikatów:
+    \begin{itemize}
+        \item Membership query
+        \item Version 1 membership report
+        \item Version 2 membership report
+        \item Leave group
+    \end{itemize}
+
+
+    Ważne zmiany w porównaniu do wersji pierwszej:
+    \begin{itemize}
+        \item Membership query może być typu group-specific query.
+        \item Leave group message – komunikat o opuszczeniu grupy, wysyłany jest na adres
+        224.0.0.2 (wszystkie routery multicast na łączu).
+        \item Dodano do zapytań IGMP określenie czasu query-interval response time , jaki mają uczestnicy na wysłanie raportu, czas ten jest określany przez
+        wysyłającego zapytanie.
+        \item Dodano mechanizm wyboru routera odpytującego (querier) w segmencie sieci
+        wykorzystującej wielodostęp. Zostaje nim router, którego adres IP jest najmniejszą
+        liczbą. Domyślnie router zakłada, że jest routerem
+        odpytującym, ale jak dostanie query od routera z „niższym” adresem IP, to przestanie być routerem odpytującym. Jeśli
+        router non-querier nie słyszy komunikatów query od routera odpytującego przez
+        pewien czas, to staje się routerem odpytującym.
+    \end{itemize}
+
+    \subsubsection{IGMPv3}
+
+    Dodano możliwość zgłaszania się do grup z wyspecyfikowaniem adresu
+    jednostkowego IPv4 pewnego nadawcy.
+
+
+    \subsection{Transmisje grupowe a technologie sieci lokalnych}
+
+    Ethernet daje możliwość adresowania MAC typu multicast. Wykorzystywane są adresy z
+    zakresu 01:00:5e:00:00:00 do 01:00:5e:7f:ff:ff. 23 bity adresu IPv4 są wprost wykorzystane w
+    adresie MAC.
+
+    Zatem każdy adres Ethernet multicast jest związany z 32 adresami IPv4 z klasy D (różniącymi
+    się na 5 bitach).
+
+    Przykłady
+    $239.20.20.20$ odpowiada adresowi MAC: $01-00-5e-14-14-14$.\\
+    $239.10.10.10$ odpowiada adresowi MAC: $01-00-5e-0a-0a-0a$.\\
+
+
+    \textbf{IGMP Snooping}\\
+    IGMP snooping polega na tym, że przełącznik warstwy drugiej „słucha” konwersacji między
+    hostami a routerami i analizuje pakiety z komunikatami IGMP (raporty członkostwa w grupie
+    membership reports oraz zgłoszenia opuszczenia grupy – membership leaves). Na podstawie
+    śledzonych komunikatów IGMP przełącznik aktualizuje swoją tablicę przypisania adresów
+    MAC do portów (CAM – Content Addressable Memory) i uwzględnia adresy Ethernet
+    multicast.
+    To rozwiązanie wymaga jednak odpowiednio wydajnych przełączników, najlepiej z
+    dołączonym specjalnym sprzętowym modułem (ASIC) do analizy komunikatów IGMP.
+
+
+    \textbf{Protokół CGMP}\\
+    Switch “słucha” konwersacji między hostami a routerami i analizuje pakiety z IGMP, na tej podstawie aktualizuje tablicę MAC portów i wysyła do komputerów to co chcą słuchać
+
+
+\end{document}

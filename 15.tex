@@ -1,0 +1,20 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+
+    STP - drzewo rozpinające switchy, switche mogą sobie dezaktywować porty na krawędziach których nie ma w drzewie; jak coś się zepsuje to porty włączane i nowe drzewo rozpinające
+    wybór switcha od którego rozpoczynane jest budowanie drzewa przez 1) priorytet 2) MAC
+
+    tryby działa switchy: cut-through  (puszcza ramki jak leci), store-and-forward (analiza czy ramka jest ok, przesyła dalej tak żeby nie było kolizji)
+
+    VLAN - odseparowanie w warstwie drugiej - ramki między vlanami nie mogą bezpośrednio przechodzić
+
+    łącza trunkingowe - do trunka są pchane wszystkie ramki z vlanów do niego przypisanych (domyślnie wszystkie ze switchu), tak samo do trunkiem można łączyć switche z komputerami z tymi samymi vlanami
+
+    przełączniki warstwy 3 - mają odciążyć router przy vlanach (ramka do vlanu w tym samym switchu musi być wysłana przez wszystkie switche do routera i z powrotem [bez sensu], więc switch może to obsłużyć) - czyli “switch, który może odpowiadac za routing między vlanami”.
+
+
+
+
+\end{document}

@@ -1,0 +1,95 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+    \textbf{ARP (Address Resolution Protocol)} stosowany jest w sieciach Ethernet (jeśli w warstwie sieci wykorzystywany jest protokół
+    IPv4), był też używany w sieciach Token Ring. W wersji IPv6 protokół ARP nie jest w ogóle wykorzystywany, zastępują go inne mechanizmy.\\
+
+    Struktura ramki ARP:
+    \begin{itemize}
+        \item Typ sprzętu (2 oktety)
+        \item Typ protokołu (2 oktety)
+        \item Długość adresu sprzętu (1 oktet)
+        \item Długość adresu protokołu (1 oktet)
+        \item Kod operacji (2 oktety)
+        \item Adres sprzętu nadawcy (dla Ethernet 6 oktetów)
+        \item Adres protokołu nadawcy (dla IPv4 4 oktety)
+    \end{itemize}
+
+    \subsubsection{Wykrywanie zduplikowanych adresów IP}
+    Tzw "zbędny ARP"
+    \begin{itemize}
+        \item Węzeł wysyła ARP Request z zapytaniem o swój własny adres.
+        \begin{itemize}
+            \item Jeśli ARP Reply nie nadejdzie to znaczy, że w lokalnym segmencie nie ma konfliktu adresów.
+            \item Jeśli odpowiedź nadejdzie, oznacza to konflikt.
+        \end{itemize}
+        \item Węzeł już skonfigurowany traktowany jest jako węzeł z poprawnym adresem (\textbf{węzeł zgodny}, defending node), węzeł
+        wysyłający „zbędny ARP” jest \textbf{węzłem konfliktowym} (offending node).
+        \item \textbf{Węzeł konfliktowy wprowadza błąd} w pamięci podręcznej ARP komputerów w \textbf{całym segmencie} sieci. ARP Reply z węzła zgodnego nie naprawia sytuacji (ramka ARP Reply nie jest ramką rozgłoszeniową), więc zgodny wysyła ARP Request ze swoim adresem po wykryciu konfliktu.
+    \end{itemize}
+    Datagramy IP wysłane na w ramkach z niepoprawnym adresem MAC odbiorcy
+    przepadają. Protokół IP nie zapewnia niezawodnej dostawy datagramów i nie
+    spowoduje powtórnego przesłania datagramu w nowej ramce. Za niezawodność
+    odpowiedzialne są protokoły warstwy transportu.
+
+    \subsubsection{Proxy ARP}
+    Router ze skonfigurowanym mechanizmem Proxy ARP odpowiada na ramki ARP Request w
+    imieniu wszystkich węzłów – komputerów spoza segmentu sieci lokalnej. Może
+    być używany jest np. w sytuacji, gdy komputery w sieci nie mają ustawionego domyślnego
+    routera (domyślna brama, default gateway). Routery mogą mieć włączoną standardowo
+    opcję Proxy ARP, wówczas jeśli jakiś komputer wyśle ARP Request z adresem spoza danej
+    sieci lokalnej (zwykle to nie następuje), to router odpowie „w imieniu” komputera
+    zewnętrznego.
+
+
+    \subsubsection{Komunikacja między komputerami}
+
+    Założenia:
+    \begin{itemize}
+        \item Komputer źródłowy - Komputer 1: IP1, MAC1
+        \item Komputer docelowy - Komputer 2: IP2, MAC2
+    \end{itemize}
+    Połączone switchem. Na komputerze docelowym jest serwer strony WWW2.
+
+    Jeżeli na komputerze 1 ktoś spróbuje otworzyć WWW2, to:
+
+    \begin{itemize}
+        \item Zadziała system DNS: komputer 1 skontaktuje się ze swoim serwerem DNS i zapyta jaki jest adres IP komputera związanego z nazwą domenową WW2. Serwer DNS znajdzie odpowiedni adres w swoich zasobach i odeśle informację do komputera 1.
+        \item Przeglądarka utworzy komunikat (wg protokołu HTTP). Do komunikatu zostanie dodany nagłówek    (wg protokołu TCP), który zawiera m.in. port docelowy (standardowo 80)    oraz port źródłowy. Komunikat razem z dołączonym nagłówkiem TCP nazywa się    \textbf{segmentem TCP}.
+        \item Do segmentu TCP zostanie dodany nagłówek IP – w ten sposób powstanie \textbf{pakiet IP}.
+        \item Pakiet musi być przesłany w ramce. Do pakietu musi zostać dodany nagłówek ramki, zawierający źródłowy i docelowy adres MAC. \textbf{Komputer 1 nie zna adresu MAC komputera 2}. Zna tylko jego adres IP. Wykorzystywany jest \textbf{protokół ARP} – Address Resolution Protocol.
+        \begin{itemize}
+            \item Komputer 1 wysyła specjalną ramkę    \textbf{ARP Request} (ta NIE zawiera pakietu IP), która ma adres rozgłoszeniowy jako adres docelowy (same jedynki).
+            \item Każdy komputer przyłączony do przełącznika ma obowiązek odebrać ramkę wysłaną na adres rozgłoszeniowy MAC. Jednak tylko komputer o zadanym IP odpowie na ARP Request.
+            \item Odpowiedź to specjalna ramka \textbf{ARP Reply}. Odpowiedź ARP jest wysyłana na adres MAC komputera 1.
+        \end{itemize}
+        \item Po tym, jak komputer 1 pozna adres MAC komputera 2, może już zbudować ramkę przeznaczoną do komputera 2. Ramka jest wysyłana do przełącznika, a przełącznik dostarcza ją tylko do komputera 2.
+        \begin{itemize}
+            \item Przełącznik uczy się adresów MAC przyłączonych komputerów i routerów i zapamiętuje w tablicy przypisanie adresu MAC do konkretnego swojego portu.
+        \end{itemize}
+        \item Komputer 2 odbiera ramkę, sprawdza adres MAC docelowy i sumę kontrolną, po czym „wyjmuje” z ramki pakiet IP. Sprawdza adres docelowy IP i „wyjmuje” z pakietu segment TCP. Sprawdza do którego portu należy przekazać zawartość (komunikat HTTP) i ostatecznie „wyjmuje” komunikat http z segmentu i przekazuje do portu 80, na którym nasłuchuje serwer WWW.
+        \item Serwer WWW konstruuje odpowiedź – stronę WWW. Strona ta zostanie umieszczona w komunikacie http, który następnie musi być przesłany do komputera 1. Mechanizm jest analogiczny jak poprzednio.
+    \end{itemize}
+    W rzeczywistości zanim może zostać przesłany segment TCP, komputery wykorzystujące ten protokół do komunikacji, muszą zbudować tzw. połączenie TCP.
+
+
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Nagłówek ramki & Nagłówek IP & Nagłówek TCP & Komunikat HTTP & Suma kontrolna\\
+        (numery MAC) & (numery IP) & (numery portów) & & \\
+        & 20 bajtów & 20 bajtów & & 4 bajty\\
+        \hline
+    \end{tabular}
+
+    \textbf{W przypadku komunikacji między komputerami rozdzielonymi przynajmniej jednym routerem}
+    \begin{itemize}
+        \item Wszystko do skonstruowania pakietu IP włącznie działa tak samo. Komputer tworzący ramkę musi więc wykorzystując ARP Request poznać
+        MAC adres routera, czyli swojej \textbf{bramy domyślnej}.
+        \item Ramka jest wysyłana do routera.
+        \item Router (brama) po otrzymaniu ramki „wyjmuje” z niej pakiet IP, zagląda do nagłówka i sprawdza jaki jest adres docelowy IP. Na podstawie
+        tego adresu i tablicy routowania wyznacza router następnego skoku i konstruuje i wysyła do niego nową ramkę, w której umieszcza przesyłany pakiet IP. Analogicznie aż pakiet dotrze w kolejnych ramkach do docelowej sieci i do docelowego komputera.
+    \end{itemize}
+
+
+\end{document}

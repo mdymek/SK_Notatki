@@ -1,0 +1,41 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+
+    \textbf{UDP – User Datagram Protocol}
+    \begin{itemize}
+        \item Prosty protokół bezpołączeniowy warstwy transportu.
+        \item Umożliwia przesyłanie danych między procesami dzięki określeniu adresów IP komputerów oraz 16 bitowych numerów portów.
+        \item Porcja danych zgodna z protokołem UDP nazywana jest datagramem/pakietem UDP.
+        \item Nie zapewnia niezawodności. Ewentualne zapewnienie niezawodności musi być realizowane przez protokoły warstwy aplikacji.
+        \item Niewielki nagłówek (8 bajtów), nie zawiera mechanizmów ustanawiania połączenia ani sterowania przepływem datagramów, zatem jest szybszy od TCP.
+        \item Datagramy UDP mogą być przesyłane w pakietach IP z adresem docelowym przesyłania grupowego.
+        \item Przykłady zastosowań: strumieniowanie audio/wideo, wideokonferencje, transmisje głosu; RIP (port 520).
+    \end{itemize}
+
+    Aplikacja jest odpowiedzialna za rozmiar wysyłanego datagramu. Jeśli wielkość przekroczy
+    MTU sieci, wówczas datagram IP (zawierający w sobie datagram UDP) jest dzielony
+    (następuje fragmentacja IP).
+
+
+    \subsubsection{Enkapsulacja datagramu UDP}
+
+    \begin{tabular}{|c|c|c|}
+        \hline
+        nagłówek IP & nagłówek UDP & dane UDP\\
+        20 bajtów & 8 bajtów & $\dots$\\
+        \hline
+    \end{tabular}
+
+    \textbf{Nagłówek UDP}
+    \begin{itemize}
+        \item Numer portu źródłowego (16 bitów)
+        \item Numer portu docelowego (16 bitów)
+        \item Długość UDP (nagłówek + dane) – wypełniana opcjonalnie (16 bitów)
+        \item Suma kontrolna UDP (16 bitów)
+        \item Dane, jeśli są.
+    \end{itemize}
+
+
+\end{document}

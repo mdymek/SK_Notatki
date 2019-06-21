@@ -1,0 +1,42 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+
+    \begin{table}[H]
+        \begin{center}
+            \begin{tabular}{ | p{.2\textwidth} | p{.1\textwidth} | p{.1\textwidth} | p{.15\textwidth} | p{.2\textwidth} | p{.2\textwidth} | }
+                \hline
+                Preambuła & src MAC & dst MAC & Typ danych & 46-1500 Dane & CRC\\
+                \hline
+                żeby się karty
+
+                sieciowe
+
+                zsynchronizowały & & & & tu jest pakiet IP i
+
+                segment TCP & suma kontrolna\\
+                \hline
+                warstwa 1 & \multicolumn{5}{c}{warstwa 2 }|\\
+                \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+
+    sposób dostępu do nośnika - kiedyś przy topologii magistrali był half-duplex (albo tylko nadajesz, albo tylko odbierasz, tylko jeden komputer może nadawać żeby się nie pokrywały)
+
+    CSMA - Carrier Sense Multiple Access - komputer nasłuchuje czy ktoś inny nadaje, jak nie to dopiero sam zaczyna nadawać; żąda potwierdzenia otrzymania ramek; jak ktoś nadaje to czeka pseudolosowy czas i próbuje znowu
+
+    teraz już nie ma problemu z kolizjami bo mamy switche
+    kabel cross - jak łączymy bez switcha dwa urządzenia
+    kabel prosty - jak jest switch
+
+    teraz sobie urządzenia wykrywają czy są dobrze połączone i same korygują żeby było ok
+
+
+    CSMA CD (Colission Detect) - nasłuchują  nadając, żeby wiedzieć czy jest kolizja; jak jest kolizja to wysyłają sygnał zagłuszający, żeby powiedzieć że była kolizja i dane wysłane przed chwilą to śmieci
+
+
+
+
+\end{document}

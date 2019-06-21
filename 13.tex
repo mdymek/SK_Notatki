@@ -1,0 +1,31 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+
+    Metryką jest szybkość łącza.
+
+    Wewnątrz obszaru:
+    \begin{itemize}
+        \item routery zgłaszają wszystkie połączenia które mają do sąsiadów i tak kaskadowo rozsyłają info o wszystkich
+        \item updaty o zmianach
+        \item każdy ma swój własny obraz sieci, użycie Dijkstry
+    \end{itemize}
+
+    Na brzegach są border routery.
+    Wszystkie area połączone do Area 0.
+
+    Rodzaje obszarów:
+    \begin{itemize}
+        \item “normalne” - bez stuba
+        \item Stub Area – do takiego obszaru NIE są wprowadzane trasy zewnętrzne, natomiast sumy tras z innych obszarów są wprowadzane.
+        \item Totally Stubby Area – do takiego obszaru nie są wprowadzane ani trasy zewnętrzne, ani sumy tras z innych obszarów OSPF. Wyjście z takiego obszaru jest tylko przez trasę domyślną
+        \item Not So Stubby Area (NSSA) – obszar Stub, do którego wprowadzane są pewne (na ogół nieliczne) trasy zewnętrzne, które następnie przekazywane są do innych obszarów tak jak sumy tras.
+        \item Not So Stubby Totally Stubby Area – obszar połączenie NSSA i Totally Stabby Area. Routery ABR na granicach różnych obszarów powinny być odpowiednio skonfigurowane, co stanowi dodatkową trudność w konfigurowaniu OSPF.
+    \end{itemize}
+    Trasy zewnętrzne - z innych protokołów routingu.
+
+    Gateway of last resort - router do którego idziemy kiedy nie mamy trasy.
+
+
+\end{document}
