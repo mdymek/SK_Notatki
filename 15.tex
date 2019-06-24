@@ -2,19 +2,86 @@
 
 
 \begin{document}
+    \textbf{Koncentratory} - huby, dostają info na jeden port i \textbf{wzmacniają go i wysyłają na
+    wszystkie inne}. Nie analizuje ramek, fizyczna budowa gwiazdy a logicznie magistrali,
+    \textbf{1 warstwa} ISO OSI.
 
-    STP - drzewo rozpinające switchy, switche mogą sobie dezaktywować porty na krawędziach których nie ma w drzewie; jak coś się zepsuje to porty włączane i nowe drzewo rozpinające
-    wybór switcha od którego rozpoczynane jest budowanie drzewa przez 1) priorytet 2) MAC
+    \textbf{Mosty} - analizują ramki, \textbf{2 warstwa} ISO OSI, ma \textbf{filtrować ruch} tak by niektóre
+    ramki pozostawić w jednym segmencie(jeśli MAC jest w tym segmencie), uczy się MAC.
 
-    tryby działa switchy: cut-through  (puszcza ramki jak leci), store-and-forward (analiza czy ramka jest ok, przesyła dalej tak żeby nie było kolizji)
+    \textbf{Przełącznik} - analizuje ramki, \textbf{2 warstwa}, ma kilka portów też uczy sie
+    MAC-ów (jak zna to tam wysyła a jak nie zna to wysyła wszędzie oprócz tego co dostało).
+    \textbf{Tryby działania}:
+    \begin{itemize}
+        \item \textbf{Store and Forward} - pobiera całą ramkę, sprawdza czy błędna i dopiero potem dalej
+        \item \textbf{Cut-through}
+        \begin{itemize}
+            \item \textbf{Fast Forward Switching}- po otrzymaniu MAC od razu ją nadaje, nie sprawdza błędów, albo czy nie nastąpiła kolizja
+            \item \textbf{Fragment-Free Switching} - ramka jest przesyłana dopiero jak dojdzie 64 bajty
+        \end{itemize}
+    \end{itemize}
 
-    VLAN - odseparowanie w warstwie drugiej - ramki między vlanami nie mogą bezpośrednio przechodzić
+    \textbf{Burza broadcastów} - cały czas są robione broadcasty i zapychają sieć(jak mamy
+    3 przełączniki w trójkąt połączone i A wyśle broadcast to odbiorą go B i C, nie wyślą go do
+    A(bo stamtąd przyszło), ale wyślą do siebie, co z powrotem wyśle do A i tak w kółko).
 
-    łącza trunkingowe - do trunka są pchane wszystkie ramki z vlanów do niego przypisanych (domyślnie wszystkie ze switchu), tak samo do trunkiem można łączyć switche z komputerami z tymi samymi vlanami
+    \textbf{STP - SpanningTree Protocol} - jak łączymy przełączniki to chcemy
+    redundancje między nimi i to jest fajne, ale przez to są pętle (burza broadcastów,
+    double packety, złe MAC) i już nie jest, na ratunek STP - będzie redundancja, ale w
+    danej chwili tylko jedno ze zduplikowanych jest aktywne.\\
+    \textbf{Działanie}:
+    \begin{itemize}
+        \item \textbf{Wybór korzenia} - na podstawie najniższego priorytetu przełącznika
+        \item \textbf{Wybór root-portów} (komunikacja z korzeniem) - jak jest połączony z rootem to jest automatycznie, inne wybierane na podstawie szerokości pasma
+        \item \textbf{Wybór portów wyznaczonych} - wszystkie inne połączenia muszą “zdecydować” w którą stronę będą działać i porównują sobie BID i wybierają niższy, a ten drugi port jest robiony na disabled
+    \end{itemize}
 
-    przełączniki warstwy 3 - mają odciążyć router przy vlanach (ramka do vlanu w tym samym switchu musi być wysłana przez wszystkie switche do routera i z powrotem [bez sensu], więc switch może to obsłużyć) - czyli “switch, który może odpowiadac za routing między vlanami”.
+    \textbf{Stany portów:}
+    \begin{itemize}
+        \item \textbf{Blocking} - nie przekazuje normalnych, czyta BPDU
+        \item \textbf{Listening} - zwykłe ramki nie przekazywane, BPDU czytane i wysyłane
+        \item \textbf{Learning} - zwykłe ramki nie przekazywane, BPDU czytane i wysyłane, uczy się MAC
+        \item \textbf{Forwarding} - wszystko przekazywane, czytane
+        \item \textbf{Disabled} - przez admina
+    \end{itemize}
 
+    \textbf{EtherChannel} - połączenie kilku ethernetowych łącz fizycznych w jedno logiczne.
+    Przełączniki mogą wówczas równomiernie rozkładać obciążenie na łączu.
 
+    \textbf{Shortest Path Bridging} - rozwinięcie STP, wiele redundantnych ścieżek jest
+    wykorzystywanych jednocześnie, link-state do wyznaczenia najkrótszych ścieżek w warstwie
+    drugiej.
+
+    \textbf{Przełącznik 3 warstwy} - to urządzenie sieciowe podobne w działaniu do
+    routera. Decyzje routingowe podejmowane są na podstawie danych z trzeciej warstwy modelu
+    OSI. Do wyznaczania trasy używany jest pierwszy pakiet z danego przepływu a reszta
+    pakietów z danego przepływu przełączana jest już w warstwie 2. W związku z tym przełącznik
+    warstwy trzeciej nie ma pełnej funkcjonalności routera. Ograniczenia dotyczą m.in.
+    translacji adresów (NAT), implementacji mechanizmów bezpieczeństwa czy niestandardowych
+    protokołów. Przełącznik warstwy trzeciej jest zazwyczaj droższy i szybszy w działaniu
+    niż router. Wykonują routowanie między VLANAMI.
+
+    \textbf{VLAN} - wirtualne sieci LAN tworzone są przy pomocy przełączników. Przez
+    odpowiednią konfigurację portów w przełącznikach można tworzyć podsieci. Sieci VLAN są
+    konfigurowane programowo, zatem ewentualne zmiany konfiguracji nie wymagają zmian w
+    okablowaniu. Komputery z każdej utworzonej sieci wirtualnej nie muszą być dołączone
+    bezpośrednio do jednego przełącznika. Urządzenia należące do jednej sieci wirtualnej
+    mogą się ze sobą komunikować tak jakby były w jednym segmencie sieci LAN. W całym takim
+    segmencie na przykład działa protokół ARP. Natomiast komunikacja między sieciami
+    wirtualnymi wymaga routera(może to robić przełącznik 3 warstwy). Musi mieć IP.
+
+    \textbf{Trunk} - Połączenia między przełącznikami są określane jako „trunk”.
+    Połączenie typu trunk umożliwia przekazywanie ramek należących do różnych sieci VLAN
+    po jednym fizycznym nośniku. Za kontrolę połączenia trunk odpowiada protokół VTP
+    (VLAN Trunking Protocol). Łączenie danych w jeden wspólny kanał, w którym przesyłane
+    są dane. Konfigurowanie portu jako wspólnego (trunk) i przypisaniu do niego wszystkich
+    lub odpowiednich VLAN-ów. Spowoduje to, w zależności od zastosowanej technologii,
+    oznaczenie (tagowanie) lub kapsułkowanie ramek ethernetowych.
+
+    \textbf{VTP - Virtual Trunking Protocol} - umożliwia zautomatyzowaną konfigurację
+    wielu przełączników z jednego miejsca na drodze wymiany odpowiednich ramek z
+    sąsiadującymi przełącznikami. Przełącznik można skonfigurować jako serwer VTP,
+    klient VTP lub „transparent VTP”. Jeden serwer reszta klienci
 
 
 \end{document}

@@ -3,15 +3,19 @@
 
 \begin{document}
 
-    Metryką jest szybkość łącza.
+    \textbf{Metryką jest szybkość łącza.}
+    \begin{itemize}
+        \item informacje rozsyłane \textbf{do wszystkich} węzłów
+        \item rozsyłana tylko część tablicy routingu o \textbf{bezpośrednio połączonych} sieciach
+        \item każdy router buduje \textbf{pełną mapę topologii}, wylicza najlepsze ścieżki (Dijkstra)
+    \end{itemize}
 
     \textbf{OSPF}
     \begin{itemize}
-        \item protokół bezklasowy
-        \item umożliwia uwierzytelnienie
-        \item szybko uzyskuje zbieżność, trigger updates
-        \item pełna mapa topologii, użycie Dijkstry
-        \item informacja o bezpośrednio połączonych sieciach przekazywana okresowo do wszystkich routerów sieci (i ich metrykach)
+        \item protokół \textbf{bezklasowy}
+        \item umożliwia \textbf{uwierzytelnienie}
+        \item \textbf{szybko uzyskuje zbieżność}, trigger updates
+        \item \textbf{flooding} do utworzenia map topologii
     \end{itemize}
 
     \textbf{Nagłówek OSPF}: typ pakietu, id routera, id obszaru.
@@ -28,7 +32,7 @@
 
     \textbf{Rodzaje routerów}
     \begin{itemize}
-        \item \textbf{Router desygnowany} - hosty mają z nim relację przyległości, z pozostałymi sąsiadami nie.
+        \item \textbf{Router desygnowany} - hosty mają z nim relację przyległości, z pozostałymi sąsiadami nie (on reaguje na zmiany, hosty na niego).
         \item Routery wewnętrzne, brzegowe, szkieletowe, brzegowe AS.
         \item \textbf{Gateway of last resort} - router do którego idziemy kiedy nie mamy trasy.
     \end{itemize}
@@ -43,7 +47,6 @@
         \item \textbf{Not So Stubby Totally Stubby Area} – obszar połączenie NSSA i Totally Stabby Area. Routery ABR na granicach różnych obszarów powinny być odpowiednio skonfigurowane, co stanowi dodatkową trudność w konfigurowaniu OSPF.
     \end{itemize}
     Trasy zewnętrzne - z innych protokołów routingu.
-
 
 
 \end{document}

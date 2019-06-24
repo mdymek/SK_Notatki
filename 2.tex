@@ -6,21 +6,21 @@
     Normalizacyjną stanowi \textbf{model referencyjny}.
 
 
-    \begin{tabular}{|c|c|c|c| }
+    \begin{tabular}{|c|c|c| }
         \hline
-        Nr warstwy OSI & Nazwa warstwy OSI & Nazwa warstwy TCP/IP & Nazwa warstwy Tannenbaum\\
+        Nr warstwy OSI & Nazwa warstwy OSI & Nazwa warstwy TCP/IP\\
         \hline
-        7 & Aplikacji & Aplikacji & Aplikacji\\
-        6 & Prezentacji & & \\
-        5 & Sesji & & \\
+        7 & Aplikacji & Aplikacji\\
+        6 & Prezentacji &\\
+        5 & Sesji & \\
         \hline
-        4 & Transportu & Transportu & Transportu\\
+        4 & Transportu & Transportu \\
         \hline
-        3 & Sieci & Intersieci & Sieci\\
+        3 & Sieci & Intersieci \\
         \hline
-        2 & Łącza danych & Interfejsu sieciowego & Łącza danych\\
+        2 & Łącza danych & Interfejsu sieciowego\\
 
-        1 & Fizyczna & & Fizyczna\\
+        1 & Fizyczna & \\
         \hline
     \end{tabular}
 
@@ -47,25 +47,15 @@
 
     \textbf{Protokoły z zestawu TCP/IP}
     \begin{itemize}
-        \item TCP, UDP - warstwa transportu,
-        \item IP - IPv4 i IPv6, warstwa internetowa,
-        \item ARP - tłumaczy adresy między warstwą internetową a warstwą interfejsu
-        sieciowego, czasami zaliczany do tej ostatniej warstwy,
-        \item ICMP - m.in. komunikaty o problemach,
-        \item IGMP - komunikacja grupowa.
+        \item warstwa aplikacji:  \textbf{TELNET, FTP, DNS}
+        \item warstwa transportu: \textbf{TCP, UDP}
+        \item warstwa internetowa: \textbf{IP - IPv4 i IPv6}
+        \item \textbf{ARP} - tłumaczy adresy między warstwą internetową a warstwą interfejsu
+        sieciowego, czasami zaliczany do tej ostatniej,
+        \item \textbf{ICMP} - m.in. komunikaty o problemach,
+        \item \textbf{IGMP} - komunikacja grupowa.
 
-        \item TELNET, FTP, DNS - warstwa aplikacji
     \end{itemize}
-
-    Na warstwę aplikacji składają się komponenty programowe sieci, wysyłające i odbierające
-    informacje przez tzw. porty TCP lub UDP (z warstwy transportu).
-    Protokoły warstwy aplikacji to między innymi:
-    \begin{itemize}
-        \item FTP (File Transfer Protocol),
-        \item TELNET,
-        \item DNS (Domain Name System) związany z usługą DNS (Domain Name Service).
-    \end{itemize}
-
 
     Dane przechodząc w dół stosu protokołów TCP/IP są opakowywane i otrzymują
     odpowiedni nagłówek. Porcje danych przesyłane w dół stosu mają różne

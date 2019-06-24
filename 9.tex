@@ -3,24 +3,24 @@
 
 \begin{document}
 
-    \textbf{ICMP (Internet Control Message Protocol)}\\
+    \textbf{ICMP (Internet Control Message Protocol)}
     \begin{itemize}
-        \item raportowanie routingu,
-        \item dostarczanie informacji o błędach podczas przesyłania ze źródła do komputera docelowego,
+        \item \textbf{raportowanie routingu},
+        \item dostarczanie informacji o \textbf{błędach} podczas przesyłania ze źródła do komputera docelowego,
         \item dostarczanie funkcji sprawdzających możliwość komunikacji komputerów wykorzystaniem protokołu IP,
         \item pomoc w automatycznej konfiguracji hostów.
     \end{itemize}
-    Komunikaty ICMP wysyłane są w pakietach IP. W efekcie w ramce znajduje się nagłówek IP, nagłówek ICMP oraz dane komunikatu ICMP.\\
+    Komunikaty ICMP wysyłane są \textbf{w pakietach IP}. W efekcie w ramce znajduje się nagłówek IP, nagłówek ICMP oraz dane komunikatu ICMP.\\
 
-    Struktura komunikatu ICMP
+    \textbf{Struktura} komunikatu ICMP
     \begin{itemize}
-        \item Typ (1 oktet)
-        \item Kod (1 oktet)
-        \item Suma kontrolna (2 oktety)
-        \item Dane charakterystyczne dla typu (różna długość)
+        \item \textbf{Typ} (1 oktet)
+        \item \textbf{Kod} (1 oktet)
+        \item \textbf{Suma kontrolna} (2 oktety)
+        \item \textbf{Dane charakterystyczne dla typu} (różna długość)
     \end{itemize}
 
-    Typy komunikatów ICMP
+    \textbf{Typy komunikatów ICMP}
     \begin{tabular}{|c|c|}
         \hline
         0 & Odpowiedź echa (echo reply)\\
@@ -53,7 +53,7 @@
     routera – bramy domyślnej nawet w sytuacji, gdy w sieci lokalnej są dwa lub więcej
     routerów, które są odpowiedzialne za pewne miejsca docelowe.
     Hosty mogą zacząć pracę z jedną domyślną trasą i uczyć się topologii sieci (w szczególności
-    informacji o routowaniu) poprzez otrzymywanie komunikatów ICMP.\\
+    informacji o routowaniu) poprzez otrzymywanie komunikatów ICMP.
 
     Komunikaty ICMP o przekierowaniu powinny być generowane przez routery, ale korzystać z
     nich mogą tylko hosty.

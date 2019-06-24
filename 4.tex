@@ -23,19 +23,16 @@
         \end{center}
     \end{table}
 
-    sposób dostępu do nośnika - kiedyś przy topologii magistrali był half-duplex (albo tylko nadajesz, albo tylko odbierasz, tylko jeden komputer może nadawać żeby się nie pokrywały)
+    \subsection{Dostęp do nośnika}
 
-    CSMA - Carrier Sense Multiple Access - komputer nasłuchuje czy ktoś inny nadaje, jak nie to dopiero sam zaczyna nadawać; żąda potwierdzenia otrzymania ramek; jak ktoś nadaje to czeka pseudolosowy czas i próbuje znowu
+    \textbf{Dla Ethernet I}: Dostęp do nośnika realizowany był na zasadzie \textbf{CSMA} (Carrier Sense, Multiple Access – wielodostęp do nośnika z badaniem stanu nośnika).
 
-    teraz już nie ma problemu z kolizjami bo mamy switche
-    kabel cross - jak łączymy bez switcha dwa urządzenia
-    kabel prosty - jak jest switch
+    \textbf{Dla Ethernet II}: Dostęp do nośnika realizowany był na zasadzie \textbf{CSMA/CD} (Carrier Sense, Multiple Access with Collision Detection – wielodostęp do nośnika z badaniem stanu oraz wykrywaniem kolizji).
+    Teraz już nie ma problemu z kolizjami, bo mamy switche.
 
-    teraz sobie urządzenia wykrywają czy są dobrze połączone i same korygują żeby było ok
-
-
-    CSMA CD (Colission Detect) - nasłuchują  nadając, żeby wiedzieć czy jest kolizja; jak jest kolizja to wysyłają sygnał zagłuszający, żeby powiedzieć że była kolizja i dane wysłane przed chwilą to śmieci
-
+    Kabel cross, jak łączymy bez switcha dwa urządzenia.
+    Kabel prosty, jak jest switch
+    Teraz sobie urządzenia wykrywają czy są dobrze połączone i same korygują żeby było ok.
 
 
 

@@ -6,12 +6,12 @@
     \textbf{UDP – User Datagram Protocol}
     \begin{itemize}
         \item Prosty protokół bezpołączeniowy warstwy transportu.
-        \item Umożliwia przesyłanie danych między procesami dzięki określeniu adresów IP komputerów oraz 16 bitowych numerów portów.
-        \item Porcja danych zgodna z protokołem UDP nazywana jest datagramem/pakietem UDP.
-        \item Nie zapewnia niezawodności. Ewentualne zapewnienie niezawodności musi być realizowane przez protokoły warstwy aplikacji.
+        \item Umożliwia przesyłanie danych między procesami dzięki określeniu \textbf{adresów IP} komputerów oraz 16 bitowych \textbf{numerów portów}.
+        \item Porcja danych zgodna z protokołem UDP nazywana jest \textbf{datagramem/pakietem UDP}.
+        \item \textbf{Nie zapewnia niezawodności}. Ewentualne zapewnienie niezawodności musi być realizowane przez protokoły warstwy aplikacji.
         \item Niewielki nagłówek (8 bajtów), nie zawiera mechanizmów ustanawiania połączenia ani sterowania przepływem datagramów, zatem jest szybszy od TCP.
         \item Datagramy UDP mogą być przesyłane w pakietach IP z adresem docelowym przesyłania grupowego.
-        \item Przykłady zastosowań: strumieniowanie audio/wideo, wideokonferencje, transmisje głosu; RIP (port 520).
+        \item Przykłady zastosowań: strumieniowanie audio/wideo, \textbf{wideokonferencje, transmisje głosu; RIP} (port 520).
     \end{itemize}
 
     Aplikacja jest odpowiedzialna za rozmiar wysyłanego datagramu. Jeśli wielkość przekroczy
@@ -30,11 +30,11 @@
 
     \textbf{Nagłówek UDP}
     \begin{itemize}
-        \item Numer portu źródłowego (16 bitów)
-        \item Numer portu docelowego (16 bitów)
-        \item Długość UDP (nagłówek + dane) – wypełniana opcjonalnie (16 bitów)
-        \item Suma kontrolna UDP (16 bitów)
-        \item Dane, jeśli są.
+        \item \textbf{Numer portu źródłowego} (16 bitów)
+        \item \textbf{Numer portu docelowego} (16 bitów)
+        \item \textbf{Długość UDP (nagłówek + dane) – wypełniana opcjonalnie} (16 bitów)
+        \item \textbf{Suma kontrolna UDP} (16 bitów) - jedyny mechanizm sprawdzenia nieuszkodzenia datagramu. Opcjonalna w IPv4, obowiązkowa w IPv6.
+        \item \textbf{Dane, jeśli są.}
     \end{itemize}
 
 

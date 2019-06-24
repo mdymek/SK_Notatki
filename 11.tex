@@ -9,10 +9,9 @@
 
     \textbf{Cechy TCP}
     \begin{itemize}
-        \item Partnerzy (procesy) tworzą połączenie z wykorzystaniem mechanizmu (trójfazowego) uzgodnienia.
-        \item Zamknięcie połączenia odbywa się z wykorzystaniem mechanizmu uzgodnienia (zgoda na zamknięcie).
-        \item TCP zapewnia sterowanie przepływem. Informuje partnera o tym ile bajtów danych ze strumienia danych może od niego przyjąć (okno oferowane). Rozmiar okna zmienia się dynamicznie i jest równy rozmiarowi wolnego miejsca w buforze odbiorcy. Zero oznacza, że nadawca musi zaczekać, aż program użytkowy
-        odbierze dane z bufora.
+        \item Partnerzy (procesy) tworzą połączenie z wykorzystaniem \textbf{mechanizmu trójfazowego uzgodnienia}.
+        \item\textbf{Zamknięcie} połączenia odbywa się z wykorzystaniem \textbf{mechanizmu uzgodnienia} (zgoda na zamknięcie).
+        \item TCP zapewnia \textbf{sterowanie przepływem}. Informuje partnera o tym ile bajtów danych ze strumienia danych może od niego przyjąć (\textbf{okno oferowane}). Rozmiar okna zmienia się \textbf{dynamicznie} i jest równy rozmiarowi wolnego miejsca w buforze odbiorcy.
         \item Dane ze strumienia danych dzielone są na fragmenty, które według TCP mają najlepszy
         do przesłania rozmiar. Jednostka przesyłania danych nazywa się \textbf{segmentem}.
         \item TCP zapewnia \textbf{niezawodność} połączenia.
@@ -33,13 +32,13 @@
 
     \subsubsection{Nagłówek TCP}
     \begin{itemize}
-        \item \textbf{Numer sekwencji.}\\
-        \item \textbf{Długość nagłówka} (przesunięcie danych).\\
+        \item \textbf{Numer sekwencji.}
+        \item \textbf{Długość nagłówka} (przesunięcie danych).
         \item \textbf{Jednobitowe znaczniki} (flagi):
         \item \textbf{Rozmiar okna} - liczba bajtów, które odbiorca może zaakceptować.
-        \item \textbf{Suma kontrolna.}\\
-        \item \textbf{Wskaźnik ważności.}\\
-        \item \textbf{Opcje} - rodzaj opcji (bajt), długość opcji (bajt), opcja. Najważniejsza opcja to \textbf{MSS}. Może być uzyskana jako MTU (Maximum Transmission Unit) minus rozmiar nagłówka IP oraz TCP.
+        \item \textbf{Suma kontrolna.}
+        \item \textbf{Wskaźnik ważności.}
+        \item \textbf{Opcje} - rodzaj opcji (bajt), długość opcji (bajt), opcja. Najważniejsza opcja to \textbf{MSS}. Może być uzyskana jako \textbf{MTU minus rozmiar nagłówka IP oraz TCP}.
     \end{itemize}
 
     \textbf{Specyfika stanu TIME WAIT}\\
@@ -63,16 +62,6 @@
     Jest to połączenie nie poprawnie nawiązane. Występuje, jeśli jedna ze stron przerwała połączenie bez informowania drugiej. Segment z ustawioną na 1 flagą SYN został przesłany od
     klienta do serwera, serwer odpowiedział segmentem z ustawionymi na 1 flagami SYN i ACK,
     ale klient nie odpowiedział segmentem z ustawioną na 1 flagą ACK.
-    Jeden ze sposobów atakowania serwisów (np. WWW) polegał na otwieraniu bardzo dużej
-    liczby połączeń półotwartych. Obecnie implementacje TCP są odporne na tego typu ataki.
-    Dopuszczalne jest, by oprogramowanie realizujące TCP mogło sprawdzać stan połączenia
-    przez okresowe przesyłanie segmentów sprawdzających aktywność. Segment taki to zawiera
-    ustawioną na 1 flagę ACK i nie zawiera żadnych danych. Dodatkowo ma on ustawiony numer
-    sekwencyjny na o 1 mniejszy od tego, którego normalnie spodziewa się strona wysyłająca
-    ACK. Partner odpowiada też segmentem z ustawioną na 1 flagą ACK ze standardowo
-    ustawionymi prawidłowymi wartościami numerów sekwencyjnych.
-
-
 
     \subsubsection{Przepływ danych w TCP}
     \textbf{Potwierdzenia}
@@ -85,8 +74,8 @@
     \textbf{Ruchome okna TCP} (sliding windows)\\
     Połączenie TCP obejmuje dwa strumienie danych. W każdym strumieniu określony jest
     nadawca i odbiorca. Kontrolę przesyłania oktetów w strumieniu umożliwiają mechanizmy
-    tzw. przesuwnych (ruchomych) okien, które można sobie wyobrazić jako nałożone na
-    strumień. Dla strumienia określone jest okno nadawcy oraz okno odbiorcy. Nadawca może
+    tzw. \textbf{przesuwnych okien}, które można sobie wyobrazić jako nałożone na
+    strumień. Dla strumienia określone jest \textbf{okno nadawcy} oraz \textbf{okno odbiorcy}. Nadawca może
     wysyłać tylko te dane, które są w tej chwili w jego oknie nadawczym, przy czym może to
     zrobić tylko za zgodą odbiorcy. Okno nadawcze jest przesuwane nad wyjściowym
     strumieniem bajtów, okno odbiorcze nad strumieniem wejściowym.\\
@@ -95,16 +84,13 @@
     Tak określa się segmenty o rozmiarze mniejszym od MSS.
     \begin{itemize}
         \item \textbf{Algorytm Nagle’a}\\
-        „Dopasowuje się” do sieci, w której przesyłane są segmenty.
-        \begin{itemize}
-            \item małe niepotwierdzone segmenty są gromadzone w buforze, wysyłane razem.
-        \end{itemize}
+        Małe niepotwierdzone segmenty są gromadzone w buforze, wysyłane razem.
         Algorytm Nagle’a może być wyłączany przez oprogramowanie TCP.
         \item \textbf{Syndrom głupiego okna} (SWS)\\
         \begin{itemize}
-            \item Jeśli odbiorca ma zerowy rozmiar okna (i nadawca też) oraz warstwa aplikacji pobierze 1
+            \item Jeśli odbiorca ma \textbf{zerowy rozmiar okna} (i nadawca też) oraz warstwa aplikacji pobierze 1
             bajt, to okno odbiorcze otwiera się o jeden bajt.
-            \item Nadawca unika SWS wstrzymując się z wysyłaniem danych dopóki rozmiar okna proponowanego przez odbiorcę nie jest równy co najmniej MSS.
+            \item Nadawca unika SWS \textbf{wstrzymując się} z wysyłaniem danych dopóki rozmiar okna proponowanego przez odbiorcę nie jest równy \textbf{co najmniej MSS}.
         \end{itemize}
     \end{itemize}
 
@@ -121,7 +107,7 @@
 
 
     \subsubsection{Retransmisje segmentów w TCP}
-    W każdym połączeniu definiowana jest zmienna RTO (Retransmission Time-out). Jeśli TCP nie
+    W każdym połączeniu definiowana jest zmienna \textbf{RTO (Retransmission Time-out)}. Jeśli TCP nie
     odbierze ACK w czasie RTO dla pewnego nadanego segmentu, to segment musi być
     retransmitowany.
 

@@ -69,5 +69,79 @@
     sieci oraz maskę. Obecnie w Internecie powszechnie jest wykorzystywane adresowanie
     bezklasowe.
 
+    \begin{itemize}
+        \item Protokół warstwy trzeciej modelu ISO OSI.
+        \item Oprogramowanie implementujące protokół IP jest odpowiedzialne za:
+        \begin{itemize}
+            \item adresowanie IP,
+            \item tworzenie datagramów IP (pakietów)
+            \item uczestniczenie w kierowaniu ich w sieci z punktu początkowego do punktu docelowego.
+        \end{itemize}
+        \item realizuje usługę zawodną. Jeśli komunikacja powinna zawierać mechanizmy niezawodności, to muszą one być dostarczone przez protokoły warstwy wyższej.
+        \item Datagram IP składa się z nagłówka (header) i bloku danych (payload).
+        \begin{itemize}
+            \item \textbf{Nagłówek} dzięki informacjom w nim zawartym umożliwia obsługę routowania, identyfikację bloku danych, określenie rozmiaru nagłówka i datagramu oraz obsługę fragmentacji. W nagłówku mogą się znaleźć również tzw. opcje rozszerzające. Ma zmienną długość (20 do 60 bajtów, co 4 bajty).
+            \item \textbf{Blok danych} może mieć długość do 65515 bajtów.
+        \end{itemize}
+    \end{itemize}
+
+    \subsection{Nagłówek IPv4}
+    \begin{itemize}
+        \item \textbf{Wersja} (4 bity) (=0100)
+        \item \textbf{Długość nagłówka IP} (IHL – Internet Header Length) (4 bity)
+        \item \textbf{Typ usługi}: TOS (Type of Service) lub DS. (Differentiaded Services) (8 bitów)\\
+        Flagi:
+        \begin{itemize}
+            \item małe opóźnienie
+            \item duża przepustowość
+            \item niezawodność
+        \end{itemize}
+        \begin{itemize}
+            \item Bits 0-5: DCSP (priorytet + flagi)
+            \item Bits 6-7: ECN
+        \end{itemize}
+        ECN jest rozszerzeniem protokołów IP oraz TCP. Umożliwia powiadamianie punktów końcowych IP/TCP o nadchodzącym zatorze bez usuwania pakietów, poprzez ustawienie warość 11 na bitach ECN. Jest opcjonalny.
+
+        \item \textbf{Długość całkowita} (16 bitów)\\
+        Na podstawie tego pola oraz pola Długość nagłówka można określić wielkość bloku danych oraz początek tego bloku.
+        \item \textbf{Identyfikator} (16 bitów)\\
+        Identyfikator kolejnych datagramów. Wartość jest wpisywana przez host nadający i dla kolejnych datagramów jest zwiększana.
+        \item \textbf{Flagi} (3 bity)
+        3 bity tworzące dwie flagi używane przy fragmentacji datagramów.
+        \item \textbf{Przesunięcie fragmentu} (13 bitów)
+        \item \textbf{Czas życia} (TTL) (8 bitów)
+        \item \textbf{Protokół} (8 bitów) - ICMP, UDP, TCP.
+        \item \textbf{Suma kontrolna nagłówka} (16 bitów)
+        \item \textbf{Adres IP źródła} (32 bity)
+        \item \textbf{Adres IP docelowy} (32 bity)
+        \item \textbf{Dodatkowe opcje i wypełnienie} (32 bity + ew. więcej).
+        Opcje mogą zająć maksymalnie 40 bajtów i mogą zawierać m.in.:
+        \begin{itemize}
+            \item zapis trasy przez którą przeszedł datagram
+            \item zapis czasu – timestamp - trasa, czas przejścia.
+            \item routowanie źrodłowe\\
+            Normalnie to routery wybierają dynamicznie trasę datagramów. Można jednak określić trasę datagramu w opcjach nagłówka IP.
+            \begin{itemize}
+                \item  dokładne – wysyłający komputer określa dokładną trasę, jaką musi przejść datagram. Jeśli kolejne routery na tej trasie są przedzielone jakimś innym routerem, to wysyła komunikat ICMP „source route failed” i datagram jest odrzucany.
+                \item swobodne – wysyłający określa listę adresów IP, przez jakie musi przejść datagram, ale datagram może przechodzić również przez inne routery.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    Za nagłówkiem IP w datagramie znajdują się dane (segment TCP, datagram UDP, komunikat ICMP).
+
+    \subsection{Fragmentacja datagramów IPv4}
+    \textbf{MTU} (Maximum Transmission Unit) to największa porcja danych, jaka może być przesłana w ramce przez pewną sieć
+    przy wykorzystaniu konkretnej technologii. Jeśli datagram IP jest większy niż wynika to z MTU dla warstwy łącza, to IP dokonuje \textbf{fragmentacji}.
+    Najmniejsze MTU po drodze przejścia datagramu nazywa się \textbf{ścieżką MTU}.
+    Fragmenty też mogą być dalej dzielone, stają się samodzielnymi pakietami.
+
+    Pole identyfikator w nagłówku IP zawiera numer wysłanego pakietu. Pole powinno być inicjowane przez protokół warstwy wyższej. Warstwa IP zwiększa identyfikator
+    o 1 dla kolejnych pakietów.\\
+
+    Jeśli flaga jest ustawiona na Don't Fragment to znaczy, że pakiet nie może być dzielony. W przypadku konieczności dzielenia jest odrzucany i do nadawcy wysyłany jest
+    komunikat ICMP (typ 3 z polem kod = 4).
+
+    Jeśli zgubiony zostanie chociaż jeden fragment, wówczas cały wyjściowy pakiet jest odrzucony, więc fragmentacja jest niekorzystna.
+    Do tego może ona bardzo obciążać routery.
 
 \end{document}

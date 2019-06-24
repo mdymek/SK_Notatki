@@ -2,19 +2,11 @@
 
 
 \begin{document}
+    Hierarchiczny rozproszony system przechowującym informacje o \textbf{nazwach komputerów} i
+    ich numerach IP, który odpowiada na zapytania o nazwy domen.
 
-    Oprócz adresu IP komputer ma
-    przyporządkowaną \textbf{nazwę}. Konwencje nazywania komputerów:
-    \begin{itemize}
-        \item \textbf{nazwy hosta}
-        \item \textbf{nazwy DNS}
-        \item \textbf{nazwy NetBIOS}
-    \end{itemize}
-
-    Istnieją mechanizmy tłumaczące nazwy na numery IP i odwrotnie.
-    Za koordynację nazw domen i przypisywanie adresów IP jest IANA (Internet Assigned Numbers
-    Authority) działająca pod ICANNem (Internet
-    Corporation for Assigned Names and Numbers).
+    Za koordynację nazw domen i przypisywanie adresów IP jest \textbf{IANA} (Internet Assigned Numbers
+    Authority) działająca pod ICANNem (Internet Corporation for Assigned Names and Numbers).
 
     \textbf{Domeny górnego poziomu}
     \begin{itemize}
@@ -23,15 +15,9 @@
         \item \textbf{Domeny geograficzne} (krajowe, country-code ccTLD), np: pl, uk, de.
     \end{itemize}
 
-    \textbf{Domeny drugiego poziomu} - w wielu krajach domeny drugiego poziomu odzwierciedlają
-    domeny organizacyjne pierwszego poziomu, ale ujmowane na swoim terytorium. Przykłady:
-    edu.pl, com.pl, co.uk, ac.uk.
+    \textbf{Domeny drugiego poziomu} - np: edu.pl, com.pl, co.uk, ac.uk.
 
-    Obszar, inaczej \textbf{strefa} jest częścią systemu DNS, która jest oddzielnie administrowana.
-    Występuje tu delegowanie zarządzania w dół struktury drzewa (dzielenie stref). Jednostka
-    odpowiedzialna za zarządzanie daną strefą decyduje ile będzie serwerów DNS w strefie,
-    rejestruje i udostępnia nazwy i numery IP nowych komputerów zainstalowanych w strefie.
-    W tej chwili jest na świecie 13 (typów) serwerów głównych (najwyższego poziomu).
+    Obszar, inaczej \textbf{strefa} jest częścią systemu DNS, która jest \textbf{oddzielnie administrowana}.
 
     \textbf{Poszukiwania w DNS}
     \begin{itemize}
@@ -45,10 +31,9 @@
 
     \begin{itemize}
         \item \textbf{Serwer podstawowy} pobiera dane z pliku konfiguracyjnego, natomiast serwery
-        drugoplanowe uzyskują dane od serwera podstawowego na drodze tzw. transferu strefy
-        (zone transfer).
+        drugoplanowe uzyskują dane od serwera podstawowego na drodze tzw. transferu strefy.
         \item \textbf{Serwery drugoplanowe} odpytują serwer podstawowy o dane w sposób
-        regularny, zwykle co kilka godzin.
+        regularny.
         \item \textbf{Serwery podręczne} (lokalne), których zadaniem jest zapamiętanie na pewien czas w
         pamięci podręcznej danych uzyskanych od innych serwerów tak, aby kolejne zapytania
         klientów mogły być obsłużone lokalnie.
@@ -70,11 +55,6 @@
     wysyłane jest zapytanie do pierwszego serwera DNS (adres w pliku
     konfiguracyjnym).
 
-    \textbf{Standardowy sposób poszukiwania}\\
-    Klient pyta swój domyślny serwer DNS wysyłając zapytanie rekurencyjne.
-    Odpytany serwer realizuje zapytania iteracyjne, zaczynając od serwerów głównych, które
-    odsyłają do serwerów niższego poziomu. Serwery zapamiętują cache z innych serwerów więc mechanizm jest efektywny.
-
     \textbf{Dynamiczny DNS (DDNS)}\\
     Chyba najważniejsze wpisy w DNS dotyczą serwisów, np. www. Standardowo DNS obsługuje
     odwzorowanie nazw do statycznych adresów IP, można skonfigurować dynamiczne przez usługodawców,
@@ -84,15 +64,15 @@
     zmianach adresu IP.
 
     \subsection{Rekordy zasobów}
-    Każdy serwer DNS przechowuje informacje o tej części obszaru nazw DNS, dla której jest
-    autorytatywny. Informacje
+    Każdy serwer DNS przechowuje \textbf{informacje o tej części obszaru nazw DNS, dla której jest
+    autorytatywny}. Informacje
     zapisywane są w postaci tzw. rekordów zasobów. Są to np: określenie adresu IPv4/6 dla hosta; nazwę kanoniczną jako nazwę domeny,
     rekord wymiany poczty.
     Dla zwiększenia wydajności serwer DNS może przechowywać również rekordy zasobów
     domen z innej części drzewa domen.
 
     \subsection{DHCP - Dynamic Host Configuration Protocol}
-    Serwer DHCP przydziela adresy IP dynamicznie.
+    Serwer DHCP \textbf{przydziela adresy IP dynamicznie}.
     Przydział dynamiczny numerów IP umożliwia pracę (ale nie jednoczesną) wielu komputerów z
     przydzielonym jednym numerem IP.
 
