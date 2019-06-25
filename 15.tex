@@ -59,29 +59,21 @@
     warstwy trzeciej nie ma pełnej funkcjonalności routera. Ograniczenia dotyczą m.in.
     translacji adresów (NAT), implementacji mechanizmów bezpieczeństwa czy niestandardowych
     protokołów. Przełącznik warstwy trzeciej jest zazwyczaj droższy i szybszy w działaniu
-    niż router. Wykonują routowanie między VLANAMI.
+    niż router. \textbf{Wykonują routowanie między VLANAMI.}
 
-    \textbf{VLAN} - wirtualne sieci LAN tworzone są przy pomocy przełączników. Przez
-    odpowiednią konfigurację portów w przełącznikach można tworzyć podsieci. Sieci VLAN są
+    \textbf{VLAN} - wirtualne sieci LAN tworzone są przy pomocy przełączników. Są
     konfigurowane programowo, zatem ewentualne zmiany konfiguracji nie wymagają zmian w
     okablowaniu. Komputery z każdej utworzonej sieci wirtualnej nie muszą być dołączone
     bezpośrednio do jednego przełącznika. Urządzenia należące do jednej sieci wirtualnej
-    mogą się ze sobą komunikować tak jakby były w jednym segmencie sieci LAN. W całym takim
-    segmencie na przykład działa protokół ARP. Natomiast komunikacja między sieciami
-    wirtualnymi wymaga routera(może to robić przełącznik 3 warstwy). Musi mieć IP.
+    mogą się ze sobą komunikować tak jakby były w jednym segmencie sieci LAN, działa np. ARP.
 
-    \textbf{Trunk} - Połączenia między przełącznikami są określane jako „trunk”.
+    \textbf{Trunk} - \textbf{połączenia między przełącznikami}.
     Połączenie typu trunk umożliwia przekazywanie ramek należących do różnych sieci VLAN
-    po jednym fizycznym nośniku. Za kontrolę połączenia trunk odpowiada protokół VTP
+    po jednym fizycznym nośniku. Za kontrolę połączenia trunk odpowiada \textbf{protokół VTP}
     (VLAN Trunking Protocol). Łączenie danych w jeden wspólny kanał, w którym przesyłane
-    są dane. Konfigurowanie portu jako wspólnego (trunk) i przypisaniu do niego wszystkich
-    lub odpowiednich VLAN-ów. Spowoduje to, w zależności od zastosowanej technologii,
-    oznaczenie (tagowanie) lub kapsułkowanie ramek ethernetowych.
+    są dane.
 
     \textbf{VTP - Virtual Trunking Protocol} - umożliwia zautomatyzowaną konfigurację
     wielu przełączników z jednego miejsca na drodze wymiany odpowiednich ramek z
-    sąsiadującymi przełącznikami. Przełącznik można skonfigurować jako serwer VTP,
-    klient VTP lub „transparent VTP”. Jeden serwer reszta klienci
-
-
+    sąsiadującymi przełącznikami.
 \end{document}

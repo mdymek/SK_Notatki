@@ -1,0 +1,36 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+    \textbf{Gniazda} - to \textbf{abstrakcyjne} mechanizmy umożliwiające wykonywanie systemowych
+    \textbf{funkcji wejścia–wyjścia} w odniesieniu do sieci. Umożliwiają między innymi
+    \textbf{przesyłanie danych między procesami} działającymi na komputerach w sieci z wykorzystaniem
+    połączeń TCP lub protokołu UDP, przy czym same operacje wysyłania i odbierania danych
+    przypominają zwykłe operacje zapisywania i odczytu z pliku.
+
+
+    \begin{itemize}
+        \item \textbf{Iteracyjne} - takie które kolejkują klientów.
+        \item \textbf{Współbieżne} - starają się od razu wszystko równolegle obsłużyć.
+    \end{itemize}
+
+    Programowanie w skrócie:
+    \begin{itemize}
+        \item Struktura \textbf{socaddr\_in}
+        \begin{itemize}
+            \item \textbf{długość} struktury,
+            \item \textbf{typ adresu} (AF\_INET),
+            \item \textbf{nr portu},
+            \item struktura z \textbf{adresem} urządzenia.
+        \end{itemize}
+        \item Klient uzupełnia socaddr\_in danymi serwera.
+        \item Wywołuje funkcję \textbf{socket} podając jej:
+        \begin{itemize}
+            \item \textbf{typ adresu} (AF\_INET),
+            \item \textbf{typ gniazda} - datagramowe (UDP) lub streamowe (TCP)
+        \end{itemize}
+        \item \textbf{(przy TCP)} Przekazuje to co zwrócił socket (\textbf{deskryptor gniazda}) i strukturę socaddr\_in do funkcji \textbf{connect} i tworzy połączenie
+        \item Używa socketa jak \textbf{pliku} - zwykłe pisanie i czytanie.
+    \end{itemize}
+
+\end{document}

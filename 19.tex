@@ -1,0 +1,34 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+    \begin{itemize}
+        \item \textbf{Border Gatewqat Protocol} -  protokół routingu \textbf{między systemami autonomicznymi} AS
+        \item główną funkcją \textbf{routera BGP} jest wymiana informacji o \textbf{osiągalności sieci} w Internecie z sąsiednimi routerami BGP w innym AS
+        \item działa na \textbf{niezawodnym} protokole transportowym jakim jest \textbf{TCP}
+        \item dwa routery z BGP zestawiają między sobą \textbf{połączenie TCP}. Wymieniają między sobą \textbf{wiadomości dla otwarcia i potwierdzenia} parametrów \textbf{połączenia}.
+        \item na początku wymiana cały tabel routingu, potem trigger updates
+        \item routery BGP okresowo wysyłają między sobą wiadomości \textbf{KeepAlive}, by upewnić się o \textbf{żywotności połączenia}
+        \item Wysyłane są też wiadomości \textbf{Notification} w odpowiedzi na wszelkie \textbf{błędy} i wyjątkowe sytuacje w routerach BGP. Po wysłaniu Notification o błedzie i połączenie między dwoma peerami BGP jest \textbf{zamykane}.
+    \end{itemize}
+
+    \textbf{Typy wiadomości BGP}
+    \begin{itemize}
+        \item \textbf{OPEN} - rozpoczęcie sesji
+        \item \textbf{UPDATE} - informacje o routingu
+        \item \textbf{NOTIFICATION} - wiadomość o błędzie
+        \item \textbf{KEEPALIVE} - sprawdzenie żywotności połączenia
+        \item \textbf{ROUTE-REFRESH} - dynamiczne żądania odświeżenia tras
+    \end{itemize}
+
+    \textbf{Zestawienie sesji BGP}
+    \begin{itemize}
+        \item \textbf{IDLE} - router oczekuje na zdarzenie Start - chęć parowania
+        \item \textbf{CONNECT} - próba nawiązania nowej sesji TCP; OPENSENT jeśli sukces, ACTIVE wpp
+        \item \textbf{ACTIVE} - routery nadal próbują nawiązać sesję TCP; OPENSENT jeśli sukces, IDLE wpp
+        \item \textbf{OPENSENT} - parowanie routerów; OPENCONFIRM jeśli ok
+        \item \textbf{OPENCONFIRM} - potwierdzenie parowania
+        \item \textbf{ESTABLISHED} - parowanie zakończone
+    \end{itemize}
+
+\end{document}

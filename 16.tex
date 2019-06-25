@@ -7,31 +7,29 @@
     \begin{itemize}
         \item liczba lub kilka liczb, składająca się z kilkudziesięciu do kilku tysięcy bitów
         \item służy do szyfrowania i odszyfrowywania rzeczy
-        \item teoretycznie możliwy do złamania brute forcem (w praktyce niezbyt)
         \item różne algorytmy szyfrowania
         \begin{itemize}
-            \item Szyfrowanie z kluczem symetrycznym\\
-            Szyfrowanie dużych porcji danych przy użyciu jednego klucza ułatwia złamanie
-            szyfru. Dlatego klucz symetryczny powinien być zmieniany. Może być przesłany zaszyfrowany przy pomocy techniki z kluczem
-            publicznym i prywatnym. Można generować oddzielne klucze sesji i szyfrować je
-            wcześniej uzgodnionym tajnym kluczem symetrycznym. Klucze symetryczne mogą być też
-            zmieniane co określony czas lub co określoną liczbę bajtów, z użyciem specjalnych
-            protokołów.
+            \item \textbf{Szyfrowanie z kluczem symetrycznym}\\
             \begin{itemize}
-                \item Data Encryption Standard DES, 3DES
-                \item RC - szyfr strumieniowy wykorzystywany w szyfrowaniu ramek w sieciach bezprzewodowych WiFi/WPA
-                \item Advanced Encryption Standard AES - szyfr blokowy, np WPA2
+                \item \textbf{Teoretycznie możliwy do złamania} brute forcem (w praktyce niezbyt).
+                \item Szyfrowanie dużych porcji danych przy użyciu jednego klucza ułatwia złamanie
+                szyfru, dlatego klucz symetryczny \textbf{powinien być zmieniany}.
+                \item Może być przesłany zaszyfrowany przy pomocy techniki z kluczem
+                publicznym i prywatnym.
+                \item Można generować oddzielne klucze sesji i szyfrować je
+                wcześniej uzgodnionym tajnym kluczem symetrycznym. Klucze symetryczne mogą być też
+                zmieniane co określony czas.
+                \item Algorytmy szyfrujące używające klucza symetrycznego: DES, 3DES, RC (WiFi/WPA), AES (WPA2)
             \end{itemize}
-            \item Szyfrowanie z kluczem asymetrycznym
+            \item \textbf{Szyfrowanie z kluczem asymetrycznym}
             \begin{itemize}
-                \item Szyfrowanie i odszyfrowanie jest tu realizowane przy pomocy pary kluczy - prywatnym
-                (tajnym) i publiczny (znany). Jeden szyfruje, drugi odszyfrowywuje.
-                \item Odgadnięcię jednego z kluczy praktycznie niemożliwe nawet przy znajomości drugiego
-                \item Szyfrujemy coś czyimś kluczem publicznym, by tylko ten ktoś mógł to odszyfrować (swoim kluczem prywatnym)
-                \item wielokrotnie kosztowniejsze
-                czasowo od szyfrowania z kluczem symetrycznym
-                \item używane do uzgodnienia kluczy symetrycznych
-                \item algorytm RSA
+                \item Szyfrowanie i odszyfrowanie jest tu realizowane przy pomocy pary kluczy - \textbf{prywatnego
+                i publicznego}. Jeden szyfruje, drugi odszyfrowywuje.
+                \item \textbf{Odgadnięcie} jednego z kluczy \textbf{praktycznie niemożliwe} nawet przy znajomości drugiego.
+                \item Szyfrujemy coś czyimś kluczem publicznym, by tylko ten ktoś mógł to odszyfrować (swoim kluczem prywatnym).
+                \item Wielokrotnie \textbf{kosztowniejsze czasowo} od szyfrowania z kluczem symetrycznym.
+                \item Używane do uzgodnienia kluczy symetrycznych.
+                \item Algorytm RSA.
             \end{itemize}
         \end{itemize}
 
@@ -39,31 +37,29 @@
 
     \subsubsection{Skrót (hash)}
     \begin{itemize}
-        \item skrót wiadomości w podpisach cyfrowych, tworzony za pomocą funkcji haszujacej
+        \item \textbf{Skrót wiadomości} w podpisach cyfrowych, tworzony za pomocą funkcji haszujacej.
         \item 128 bitów (MD5), 160 bitów(SHA-1), 224-512 bitów (rodzina SHA-2)
-        \item jeśli w oryginalnej wiadomości (pliku)
-        zmieniony zostanie chociaż jeden bit, to skrót będzie zupełnie inny niż ten, który został
+        \item Jeśli w oryginalnej wiadomości (pliku)
+        zmieniony \textbf{zostanie chociaż jeden bit, to skrót będzie zupełnie inny} niż ten, który został
         utworzony przed zmianą.
-        \item  Algorytmy haszujące są deterministyczne,
-        \item odtworzenie oryginalnej wiadomości ze skrótu jest prawie niemożliwe
+        \item \textbf{Algorytmy haszujące są deterministyczne}.
+        \item \textbf{Odtworzenie} oryginalnej wiadomości ze skrótu jest \textbf{prawie niemożliwe}.
     \end{itemize}
-
 
 
     \subsubsection{Podpis cyfrowy}
     \begin{itemize}
-        \item Zaszyfrowanie kluczem prywatnym daje gwarancję, że zaszyfrowana wiadomość pochodzi z
-        odpowiedniego źródła
+        \item Zaszyfrowanie kluczem prywatnym daje \textbf{gwarancję}, że zaszyfrowana wiadomość \textbf{pochodzi z
+        odpowiedniego źródła}.
         \item Samej podpisywanej wiadomości nie musi się szyfrować. Generowany jest jej skrót
-        i ten skrót szyfrowany jest z wykorzystaniem klucza
-        prywatnego osoby podpisującej. Zaszyfrowany skrót stanowi podpis cyfrowy. Niezaszyfrowana wiadomość może być przesłana jawnie razem z zaszyfrowanym skrótem
+        i ten \textbf{skrót jest szyfrowany} z wykorzystaniem klucza
+        \textbf{prywatnego} osoby \textbf{podpisującej}. Zaszyfrowany skrót stanowi podpis cyfrowy.
+        Niezaszyfrowana wiadomość może być przesłana jawnie razem z zaszyfrowanym skrótem
         (czyli podpisem cyfrowym).
-        \item Odbiorca odszyfrowuje skrót używając klucza
-        publicznego nadawcy. Potem tworzy skrót wiadomości używając tej samej funkcji haszującej. Jeśli wyniki
+        \item Odbiorca \textbf{odszyfrowuje} skrót używając klucza
+        \textbf{publicznego nadawcy}. Potem tworzy skrót wiadomości używając tej samej funkcji haszującej. Jeśli wyniki
         obu operacji są identyczne, to znaczy, że wiadomość na pewno
         podpisał określony nadawca, a ponadto nikt po tej wiadomości nie zmienił już po podpisaniu.
-        \item Po podpisaniu dodatkowo możemy wiadomość zaszyfrować, ale to nie
-        należy już do samego podpisu.
     \end{itemize}
 
     \subsubsection{Klucze publiczne i prywatne, infrastruktura kluczy publicznych}
@@ -82,8 +78,7 @@
             \item Podpis cyfrowy wydawcy
         \end{itemize}
         \item Jeśli ufamy danemu CA, to ufamy, że zawarty w certyfikacie klucz publiczny jest rzeczywiście prawdziwy.
-        W systemach operacyjnych oraz różnych programach
-        jest wpisana lista zaufanych CA.
+        W systemach operacyjnych oraz różnych programach jest wpisana lista zaufanych CA.
         Zarządzanie centrum certyfikacyjnym jest realizowane na przez konsolę MMC.
         \item Niezależnym standardem opisującym tworzenie kluczy, rejestrowanie i wykorzystywanie
         certyfikatów jest PGP (Pretty Good Privacy). Powstał standard Open PGP.

@@ -1,515 +1,160 @@
+\documentclass[../main.tex]{subfiles}
+
 
 \begin{document}
-
-    Potrzeba zwiększenia liczby adresów wynika z rosnącej liczby komputerów i innych urządzeń
-    podłączonych do Internetu (komputery PDA, telefony komórkowe, różne urządzenia z
-    „inteligentnego” domu). Jeśli urządzenia te miałyby korzystać z IP to być może IPv4 będzie
-    niewystarczający, mimo stosowania translacji adresów (NAT) czy DHCP.
-    Zanim wprowadzono routowanie bezklasowe, które powoduje lepsze wykorzystanie
-    przestrzeni adresowej i zanim wprowadzono translację adresów i adresy prywatne, były
-    przewidywania, że do końca lat 90-tych ubiegłego wieku adresy IPv4 zostaną wyczerpane
-    (niektóre opracowania mówiły o 2005-2010). Wprowadzenie wspomnianych rozwiązań
-    odsunęło bezwzględną konieczność stosowania IPv6 na nieco dalszą przyszłość. Ze względu
-    na niekompatybilność IPv6 z IPv4 powszechne przejście na nową wersję nie jest jeszcze
-    realizowane.
-    W IPv6 rozmiar adresu wzrasta z 32 bitów do 128 bitów (liczba adresów rośnie do
-    maksymalnie 3,4*10 38, są to tysiące unikalnych adresów na każdy metr kwadratowy kuli
-    ziemskiej).
-    W rzeczywistości jednak powody, dla których powszechne wprowadzenie IPv6 wydaje się
-    być nieuchronne są też inne niż zwiększona przestrzeń adresowa. Prześledźmy najważniejsze
-    cechy IPv6.
-
-
-    Cechy IPv6 w odniesieniu do IPv4
     \begin{itemize}
-        \item Dłuższe adresy, a zatem dużo większa przestrzeń adresowa (zakres dopuszczalnych
-        adresów).
-        \item Złożona hierarchia adresów. W IPv4 hierarchia adresów dotyczy tylko sieci i podsieci, ale
-        nie ma gwarancji, że adresy np. 149.167.0.0/16 i 149.168.0.0/16 należą do tego samego
-        dostawcy (i są ulokowane niedaleko w sensie geograficznym). Zatem w IPv4 jest trudniej
-        wpisywać zsumowane trasy w routerach (trasy do wielu sieci). W IPv6 wprowadza się
-        hierarchię adresów, która znacznie ułatwia routowanie (zapis sumarycznych tras do wielu
-        sieci).
-        \item Nowa forma nagłówka – podstawowy nagłówek jest uproszczony, zawiera 40 oktetów,
-        dodatkowe informacje przekazywane są za pomocą dodatkowych nagłówków (mogą
-        mieć inną wielkość). Wymagany jest jedynie nagłówek podstawowy, dodatkowe są
-        opcjonalne. W nagłówkach dodatkowych mogą być informacje o trasowaniu,
-        fragmentacji, szyfrowaniu, kontroli autentyczności i integralności. Uproszczona forma
-        nagłówka powoduje przyśpieszenie operacji w routerach. Wprawdzie podstawowy
-        nagłówek jest większy niż w IPv4 (tam zajmował 20 bajtów), lecz w IPv4 cały nagłówek
-        ma zmienną długość (od 20 do 60 bajtów) ze względu na możliwość umieszczenia w nim
-        opcji. W IPv6 w przypadku nagłówka podstawowego pobieranych jest zawsze 40 bajtów,
-        operacja może być wykonywana szybciej sprzętowo. W IPv6 poza adresami źródłowym i
-        docelowym jest tylko osiem bajtów innych informacji. Ewentualne inne informacje mogą
-        być przesyłane w załączonych nagłówkach dodatkowych, które mogą nie być w ogóle
-        przetwarzane przez routery pośrednie, ich przetwarzanie jest realizowane dopiero w
-        komputerze docelowym. Ponadto umieszczenie dodatkowych informacji w nagłówkach
-        dodatkowych a nie w nagłówku podstawowym ułatwia rozszerzanie protokołu i
-        wprowadzanie nowych opcji i nagłówków w przyszłości.
-        \item Fragmentacja realizowana jest nie przez routery pośrednie (jak w IPv4), ale przez
-        nadawcę, który musi określić MTU (Maximum Transfer Unit) na drodze datagramu IP
-        (inaczej: pakietu). Procedura wyznaczenia MTU jest nazywana Path MTU Discovery.
-        Celem przesunięcia zadania fragmentacji na nadawcę jest odciążenie routerów. W
-        przypadku decyzji (w pewnym routerze) o przesyłaniu datagramu trasą o mniejszym MTU
-        niż wielkość datagramu IPv6, datagram jest odrzucany (przez ten router) i odpowiedni
-        komunikat ICMPv6 (Packet Too Big) jest wysyłany do nadawcy (komunikat ten zawiera
-        poprawną wartość MTU). Nadawca musi powtórzyć przesłanie z odpowiednim MTU.
-        Proces ten teoretycznie może nastąpić wielokrotnie na drodze datagramu, jednak w
-        praktyce powinien wystąpić rzadko. Protokoły (implementacje protokołów) warstw
-        wyższych (np. TCP) są powiadamiane o nowej wartości MTU i powinny ją uwzględnić.
-        Jeśli jednak nie uwzględnią (czyli będą dalej przesyłać np. za duże segmenty TCP),
-        wówczas komputer źródłowy będzie wykonywał fragmentację zbyt dużych pakietów.
-        \item IPv6 zawiera rozwinięte mechanizmy autokonfiguracji.
-        \item IPv6 zawiera ulepszone mechanizmy obsługi rozgłaszania grupowego (multicast) oraz
-        nowy rodzaj adresowania – adresy pobliskie anycast (przesłanie do jednego – na ogół
-        najbliższego – routera skonfigurowanego do odbierania określonego adresu typu
-        anycast).
-        \item IPv6 zawiera mechanizmy wsparcia dla urządzeń mobilnych.
-        \item Do IPv6 włączone są mechanizmy bezpieczeństwa. Jest wparcie dla szyfrowania, kontroli
-        integralności i autentyczności przesyłanych danych (włączony standard IPSec).
-        \item Wsparcie dla QoS (Quality of Service) – jest to mechanizm rezerwacji zasobów na
-        potrzeby komunikujących się programów. Mechanizm umożliwia routerowi wiązanie
-        każdego datagramu z podaną rezerwacją zasobów. Wprowadza się pojęcie potoku (flow),
-        oznaczające ścieżkę przez intersieć, na której routery gwarantują określoną jakość usługi,
-        np. programy przesyłające wideo mogą ustanowić potok, w ramach którego mają
-        gwarantowaną określoną przepustowość i opóźnienie. Można również określać priorytet
-        pakietów uwzględniany przy odrzucaniu pakietów wskutek przeciążenia (congestion) na
-        routerze.
+        \item \textbf{dłuższy adres} - 128 bitów
+        \item \textbf{złożona hierarchia adresów}.
+        \item nowa forma nagłówka
+        \begin{itemize}
+            \item \textbf{podstawowy nagłówek} jest uproszczony - zawiera 40 oktetów
+            \item dodatkowe informację przekazywane są za pomocą \textbf{dodatkowych nagłówków}, które są opcjonalne
+            \item dzięki temu router szybciej jest w stanie przetworzyć pakiet
+            \item takie rozwiązanie daje więcej możliwości rozszerzenia protokołu
+        \end{itemize}
+        \item \textbf{fragmentacja} jest \textbf{realizowana przez nadwacę}, nie przez routery pośrednie (jak w IPv4)
+        \item zawiera rozwinięte mechanizmy \textbf{autokonfiguracji}
+        \item zawiera ulepszone mechanizmy obsługi rozgłaszania grupowego (\textbf{multicast}) oraz nowy rodzaj adresowania – adresy pobliskie \textbf{anycast} (przesłanie do jednego – na ogół najbliższego – routera skonfigurowanego do odbierania określonego adresu typu anycast)
+        \item włączone są \textbf{mechanizmy bezpieczeństwa} (włączony standard \textbf{IPSec}).
+        \item Wsparcie dla \textbf{QoS} (Quality of Service) – mechanizm rezerwacji zasobów na potrzeby komunikujących się programów
     \end{itemize}
 
-    \textbf{Struktura nagłówka IPv6}
-    Pięć pól z nagłówka IPv4 zostało usuniętych:
-    długość nagłówka,
-    identyfikacja, flagi, przesunięcie fragmentu (te trzy pola były używane przy fragmentacji),
-    suma kontrolna nagłówka.
-
-    \textbf{Pola nagłówka IPv6}
-
+    \subsection{Nagłówek IPv6}
     \begin{tabular}{|c|c|}
         \hline
-        Version & 4 bity, wersja protokołu, wpisana jest liczba 6\\
-
+        \textbf{Version} &
+        wersja protokółu (6)\\
         \hline
-        Traffic Class & 1 bajt, używana do określenia priorytetu pakietów IPv6.\\
-
+        \textbf{Traffic Class} &
+        używana do określenia priorytetu pakietu\\
         \hline
-        Flow Label & 20 bitów, używane do etykietowania pakietów wymagających takieg o
-        samego traktowania przez routery. Przyśpiesza obsługę strumienia
-        (potoku, ang. flow) datagramów, które muszą być dostarczone w czasie
-        rzeczywistym (np. wideo), w kolejnych datagramach ze strumienia (za
-        pierwszym) nagłówki nie muszą być przetwarzane pod kątem
-        określania jakości przesyłania.\\
 
-        \hline
-        Payload Length & 2 bajty, wielkość danych za nagłówkiem, obejmuje też nagłówki
-        dodatkowe. Normalnie daje to możliwości przesyłania 64 kB danych,
-        ale IPv6 daje możliwość tworzenia tzw. Jumbgrams – datagramów
-        większych, które wymagają specjalnego nagłówka dodatkowego
-        Jumbogram Extension header.\\
+        \textbf{Flow Label} &
+        etykietowanie pakietów wymagających takiego samego
 
+        traktowania przez routery\\
         \hline
-        Next Header & 1 bajt, identyfikuje typ następnego nagłówka, np. TCP, UDP lub
-        nagłówka dodatkowego IPv6.\\
 
-        \hline
-        Hop Limit & 1 bajt, TTL.\\
+        \textbf{Payload Length} &
+        wielkość danych za nagłówkiem,
 
+        obejmuje też nagłówki dodatkowe\\
         \hline
-        Source Address & 16 bajtów, adres źródłowy.\\
 
+        \textbf{Next Header} &
+        identyfikuje typ następnego nagłówka, np. TCP, UDP
+
+        lub nagłówka dodatkowego IPv6\\
         \hline
-        Destination Address & 16 bajtów, adres docelowy. W IPv6 to pole czasami może nie zawierać
-        ostatecznego adresu przeznaczenia – jeśli został załączony dodatkowy
-        nagłówek typu Routing\\
+
+        \textbf{Hop Limit} &
+        TTL (Czas życia pakietu)\\
+        \hline
+
+        \textbf{Source Address} &
+        adres źródłowy\\
+        \hline
+
+        \textbf{Destination Address} &
+        adres docelowy (puste jeśli został
+
+        załączony dodatkowy nagłówek typu Routing)\\
         \hline
     \end{tabular}
 
 
-    \textbf{Nagłówki dodatkowe IPv6 (Extension headers)}
-
-    W datagramie IPv6 może być zero lub więcej nagłówków dodatkowych za nagłówkiem
-    podstawowym a przed przesyłanymi danymi (np. segmentem TCP). Typ nagłówka
-    dodatkowego jest określony w polu Next Header w nagłówku poprzedzającym. Nagłówki
-    dodatkowe są sprawdzane i przetwarzane przez węzeł (router, host) o adresie zawartym w
-    polu Destination Address w nagłówku podstawowym. W przypadku transmisji grupowej
-    (multicast) nagłówki dodatkowe są sprawdzane i przetwarzane przez wszystkie węzły
-    należące do grupy.
-    Jeśli nagłówek jest typu Hop-by-hop Options header, informacje które przenosi muszą być
-    przeanalizowane przez każdy węzeł na drodze datagramu. Taki nagłówek musi być
-    umieszczony zawsze bezpośrednio za nagłówkiem podstawowym.
-    Wielkość nagłówka dodatkowego jest zawsze wielokrotnością 8 bajtów.
-    Nagłówki dodatkowe muszą być sprawdzane i przetwarzane dokładnie w kolejności
-    występowania.
-    Jeśli węzeł musi przetworzyć nagłówek dodatkowy, ale nie może rozpoznać poprawnej liczby
-    w polu Next Header, powinien odrzucić datagram i wysłać komunikat ICMPv6 Parameter
-    Problem.
-
-    Jeśli więcej niż jeden nagłówek jest przesyłany, to kolejność musi być taka:
+    \subsubsection{Dodatkowe nagłówki}
     \begin{itemize}
-        \item IPv6 header (nagłówek podstawowy).
-        \item Hop-by-hop Options header (jest używany przez routery np. w protokole RVSP – Resource
-        Reservation Protocol, w protokole MLD – Multicast Listener Discovery, w jumbogramach).
-        \item Destination Options header, jeśli użyty jest nagłówek dodatkowy Routing. Służy do
-        przekazania opcji, które będą przetwarzane przez węzeł o adresie zawartym w polu
-        Destination Address w nagłówku podstawowym oraz przez węzły o adresach
-        wymienionych w nagłówku dodatkowym typu Routing.
-        \item Routing header (typ 0 – odpowiednik routowania źródłowego z IPv4 oraz typ 2 –
-        wykorzystywany do obsługi mobilności do przekazania Home Address mobilnego węzła
-        docelowego).
-        \item Fragment header.
-        \item Authentication header.
-        \item Encapsulating Security Payload header.
-        \item Destination Options header (wykorzystywany dla opcji, które będą przetwarzane tylko
-        przez ostatecznego odbiorcę pakietu, wykorzystywany w mobilnym IP do przekazania
-        źródłowego adresu home).
-        \item Mobility header (wykorzystywany do obsługi mobilności, przy zgłaszaniu ).
-        \item Upper-Layer header (np. TCP, UDP).
+        \item \textbf{typ} nagłówka dodatkowego jest określony w polu \textbf{Next Header} w nagłówku poprzedzającym
+        \item nagłówki dodatkowe są sprawdzane i \textbf{przetwarzane przez węzeł} (router, host) o adresie zawartym w polu \textbf{Destination Address} w nagłówku podstawowym
+        \item nagłówki dodatkowe muszą być \textbf{sprawdzane i przetwarzane dokładnie w kolejności występowania}
+        \item jeśli węzeł musi przetworzyć nagłówek dodatkowy, ale nie może rozpoznać poprawnej liczby w polu Next Header, powinien odrzucić datagram i wysłać komunikat ICMPv6 Parameter Problem
     \end{itemize}
 
-    Przykłady pakietów IPv6:
-
-    \begin{tabular}{|c|c|}
-        \hline
-        Nagłówek
-        postawowy
-        IPv6,
-        Next header =
-        6 (TCP)
-        &
-        Nagłówek TCP
-        wraz z danymi
-        (segment TCP)\\
-        \hline
-    \end{tabular}
-
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Nagłówek
-        postawowy
-        IPv6,
-        Next header =
-        43 (Routing)
-        &
-        Nagłówek
-        Routing,
-        Next header =
-        6 (TCP)
-        &
-        Nagłówek TCP
-        wraz z danymi\\
-        \hline
-    \end{tabular}
-
-    \begin{tabular}{|c|c|c|c|}
-        \hline
-        Nagłówek
-        postawowy
-        IPv6,
-        Next header =
-        43 (Routing)
-        &
-        Nagłówek
-        Routing,
-        Next header =
-        44 (Fragment)
-        &
-        Fragment
-        header,
-        Next header =
-        6 (TCP)
-        &
-        Nagłówek TCP
-        wraz z danymi\\
-    \end{tabular}
-
-
-    \textbf{Routing header}
-    Routing header jest używany do określenia listy routerów, przez które powinien przejść
-    pakiet na drodze do miejsca przeznaczenia. Odpowiada to opcjom routowania źródłowego.
-    Struktura nagłówka typu Routing:
-
-    Next header (1 bajt)
-    Header Extension Length (1 bajt) – podaje wielkość tego nagłówka w jednostkach 8-
-    bajtowych, pierwsze 8 bajtów nie jest wliczane.
-    Routing Type (1 bajt)
-    Segments Left (1 bajt) – wartość pola określa przez ile węzłów datagram ma jeszcze przejść
-    zanim osiągnie ostateczne miejsce przeznaczenia.
-    Type-Specific Data – zależy od typu nagłówka Routing. Dla typu zero zawiera adresy IPv6
-    routerów, przez które datagram musi przejść. Dla typu 2 (wykorzystywanego w mobilnym
-    IPv6) zawiera tzw. Home Address urządzenia mobilnego. To pole ma zawsze taką długość, by
-    całkowita długość nagłówka była wielokrotnością liczby 8.
-    Pierwszy węzeł, który przetwarza nagłówek Routing to węzeł (router), którego adres
-    znajduje się w polu Destination Address nagłówka podstawowego. Węzeł ten zmniejsza o
-    jeden liczbę zawartą w polu Segments Left i przepisuje następny adres z nagłówka Routing
-    do pola Destination nagłówka podstawowego. Ostateczne miejsce docelowe datagramu jest
-    określone przez ostatni adres w nagłówku Routing. Jak widać, w odróżnieniu od IPv4, w IPv6
-    adres docelowy może się zmieniać na drodze datagramu – jeśli wykorzystywany jest
-    nagłówek dodatkowy Routing.
-
-
-    \textbf{Fragment header}
-    Fragmentacja występuje tylko w węźle źródłowym. Pakiet ma część, która nie podlega
-    fragmentacji – jest to podstawowy nagłówek i wszystkie nagłówki dodatkowe, które muszą
-    być przetwarzane na drodze datagramu. Część, która podlega fragmentacji składa się z
-    pozostałych nagłówków dodatkowych, nagłówka warstwy wyższej i danych. Część nie
-    podlegająca fragmentacji jest na początku każdego fragmentu, potem jest nagłówek
-    Fragment, potem część fragmentowana.
-
-
-    \subsection{Adresy IPv6}
-
-    Adresację IPv6 omawia RFC 4291 (IP Version 6 Addressing Architecture)
-    Tekstowe przedstawianie adresów IPv6
-    Osiem 16 bitowych sekcji w zapisie szesnastkowym, oddzielonych dwukropkami, np.:
-    fe80:0000:0000:0000:0202:b3ff:fe1e:8329
-    Jeśli w jakiejś sekcji są zera na najstarszych bitach, to nie muszą być wypisywane, np.:
-    fe80: 0:0:0:202:b3ff:fe1e:8329
-    Długi ciąg zer może być połączony i przedstawiony jako dwa dwukropki „::”. Symbol „::”
-    może być użyty w adresie tylko jeden raz.
-    Na przykład:
-    fe80::202:b3ff:fe1e:8329
-    Adres
-    2002:ca01:0000:0000:0056:0000:0000:1234
-    może być przedstawiony jako
-    2002:ca01::0056:0000:0000:1234
-    lub
-    2002:ca01:0000:0000:0056::1234
-    ale niepoprawny jest następujący zapis:
-    2002:ca01::0056::1234
-
-    W środowisku z węzłami IPv4 oraz IPv6 mogą być w użyciu adresy IPv6, które na ostatnich
-    czterech bajtach zawierają adres IPv4. Wówczas sześć bardziej znaczących sekcji 16-bitowych
-    przedstawianych jest heksadecymalnie, pozostałe 32 bity mogą być przedstawione w postaci
-    dziesiętnej notacji kropkowej.
-    Są dwa typy takich adresów.
-    Typ 1: IPv4-Compatible IPv6 Address
-    96 bitów zero + adres IPv4
-    Przykłady
-    Adres 192.168.0.2 może być zapisany jako:
-    0:0:0:0:0:0:192.168.0.2
-    lub
-    ::192.168.0.2
-
-    Drugi typ to IPv4-Mapped IPv6 Address i ten jest obecnie zalecany.
-    Adres taki ma format:
-    0000..............................0000 ffff + IPv4 address
-
-
-
-    \textbf{Proponowana forma kanoniczna tekstowej reprezentacji adresów IPv6}
-    Różne sposoby prezentacji tego samego adresu sprawiają jednak wiele kłopotów. Z tego
-    powodu w sierpniu 2010 opublikowano RFC5952 („A Recommendation for IPv6 Address Text
-    Representation”), który określa zalecenia w tym zakresie. Proponuje się formę kanoniczną
-    (canonical format) reprezentacji tekstowej. Jednocześnie wszystkie inne wcześniej
-    omówione formaty są dopuszczalne.
-    Główne postulaty:
+    \subsubsection{Rodzaje nagłówków.}
     \begin{itemize}
-        \item Zawsze opuszczać wiodące (początkowe) zera w sekcjach.
-        \item Skracać przez dwa dwukropki :: tak dużą część adresu, jak to możliwe.
-        \item Nie skracać przez :: pojedynczej sekcji 16-to bitowej złożonej z samych zer
-        \item Pojedyncza sekcja 16-to bitowa złożona z samych zer powinna być reprezentowana
-        jako 0.
-        \item Podwójny dwukropek należy stosować w tym miejscu adresu, w którym skrócenie będzie
-        największe. Jeśli jest kilka takich miejsc o tej samej długości, należy wybrać pierwsze z
-        lewej strony.
-        \item Należy używać małych liter, nie dużych (ze względu na podobieństwo dużej litery D do 0
-        oraz dużego B do 8).
+        \item \textbf{IPv6 header} - nagłówek podstawowy.
+        \item \textbf{Hop-by-hop Options header} - np. w protokole RVSP, w protokole MLD – Multicast Listener Discovery.
+        \item \textbf{Destination Options header} - jeśli użyty jest nagłówek dodatkowy Routing. Służy do przekazania opcji, które będą przetwarzane przez węzeł o adresie zawartym w polu Destination Address w nagłówku podstawowym oraz przez węzły o adresach wymienionych w nagłówku dodatkowym typu Routing.
+        \item \textbf{Routing header}
+        \begin{itemize}
+            \item \textbf{typ 0}: odpowiednik routowania źródłowego z IPv4
+            \item \textbf{typ 2}: wykorzystywany do obsługi mobilności do przekazania Home Address mobilnego węzła docelowego).
+            \item jest używany do określenia listy routerów, przez które powinien przejść pakiet na drodze do miejsca przeznaczenia.
+            \item pierwszy węzeł, który przetwarza nagłówek Routing to węzeł (router), którego adres znajduje się w polu Destination Address nagłówka podstawowego. Węzeł ten zmniejsza o jeden liczbę zawartą w polu Segments Left i przepisuje następny adres z nagłówka Routing do pola Destination nagłówka podstawowego. Ostateczne miejsce docelowe datagramu jest określone przez ostatni adres w nagłówku Routing.
+            \item w odróżnieniu od IPv4, w IPv6 adres docelowy może się zmieniać na drodze datagramu – jeśli wykorzystywany jest nagłówek dodatkowy Routing
+        \end{itemize}
+        \item \textbf{Fragment header}.
+        \begin{itemize}
+            \item Fragmentacja występuje tylko w węźle źródłowym.
+            \item Pakiet ma część, która nie podlega fragmentacji – jest to podstawowy nagłówek i wszystkie nagłówki dodatkowe, które muszą być przetwarzane na drodze datagramu.
+            \item Część, która podlega fragmentacji składa się z pozostałych nagłówków dodatkowych, nagłówka warstwy wyższej i danych.
+            \item Część niepodlegająca fragmentacji jest na początku każdego fragmentu, potem jest nagłówek Fragment, potem część pofragmentowana.
+        \end{itemize}
+        \item \textbf{Authentication header}.
+        \item \textbf{Encapsulating Security Payload header}.
+        \item \textbf{Destination Options header} (wykorzystywany dla opcji, które będą przetwarzane tylko przez ostatecznego odbiorcę pakietu, wykorzystywany w mobilnym IP do przekazania źródłowego adresu home).
+        \item \textbf{Mobility header} (wykorzystywany do obsługi mobilności, przy zgłaszaniu).
+        \item \textbf{Upper-Layer header} (np. TCP, UDP) <- nagłówek dotyczący danych
+    \end{itemize}
+
+    \subsection{Adresacja IPv6}
+    \begin{itemize}
+        \item \textbf{osiem 16 bitowych sekcji w zapisie szesnastkowym}, oddzielonych dwukropkami,
+        np.: fe80:0000:0000:0000:0202:b3ff:fe1e:8329
+        \item długi ciąg zer może być \textbf{raz} połączony i przedstawiony jako dwa dwukropki "::"
+        \item w środowisku z węzłami IPv4 oraz IPv6 często \textbf{w adresie IPv6 umieszcza się również IPv4}. Są dwa typy takich adresów:
+        \begin{itemize}
+            \item \textbf{Typ 1: IPv4-Compatible IPv6 Address} - 96 bitów zero + adres IPv4
+            \item \textbf{Typ 2: IPv4-Mapped IPv6 Address} (zalecany) - $0000..............................0000$ ffff + IPv4 address
+        \end{itemize}
+        \item Zamiast identyfikatora sieci (jak było w IPv4), w IPv6 używa się tzw. \textbf{prefiksu}. Prefiks to \textbf{pewna liczba bitów} adresu licząc z lewej strony. Prefiks \textbf{określa} zatem \textbf{sieć}. Prefiks podaje się standardowo jako pewną liczbę sekcji adresu.
+    \end{itemize}
+
+    \subsubsection{Typy adresów}
+    \begin{itemize}
+        \item \textbf{Adres niewyspecyfikowany} - $::/128$
+        \item \textbf{Pętla zwrotna} (Loopback) - $::1/128$
+        \item \textbf{Multicast} - $ff00::/8$ ($1111 1111$)
+        \item \textbf{Link-local unicast} - $fe80::/10$ ($1111 1110 10$)
+        \item \textbf{Global unicast}
     \end{itemize}
 
 
+    \subsubsection{Skąd wziąć adres MAC?}
+    \begin{itemize}
+        \item Unicastowy adres IP na multicastowy (Solicited Node Multicast address) - $ff02:0:0:0:0:1:ff\_:\_\_$,
+        z trzema najmłodszymi bajtami adresu IP
+        \item Multicastowy MAC - $33:33:\_:\_:\_:\_$ z czterema najmłodszymi bajtami adresu multicastowego
+        \item Ramka skonstruowana z adresem MAC, z pakietem IP z multicastowym IP w środku, z unicastowym w komunikacie ICMP
+        \item Switche się znają na tyle, że ramka w miarę dochodzi tylko tam gdzie trzeba
+        \item Komputer otrzymujący ramkę sprawdza czy o niego chodzi w komunikacie ICMP, i unicastowo odpowiada
+    \end{itemize}
 
-    \textbf{Prefiksy adresów IPv6}
-    Zamiast identyfikatora sieci (jak było w IPv4), w IPv6 używa się tzw. prefiksu. Prefiks to
-    pewna liczba bitów adresu licząc z lewej strony (najbardziej znaczące bity). Prefiks określa
-    zatem sieć. Prefiks podaje się standardowo jako pewną liczbę sekcji adresu.
+    \subsection{ICMPv6}
+    \textbf{Mechanizmy}:
+    \begin{itemize}
+        \item \textbf{Wykrywanie sąsiada}
+        \item \textbf{Multicast Listener Discovery} (MLD) - jest odpowiednikiem \textbf{Internet Group Management Protocol} (IGMP) w IPv4
+        \item \textbf{Wykrywanie ścieżki MTU} (Path MTU Discovery) - nie musi być implementowane w pełni w każdym węźle.
+        Host zaczyna wysyłać pakiety o wielkości MTU dla wykorzystywanego łącza.
+        Jeśli dostanie komunikat ICMPv6 Packet Too Big, to zmniejsza rozmiar pakietu.
+        Może to wystąpić wielokrotnie w czasie komunikacji do miejsca docelowego.
+        Po ewentualnym zmniejszeniu rozmiaru pakietu od czasu do czasu host próbuje wysłać
+        większy datagram, aby wykryć możliwość przesłania większego datagramu.
+        \item \textbf{IPSec w IPv6}
+    \end{itemize}
 
-    \begin{tabular}{c|c|c|c}
-        Typ & Prefiks binarnie & Prefiks szesnastkowo &
-        Część przestrzeni adresowej\\
-
-        Adres niewyspecyfikowany & Same zera & ::/128 &\\
-
-        Pętla zwrotna (Loopback) & Najmłodszy bit 1,
-
-        reszta same zera & ::1/128 &\\
-
-        Multicast & 1111 1111 & ff00::/8 & 1/256\\
-
-        Link-local unicast & 1111111010 & fe80::/10 & 1/1024\\
-        Global unicast
-        (globalne
-        jednostkowe) & wszystkie pozostałe.
-    \end{tabular}
-
-    \textbf{Typy adresów IPv6}
-    Najważniejsza klasyfikacja adresów IPv6:
-    adresy jednostkowe (unicast), adresy pobliskie (anycast) i adresy grupowe (multicast). Nie
-    ma w IPv6 adresów rozgłoszeniowych, zastępują je adresy grupowe.
-    Jest też inna klasyfikacja – adresy IPv6 mogą być typu:
-    Unique stable IP addresses: przypisane w drodze konfiguracji ręcznej, poprzez serwer DHCP
-    lub w drodze autokonfiguracji z wykorzystaniem adresów MAC (identyfikatorów
-    interfejsów);
-    Temporary transient IP addresses: otrzymane z wykorzystaniem liczby pseudolosowej w
-    miejscu identyfikatora interfejsu.
-    Inny podział: stateful (skonfigurowane przy udziale serwerów DHCPv6) i stateless
-    (autokonfiguracja bez DHCPv6). Uwaga – konfiguracja stateless oznacza, że nie ma obiektów
-    (np. serwera DHCPv6), które utrzymywałyby stan adresu (kiedy i komu adres został
-    przydzielony, na jak długo itp.). RFC 3736 dopuszcza wykorzystanie autokonfiguracji stateless
-    z udziałem serwera DHCPv6 (czasem określany jako DHCP-lite), ale wówczas
-
-    \textbf{Adresy jednostkowe}
-    W IPv6 określony pojedynczy adres jednostkowy może być przypisany do wielu interfejsów w
-    węźle (komputerze) lub wielu komputerów. Może to być wykorzystywane do adresacji typu
-    anycast (będzie wyjaśniona dalej) lub do równoważenia obciążeń.
-    Adres jednostkowy generalnie jest podzielony na dwie części: n bitowy prefiks oraz 128-n
-    bitowy identyfikator interfejsu. Typowo prefiks otrzymany od dostawcy ma 48 bitów, 16
-    bitów mamy na wewnętrzny podział sieci na podsieci (np. w firmie).
-    Adresy jednostkowe o prefiksie różnym od 000 powinny używać 64-bitowego identyfikatora
-    interfejsu, zgodnego ze standardem o nazwie EUI-64.
-    Identyfikator interfejsu może być wyznaczony w trakcie autokonfiguracji na podstawie
-    adresu warstwy łącza danych. Np. dla adresu MAC w technologii Ethernet: najpierw między
-    trzeci i czwarty bajt 6-cio bajtowego adresu MAC wstawiona jest liczba 0xfffe (0x oznacza
-    zapis szesnastkowy), następnie zamieniany jest drugi najmłodszy bit z prawej strony
-    pierwszego (najbardziej znaczącego) bajta adresu (ta zamiana nie jest wykonywana w
-    przypadku adresu typu Link-local).
-    Na przykład dla adresu MAC: 00-02-b3-1e-83-29 otrzymujemy:
-    0202:b3ff:fe1e:8329.
-    Adres może być budowany automatycznie na podstawie MAC ale nie musi. Można go np.
-    wpisać ręcznie lub może być generowany losowo lub przydzielony przez serwer DHCPv6.
-
-    Zarezerwowane:
-    Adres nieokreślony
-    0:0:0:0:0:0:0:0 (lub :: w formacie skompresowanym) – nie może być przypisany do węzła,
-    używany jest np. przy inicjalizacji IPv6, gdy węzeł nie zna swojego adresu (w datagramach
-    IPv6 w miejscu adresu źródłowego).
-    Adres pętli zwrotnej (loopback), odpowiednik 127.0.0.1 z IPv4.
-    0:0:0:0:0:0:0:1 (lub ::1 w formacie skompresowanym).
-    2001:db8::/32 - Adresy zarezerwowane tylko dla celów wykorzystywania w dokumentacji –
-    RFC 3849 (nie można ich przypisywać do rzeczywistych interfejsów)
-
-
-    \textbf{Global Unicast Addresses}
-    Adresy te były zorganizowane w strukturę hierarchiczną.
-    Najwyższy poziom hierarchii był wyznaczony przez tzw. TLA ID – Top Level Aggregation
-    Identifier. Za 8192 trasy typu top level były odpowiedzialne następujące organizacje:
-    ARIN – American Registry for Internet Numbers,
-    RIPE – Reseau IP Europeens Network Coordinator Center in Europe,
-    APNIC – Asia Pacific Network Information Center.
-    NLA ID – Next Level Aggregation Identifier wyznaczał przestrzeń adresową przypisaną do
-    dostawców Internetu.
-    SLA ID – Site Level Aggregation to tzw. topologia siedziby (Site topology). Część adresu
-    poświęcona na potrzeby routowania wewnętrznego (w ramach organizacji). Identyfikator
-    podsieci, pozwalał organizacjom utworzyć wewnętrzną strukturę routingu, 16 bitów daje
-    możliwości obsługi 65536 wewnętrznych podsieci.
-
-
-    \textbf{Link-local Unicast Addresses}
-    Używane na łączach, na których nie ma routerów, przy autokonfiguracji adresu (host sam
-    przydziela sobie adres), do tworzenia sieci tymczasowych lub przed przydzieleniem prefiksu
-    przez router lub serwer DHCPv6.
-
-    Adresy tego typu mają prefiks fe80/10. Identyfikator interfejsu jest automatycznie wyliczany
-    z adresu MAC (opis znajduje się w tekście wyżej). Typowo adresy te są wykorzystywane np.
-    jako adresy Next Hop Router w tablicy routowania IPv6 (oczywiście interfejs routera o takim
-    adresie może mieć też adres IPv6 unikalny globalnie, jednak użycie takich adresów jako Next
-    Hop nie jest rekomendowane).
-
-    \textbf{Site-local Unicast Addresses}
-    Ten typ adresów według najnowszej specyfikacji jest już przestarzały, chociaż dotychczasowe
-    implementacje mogą być używane nadal. Są odpowiednikiem adresów prywatnych IPv4,
-    używane do adresacji wewnątrz prywatnej organizacji. Routery nie mogą przesyłać
-    datagramów z tymi adresami na zewnątrz, ale wewnątrz organizacji sieć może być
-    podzielona z wykorzystaniem routerów.
-    10 bitów 38 bitów 16 bitów 64 bity
-    1111111011 0 ID podsieci ID interfejsu
-    Adresy tego typu mają prefiks fec0.
-
-    \textbf{Adresy IPv6 z wbudowanymi adresami IPv4}
-    Wspominane już wcześniej przy okazji omawiania sposobu zapisu adresów IPv6.
-    80 bitów 16 bitów 32 bity
-    0000 .......... 000000 a) 0000 lub
-    b) ffff
-    Adres IPv4
-    a) IPv4-compatible IPv6 addresses – przestarzałe, niezalecane.
-    b) IPv4-mapped IPv6 addresses.
-
-
-    \textbf{Anycast Addresses - Adresy pobliskie}
-    Są z zakresu adresów jednostkowych danej organizacji. Nie są przydzielane do pojedynczego
-    węzła, lecz do grupy węzłów (np. routerów, serwerów DNS). Routery muszą być
-    odpowiednio skonfigurowane, aby można było je używać z wykorzystaniem adresów
-    pobliskich. Routowanie powinno być tak skonfigurowane, żeby użycie adresu pobliskiego
-    oznaczało „najbliższy” (w sensie protokołu routowania) komputer (router) z takim adresem
-    pobliskim.
-    Proponowany sposób wykorzystania: można nadać ten sam adres pobliski wszystkim
-    routerom należącym do pewnego dostawcy Internetu. Użycie tego adresu jako adresu
-    pośredniego w Routing Header (odpowiednik „routowania źródłowego” w IPv4) oznacza
-    żądanie przekazywania pakietu przez routery należące do danego dostawcy.
-    Required Anycast Address.
-    Wygląda podobnie, jak adres sieci w IPv4:
-    Subnet prefix 00000000…000
-    n bits 128-n bits
-    Oznacza: najbliższy router na tym łączu (tj. w tym segmencie sieci). Każdy router
-    uczestniczący w tym mechanizmie powinien rozpoznawać ten (odpowiedni) adres jako
-    własny.
-
-
-    \textbf{Adresy grupowe Multicast}
-
-    Zastępują adresy rozgłoszeniowe i grupowe w Ipv4. Adres grupowy jest przydzielany do
-    grupy węzłów (podobnie jak adres pobliski), lecz w odróżnieniu od adresu pobliskiego,
-    wszystkie węzły skonfigurowane do stosowania adresu grupowego odbierają pakiety
-    wysłane do tego adresu.
-    8 bitów 4 bity 4 bity 112 bitów
-    11111111 flagi zakres ID grupy
-    Czwarty bit w drugim (od lewej) polu równy zero określa trwały przydział adresu grupowego
-    (przydzielony przez IANA), jedynka oznacza adres nietrwały. Pozostałe dwie flagi (bity) są
-    określone w RFC 3306 oraz RFC 3956.
-
-    Zakresy:
-    0 reserved
-    1 zakres węzła lokalnego (interface or node-local) – tylko transmisja loopback typu multicast
-    2 adres lokalnego łącza (segmentu sieci lokalnej, link-local)
-    3 reserved
-    4 Admin-Local scope – zakres konfigurowany przez administratora
-    5 zakres lokalnej siedziby (site-local)
-    6 (unassigned)
-    7 (unassigned)
-    8 zakres organizacji (organization-local) – wiele siedzib (sites) jednej organizacji
-    9 (unassigned)
-    A (unassigned)
-    B (unassigned)
-    C (unassigned)
-    D (unassigned)
-    E zakres globalny (global)
-    F reserved
-
-    \textbf{Solicited-Node Multicast Addresses}
-
-    Adres typu Solicited-Node Multicast jest adresem grupowym, tworzonym automatycznie dla
-    każdego adresu jednostkowego (i pobliskiego) w każdym węźle. Adres ten jest tworzony
-    przez 24 najmniej znaczące bity adresu IPv6 (ostatnia część identyfikatora hosta) przez
-    dodanie do nich prefiksu: ff02:0:0:0:0:1:ff00::/104.
-    Na przykład dla adresu MAC 00-02-b3-1e-83-29 adres IPv6 może być
-    fe80::202:b3ff:fe1e:8329, a odpowiadający adres solicited-node multicast będzie:
-    ff02:0:0:0:0:1:ff00:ff1e:8329.
-    Adresy typu solicited-node multicast są wykorzystywane w omawianym poniżej
-    mechanizmie Neighbor Discovery.
-
-    \textbf{Wymagane adres IPv6}
-    Host powinien rozpoznawać następujące adresy:
-    Link-Local address dla każdego swojego interfejsu.
-    Dodatkowe adresy Unicast i Anycast skonfigurowane ręcznie lub automatycznie dla
-    interfejsów.
-    • Adres loopback (::1).
-    • Adres All-Nodes multicast (ff02:0:0:0:0:0:0:1).
-    • Adres Solicited-Node multicast dla każdego adresu Unicast i Anycast skonfigurowanego
-    na interfejsach.
-    • Adresy Multicast wszystkich grup, do których host należy.
-    Router powinien ponadto rozpoznawać następujące adresy:
-    • Adres Subnet-Router Anycast na wszystkich łączach, na których działa jako router
-    • Wszystkie inne adresy Anycast, skonfigurowane na routerze.
-    • Adresy multicast dotyczące routerów.
+    \textbf{Mechanizmy przejścia}
+    \begin{itemize}
+        \item 6to4
+        \begin{itemize}
+            \item polega na pakowaniu pakietów IPv6 w pakiety IPv4. Pole protokołu w nagłówku otrzymuje wartość 41. Tak utworzone pakiety wysyłane są do komputera stanowiącego bramę pomiędzy siecią opartą na IPv4 a „prawdziwą” siecią IPv6.
+            \item łączenie sieci 6to4 z innymi sieciami 6to4 i innymi IPv6 poprzez sieć IPv4 w okresie przejściowym
+        \end{itemize}
+        \item 6over4
+        \item ISATAP
+    \end{itemize}
 
 
 \end{document}
