@@ -4,9 +4,9 @@
 \begin{document}
     Bezpieczne protokoły mogą być wykorzystywane:
     \begin{itemize}
-        \item w warstwie aplikacji- szyfrowanie komunikatów HTTPS, protokoły SSL, TLS,
-        \item między warstwą sieci a transportu- szyfrowanie pakietów IP – protokół IPSec,
-        \item w warstwie łącza danych - szyfrowanie ramek, np. WEP, WPA, WPA2 w sieciach bezprzewodowych.
+        \item \textbf{w warstwie aplikacji}- szyfrowanie komunikatów HTTPS, protokoły SSL, TLS,
+        \item \textbf{między warstwą sieci a transportu} - szyfrowanie pakietów IP – protokół IPSec,
+        \item \textbf{w warstwie łącza danych} - szyfrowanie ramek, np. WEP, WPA, WPA2 w sieciach bezprzewodowych.
     \end{itemize}
 
 
@@ -15,8 +15,8 @@
         \item \textbf{warstwa IP}
         \item może szyfrować dane pochodzące z dowolnej
         aplikacji, proces szyfrowania i deszyfrowania jest \textbf{niewidoczny} dla użytkownika
-        \item \textbf{Authentication Headers} - sprawdzenie \textbf{autentyczności i integralności} danych.
-        \item \textbf{Encapsulating Security Payloads} - \textbf{szyfrowanie} danych, oraz autentyczność i integralność danych. ESP może być
+        \item \textbf{Authentication Headers} (AH) - sprawdzenie \textbf{autentyczności i integralności} danych.
+        \item \textbf{Encapsulating Security Payloads} (ESP) - \textbf{szyfrowanie} danych, oraz autentyczność i integralność danych. ESP może być
         używany samodzielnie lub z AH.
     \end{itemize}
 
@@ -77,7 +77,7 @@
     \begin{itemize}
         \item \textbf{warstwa aplikacji}
         \item strony dogadują się co do klucza symetrycznego szyfrowaniem niesymetrycznym
-        \item przy danych nie ma asymetrycznego szyfrowania, tylko symetryczne
+        \item symetryczne szyfrowanie danych
     \end{itemize}
 
 \end{document}

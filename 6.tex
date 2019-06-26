@@ -15,7 +15,7 @@
         \item \textbf{Identyfikator sieci} (Network ID) - pewna liczba bitów z lewej strony adresu
         \item \textbf{Identyfikator hosta} (Host ID) - pozostałe bity.
     \end{itemize}
-   \textbf{Granica} między identyfikatorem sieci a identyfikatorem hosta może być wyznaczona przez
+    \textbf{Granica} między identyfikatorem sieci a identyfikatorem hosta może być wyznaczona przez
     tzw. \textbf{maskę sieci}.
 
     Adres IP, który zawiera \textbf{same zera} w części hosta jest traktowany jako \textbf{adres sieci}.
@@ -70,26 +70,26 @@
     bezklasowe.
 
     \begin{itemize}
-        \item Protokół warstwy trzeciej modelu ISO OSI.
+        \item Protokół \textbf{warstwy trzeciej} modelu ISO OSI.
         \item Oprogramowanie implementujące protokół IP jest odpowiedzialne za:
         \begin{itemize}
-            \item adresowanie IP,
-            \item tworzenie datagramów IP (pakietów)
-            \item uczestniczenie w kierowaniu ich w sieci z punktu początkowego do punktu docelowego.
+            \item \textbf{adresowanie} IP,
+            \item \textbf{tworzenie datagramów} IP (pakietów)
+            \item uczestniczenie w \textbf{kierowaniu ich} w sieci z punktu początkowego do punktu docelowego.
         \end{itemize}
-        \item realizuje usługę zawodną. Jeśli komunikacja powinna zawierać mechanizmy niezawodności, to muszą one być dostarczone przez protokoły warstwy wyższej.
+        \item Realizuje usługę \textbf{zawodną}. Jeśli komunikacja powinna zawierać mechanizmy niezawodności, to muszą one być dostarczone przez protokoły warstwy wyższej.
         \item Datagram IP składa się z nagłówka (header) i bloku danych (payload).
         \begin{itemize}
-            \item \textbf{Nagłówek} dzięki informacjom w nim zawartym umożliwia obsługę routowania, identyfikację bloku danych, określenie rozmiaru nagłówka i datagramu oraz obsługę fragmentacji. W nagłówku mogą się znaleźć również tzw. opcje rozszerzające. Ma zmienną długość (20 do 60 bajtów, co 4 bajty).
-            \item \textbf{Blok danych} może mieć długość do 65515 bajtów.
+            \item \textbf{Nagłówek} dzięki informacjom w nim zawartym umożliwia obsługę routowania, identyfikację bloku danych, określenie rozmiaru nagłówka i datagramu oraz obsługę fragmentacji. W nagłówku mogą się znaleźć również tzw. opcje rozszerzające.
+            \item \textbf{Blok danych}.
         \end{itemize}
     \end{itemize}
 
     \subsection{Nagłówek IPv4}
     \begin{itemize}
         \item \textbf{Wersja} (4 bity) (=0100)
-        \item \textbf{Długość nagłówka IP} (IHL – Internet Header Length) (4 bity)
-        \item \textbf{Typ usługi}: TOS (Type of Service) lub DS. (Differentiaded Services) (8 bitów)\\
+        \item \textbf{Długość nagłówka IP} (IHL – Internet Header Length)
+        \item \textbf{Typ usługi}: TOS (Type of Service) lub DS. (Differentiaded Services)\\
         Flagi:
         \begin{itemize}
             \item małe opóźnienie
@@ -102,19 +102,16 @@
         \end{itemize}
         ECN jest rozszerzeniem protokołów IP oraz TCP. Umożliwia powiadamianie punktów końcowych IP/TCP o nadchodzącym zatorze bez usuwania pakietów, poprzez ustawienie warość 11 na bitach ECN. Jest opcjonalny.
 
-        \item \textbf{Długość całkowita} (16 bitów)\\
-        Na podstawie tego pola oraz pola Długość nagłówka można określić wielkość bloku danych oraz początek tego bloku.
-        \item \textbf{Identyfikator} (16 bitów)\\
-        Identyfikator kolejnych datagramów. Wartość jest wpisywana przez host nadający i dla kolejnych datagramów jest zwiększana.
-        \item \textbf{Flagi} (3 bity)
-        3 bity tworzące dwie flagi używane przy fragmentacji datagramów.
-        \item \textbf{Przesunięcie fragmentu} (13 bitów)
-        \item \textbf{Czas życia} (TTL) (8 bitów)
-        \item \textbf{Protokół} (8 bitów) - ICMP, UDP, TCP.
-        \item \textbf{Suma kontrolna nagłówka} (16 bitów)
-        \item \textbf{Adres IP źródła} (32 bity)
-        \item \textbf{Adres IP docelowy} (32 bity)
-        \item \textbf{Dodatkowe opcje i wypełnienie} (32 bity + ew. więcej).
+        \item \textbf{Długość całkowita} - na podstawie tego pola oraz pola Długość nagłówka można określić wielkość bloku danych oraz początek tego bloku.
+        \item \textbf{Identyfikator} kolejnych datagramów. Wartość jest wpisywana przez host nadający i dla kolejnych datagramów jest zwiększana.
+        \item \textbf{Flagi} - 3 bity tworzące dwie flagi używane przy fragmentacji datagramów.
+        \item \textbf{Przesunięcie fragmentu}
+        \item \textbf{Czas życia} (TTL)
+        \item \textbf{Protokół} - ICMP, UDP, TCP.
+        \item \textbf{Suma kontrolna nagłówka}
+        \item \textbf{Adres IP źródła}
+        \item \textbf{Adres IP docelowy}
+        \item \textbf{Dodatkowe opcje i wypełnienie}
         Opcje mogą zająć maksymalnie 40 bajtów i mogą zawierać m.in.:
         \begin{itemize}
             \item zapis trasy przez którą przeszedł datagram

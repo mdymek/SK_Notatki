@@ -72,10 +72,6 @@
     \begin{itemize}
         \item Aplikacja przesyła dane do warstwy transportu.
         \item Dalszy dostęp do sieci realizowany jest przez TCP albo UDP.
-        \begin{itemize}
-            \item TCP realizuje tzw. niezawodne połączenia i kontroluje przepływ danych zapewniając niezawodne dostarczenie danych.
-            \item UDP nie zapewnia niezawodności, ale jest szybszy.
-        \end{itemize}
         \item Segment lub datagram UDP przesyłany jest do warstwy IP, gdzie protokół IP dołącza między innymi informacje o adresach IP źródła i celu tworząc datagram IP (pakiet).
         \item Datagram z IP przechodzi do warstwy interfejsu sieciowego, gdzie tworzone są ramki. W sieci LAN ramki zawierają adres fizyczny (przypisany do karty sieciowej) otrzymany zprotokołu ARP.
         \item Ramka przekształcana jest w ciąg sygnałów, który zostaje przesłany przez sieć.
