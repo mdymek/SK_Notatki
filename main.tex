@@ -1,3 +1,4 @@
+%! suppress = MissingLabel
 \documentclass[a4paper]{article}
 
 \usepackage{fullpage} % Package to use full page
@@ -6,7 +7,6 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
 \usepackage[MeX]{polski}
 \usepackage[T1]{fontenc}
 \usepackage{subfiles}
@@ -19,7 +19,6 @@
 
 \begin{document}
     \maketitle
-
 
 
     % \section{Laboratorium 1}
@@ -92,72 +91,84 @@
 
     \section{Charakterystyka sieci LAN, WAN. Topologie połączeń. Komutacja obwodów vs. komutacja
     pakietów i komutacja komórek.}
-    \subfile{1}
+    \subfile{subfiles/1}
+
 
     \section{Model ISO OSI, model TCP/IP.}
-    \subfile{2}
+    \subfile{subfiles/2}
+
 
     \section{Standaryzacja w sieciach komputerowych, co to są dokumenty RFC.}
-    \subfile{3}
+    \subfile{subfiles/3}
+
 
     \section{Ethernet: sposób dostępu do nośnika, ramki.}
-    \subfile{4}
+    \subfile{subfiles/4}
+
 
     \section{Ethernet: działanie przełączników i koncentratorów (podstawy).}
-    \subfile{5}
+    \subfile{subfiles/5}
+
 
     \section{Protokół IPv4: adresacja, pola w nagłówku, fragmentacja.}
-    \subfile{6}
+    \subfile{subfiles/6}
 
     \section{Multiemisja (multicast) w IPv4 (IGMP, IGMP-snooping, współpraca technologii Ethernet z
     multiemisją – adresy MAC multiemisji).}
-    \subfile{7}
+    \subfile{subfiles/7}
+
 
     \section{Protokół ARP.}
-    \subfile{8}
+    \subfile{subfiles/8}
+
 
     \section{Protokół ICMP.}
-    \subfile{9}
+    \subfile{subfiles/9}
+
 
     \section{Protokół UDP: charakterystyka, nagłówek.}
-    \subfile{10}
+    \subfile{subfiles/10}
+
 
     \section{Protokół TCP: charakterystyka, mechanizmy, nagłówek.}
-    \subfile{11}
+    \subfile{subfiles/11}
 
     \section{Protokoły routowania typu wektor odległości: sposób działania, wady i zalety,
     podstawowe parametry protokołów RIP, RIP2, IGRP, EIGRP. (M.in. pętle routowania,
     zliczanie do nieskończoności, dzielony horyzont, zegary).}
-    \subfile{12}
+    \subfile{subfiles/12}
 
     \section{Protokoły routowania stanu łącza: sposób działania, charakterystyka protokołu OSPF,
     rodzaje obszarów.}
-    \subfile{13}
+    \subfile{subfiles/13}
+
 
     \section{DNS.}
-    \subfile{14}
+    \subfile{subfiles/14}
 
     \section{Działanie przełączników Ethernet: tryby działania, protokół STP, sieci VLAN, łącza
     trunkingowe, przełączniki warstwy 3.}
-    \subfile{15}
+    \subfile{subfiles/15}
 
     \section{Podstawy kryptografii: szyfrowanie z kluczem symetrycznym, szyfrowanie z kluczem
     publicznym i prywatnym, funkcje skrótu, podpis cyfrowy, certyfikaty.}
-    \subfile{16}
+    \subfile{subfiles/16}
+
 
     \section{Bezpieczne protokoły: SSL, TLS, IPSec (ze szczególnym naciskiem na protokół IPSec).}
-    \subfile{17}
+    \subfile{subfiles/17}
 
     \section{Protokół IPv6: adresacja, nagłówki, mechanizmy, ICMPv6 (m.in. jak odnaleźć adres MAC
     na podstawie adresu IPv6), mechanizmy przejścia między IPv4 i IPv6, mobilny IP.}
-    \subfile{18}
+    \subfile{subfiles/18}
+
 
     \section{Charakterystyka protokołu BGP (w zakresie omówionym na wykładzie).}
-    \subfile{19}
+    \subfile{subfiles/19}
+
 
     \section{Podstawy programowania w interfejsie gniazd (w zakresie omówionym na wykładzie).}
-    \subfile{20}
-
+    \subfile{subfiles/20}
 
 
 \end{document}
